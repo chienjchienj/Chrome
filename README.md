@@ -4,12 +4,12 @@ This is the source code for the Krake browser extension in Google Chrome
 
 Backlog
 ===
-TODO : Ensure each Tab_ID has its own ShareKrakedObject
-TODO : Ensure sharedKRake_helper retrieves the respective SharedKrakeObject from the records object
-TODO : Refactor sharedKRake_helper to use self.SharedKrakeObject instead of SharedKrakeObject variable
-TODO : set reference for self.SharedKrakeObject to records[tab_id].shared_krakes[url] 
-TODO : have separate Krake definition for each page
-TODO : have the separate Krake definitions compiled for a specific Tab on the fly when the done button is clicked
+- TODO : Ensure each Tab_ID has its own ShareKrakedObject
+- TODO : Ensure sharedKRake_helper retrieves the respective SharedKrakeObject from the records object
+- TODO : Refactor sharedKRake_helper to use self.SharedKrakeObject instead of SharedKrakeObject variable
+- TODO : set reference for self.SharedKrakeObject to records[tab_id].shared_krakes[url] 
+- TODO : have separate Krake definition for each page
+- TODO : have the separate Krake definitions compiled for a specific Tab on the fly when the done button is clicked
 
 Documentation
 ===
