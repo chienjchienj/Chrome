@@ -52,7 +52,10 @@ var handleIconClick = function(tab){
     updateBrowserActionIcon(tab.id);
         
     sessionManager = new SessionManager();
+    
+    // TODO : To refactor load the sharedKrake based on tab.url
     sharedKrake = SharedKrake;
+    
     colorGenerator = new ColorGenerator();
     clearCache();
     MixpanelEvents.event_2();

@@ -208,6 +208,7 @@ SharedKrakeHelper.prototype.setNextPager = function(xpath){
   return self.addNextPagerToColumns(xpath, sharedKrake.columns);
 };//eo setNextPager
 
+
 SharedKrakeHelper.prototype.addNextPagerToColumns = function(xpath, columns, options){
   var self = this;    
   var columnId = sessionManager.previousColumn.columnId;
@@ -221,9 +222,11 @@ SharedKrakeHelper.prototype.addNextPagerToColumns = function(xpath, columns, opt
         options.nextPager = { xpath: xpath };
       }
       return columns[i];
+      
     }else{
       var result = self.addNextPagerToColumns(xpath, columns[i].options.columns, columns[i].options);
       if(result) return result;
+      
     }
   }//eo for
   return null;

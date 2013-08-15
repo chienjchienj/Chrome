@@ -43,6 +43,8 @@ var showPanel = function(){
   
 };
 
+
+
 // @Description : Hides the panel
 var hidePanel = function(){
   if($('#k-panel-wrapper').isExist()){
@@ -52,8 +54,12 @@ var hidePanel = function(){
   }
 };
 
-// @Description : In case there was a page reload, populates the panel with previously existing column data.
-var populatePreviousColumns = function(){
+
+
+// @Description : In case there was a page reload, populates the panel 
+//   with data from previously existing column in the Krake definitions of the
+//   current Tab.
+var reloadExistingColumns = function(){
   chrome.extension.sendMessage({ action: "get_shared_krake" },  function(response){ 
     console.log( '-- sharedKrake: ');
     console.log( JSON.stringify(response.sharedKrake) );
@@ -61,7 +67,9 @@ var populatePreviousColumns = function(){
     var wrapper = $("#inner-wrapper");
     populateColumns(wrapper, response.sharedKrake.columns);
   });
-};//eo populatePreviousColumns
+};//eo reloadExistingColumns
+
+
 
 // @Description : Given an array of columns populates the columns wrapper
 var populateColumns = function(wrapper, columns){
@@ -78,11 +86,15 @@ var populateColumns = function(wrapper, columns){
     wrapper.append(UIColumnFactory.recreateUIColumn(params));
     Panel.addBreadCrumbToColumn(columns[i].columnId);
 
+    // TODO : Refactor this
+    // Recursively populates the nested columns.
     populateColumns(wrapper, columns[i].options.columns); //add UI columns to panel
 
     //elementUIManager.evaluateXpath(columns[i]); //highlight columns
   }
 };
+
+
 
 // @Description : Handles calls from the background script
 chrome.extension.onMessage.addListener(
@@ -105,7 +117,7 @@ chrome.extension.onMessage.addListener(
         if(request.params.filename == "js/content/krake.js"){
           Panel.init(behavioral_mode);
           UIElementSelector.init();
-          populatePreviousColumns();
+          reloadExistingColumns();
           console.log('Line 30 : %s', behavioral_mode);
           NotificationManager.init(behavioral_mode);
 
@@ -121,6 +133,8 @@ chrome.extension.onMessage.addListener(
 var param = {
   currentUrl : document.URL
 }
+
+
 
 // @Description : Checks the current domain loaded and activates different mode
 if( !isKrakeDomain() ) { // Normal mode
