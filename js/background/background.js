@@ -8,16 +8,18 @@ var curr_SKH = null;
 /*
   Example holds an array of Krakes defined for tab id = 1 and tab id = 2
   var records = {
-    1 : {
+    <<tab_id_1>> : {
       isActive : boolean,
       shared_krakes : {
-        url : {}
+        url1 : shared_krake_definition,
+        url2 : shared_krake_definition
       }
     },
-    2 : {
+    <<tab_id_1>> : {
       isActive : boolean,
       shared_krakes : {
-        url : {}
+        url1 : shared_krake_definition,
+        url2 : shared_krake_definition
       }
     }   
   }
@@ -556,6 +558,14 @@ chrome.runtime.onMessage.addListener(
       case "add_column":
         newColumn(request.params, sendResponse);
       break;
+      
+      case "add_pagination":
+        // TODO : To Extend
+      break;
+      
+      case "add_nested_krake":
+        // TODO : To Extend      
+      break;      
 
       case 'get_column_by_id':
         getColumnById(request.params, sendResponse);

@@ -226,12 +226,14 @@ var Panel = {
           var columnIdentifier = "#krake-column-" + column.columnId; 
           var selector = columnIdentifier + ' .krake-control-button-save';
           $(selector).remove();
-
-          chrome.extension.sendMessage({ action:"edit_session", params: params }, function(response){
+          
+          // Adds the pagination declaration in the background
+          chrome.extension.sendMessage({ action:"add_pagination", params: params }, function(response){
             if(response.status == 'success'){
               
             }
           });
+          
         }
       });
     }//eo if
@@ -251,6 +253,7 @@ var Panel = {
       $(selector).append($linkButton);
 
       $linkButton.bind('click', function(){
+        console.log('Detailed Link Clicked')
         var params = {
           attribute : 'previous_column',
           event : 'detail_link_clicked',
@@ -264,14 +267,19 @@ var Panel = {
         chrome.extension.sendMessage({ action:"get_session" }, function(response){ 
           console.log('-- get_session\n' + JSON.stringify(response) );
           if(response.session.currentColumn){
-              //notify user to save column first
+            console.log('We are at line 268');
+            //notify user to save column first
           }else{
-          
-            chrome.extension.sendMessage({ action:'edit_session', params : params}, function(response){
+            console.log('We are at line 271');
+            chrome.extension.sendMessage({ action:'add_nested_krake', params : params}, function(response){
               if(response.status == 'success'){
+
+                console.log('We got back the edit_session successfully');
+                
                 //alert('column.genericXpath := ' + column.genericXpath);
                 var results = XpathHelper.evaluateQuery(column.genericXpath);
-                //console.log(results.nodesToHighlight[0].href);
+                console.log('Rerouting to location %s' , results.nodesToHighlight[0].href);
+
                 window.location.href = results.nodesToHighlight[0].href;
               } 
             });
