@@ -282,11 +282,13 @@ var Panel = {
         }
       
         chrome.extension.sendMessage({ action:"get_session" }, function(response) { 
-          console.log('-- get_session\n' + JSON.stringify(response) );
+          console.log('==== get session response ====');
+          console.log(response);
           
           // Do nothing with session obtained from the background
           if(response.session.currentColumn) {
-
+            
+            // TODO : Need to extend this part
 
           // Gets the HREF defined by this column and redirects the users to the nested page
           } else {

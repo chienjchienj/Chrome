@@ -44,12 +44,14 @@ var UIElementSelector = {
     return false; //preventDefault & stopPropogation
   },
   
+  // @Description : attached events to DOM elements that are not part of the krake panel
   attachElementHighlightListeners : function() {   
-    $('*').bind('mouseover', UIElementSelector.mouseOver);
-    $('*').bind('mouseout', UIElementSelector.mouseOut);
-    $('*').bind('click', UIElementSelector.selectElement);
+    $('*:not(".k_panel")').bind('mouseover', UIElementSelector.mouseOver);
+    $('*:not(".k_panel")').bind('mouseout', UIElementSelector.mouseOut);
+    $('*:not(".k_panel")').bind('click', UIElementSelector.selectElement);
   },
 
+  // @Description : detach events from DOM elements that are not part of the krake panel
   detachElementHighlightListeners : function() {
     $('*').unbind('mouseover', UIElementSelector.mouseOver);
     $('*').unbind('mouseout', UIElementSelector.mouseOut);
@@ -62,22 +64,22 @@ var UIElementSelector = {
 
   // @Description : Gets and sets the element Xpath to session when a click event occurs
   selectElement : function(e) {
+
+    var self = this;
+    
+    // do not handle any elements that are part of or child elements of the Krake panel
+    if ( $(e.target).is('.k_panel') || 
+      $(e.target).parents().hasClass('k_panel') ) {
+      
+      console.log('Not handling');
+      return;
+      
+    }
     
     e.preventDefault();
     e.stopPropagation();
 
-    if ($(e.target).is('.k_panel')) return;
-    
-    
-    var self = this;
-      
     chrome.extension.sendMessage({ action: 'get_session'}, function(response) {
-      
-      console.log('Selected element');
-      console.log('======================================');
-      console.log(e);
-      console.log(response);
-      console.log('======================================');
             
       var sessionManager = response.session;
       //console.log("--");

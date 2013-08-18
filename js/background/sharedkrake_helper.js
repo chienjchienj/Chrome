@@ -342,11 +342,11 @@ SharedKrakeHelper.prototype.createOptionsJson = function(options) {
 
 
 
-  /*
-   * @Param: key:string, attributes of sharedKrake object
-   * @Return: Corresponding column name to be appeared in krake definition (JSON), or
-   *          false: no column name found
-   */
+/*
+ * @Param: key:string, attributes of sharedKrake object
+ * @Return: Corresponding column name to be appeared in krake definition (JSON), or
+ *          false: no column name found
+ */
 SharedKrakeHelper.prototype.getMappedColumnName = function(key) {
   var self = this;  
   for(var columnKey in CommonParams.columnNameMapper) {

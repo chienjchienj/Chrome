@@ -7,20 +7,20 @@ var Params = {
 
   NOTIFICATION_TITLE_IDLE : 'Get data from this page.',
   NOTIFICATION_MESSAGE_IDLE : 'Create a new column for your data-set by clicking either one of the two buttons below — ' + 
-    '<button disabled="disabled">Select a list of items</button>, ' + 
-    '<button disabled="disabled">Select a single item</button>',
+    '<button class="k_panel" disabled="disabled">Select a list of items</button>, ' + 
+    '<button class="k_panel" disabled="disabled">Select a single item</button>',
   
   NOTIFICATION_TITLE_PRE_SELECTION_1 : 'You choosed to create a column to extract a list of items from this page',
-  NOTIFICATION_MESSAGE_PRE_SELECTION_1 : '<ol>' + 
-    '<li>Enter a name for this column</li>' +
-    '<li>click on the first item on the list you want from this page</li>' +
-    '<li>Items selectable on this page are highlighted in blue when you mouse over them</li><ol>',
+  NOTIFICATION_MESSAGE_PRE_SELECTION_1 : '<ol class="k_panel">' + 
+    '<li class="k_panel">Enter a name for this column</li>' +
+    '<li class="k_panel">click on the first item on the list you want from this page</li>' +
+    '<li class="k_panel">Items selectable on this page are highlighted in blue when you mouse over them</li><ol>',
   
   NOTIFICATION_TITLE_SINGLE_SELECTION : 'You choosed to create a column to extract a single of item from this page',
-  NOTIFICATION_MESSAGE_SINGLE_SELECTION : '<ol>' + 
-    '<li>Enter a name for this column</li>' + 
-    '<li>Click on the item you want from this page.</li> ' +
-    '<li>Items selectable on this page are highlighted in blue when you mouse over them</li></ol>',
+  NOTIFICATION_MESSAGE_SINGLE_SELECTION : '<ol class="k_panel">' + 
+    '<li class="k_panel">Enter a name for this column</li>' + 
+    '<li class="k_panel">Click on the item you want from this page.</li> ' +
+    '<li class="k_panel">Items selectable on this page are highlighted in blue when you mouse over them</li></ol>',
 
   NOTIFICATION_TITLE_PRE_SELECTION_2 : 'Select second item the on the list you want in your column',
   NOTIFICATION_MESSAGE_PRE_SELECTION_2 : 'Krake will highlight the rest of the matches once you have done so. Selectable items are highlighted in blue',
