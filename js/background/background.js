@@ -1,9 +1,3 @@
-var sessionManager = null;
-var sharedKrake = null;
-var colorGenerator = null;
-var curr_SKH = null;
-
-
 // Object that holds all the Krakes that were defined in the browser extension
 /*
   Example holds an array of Krakes defined for tab id = 1 and tab id = 2
@@ -13,52 +7,66 @@ var curr_SKH = null;
       shared_krakes : {
         url1 : shared_krake_definition,
         url2 : shared_krake_definition
-      }
+      },
+      sessionManager : SessionManager
+      colorGenerator : ColorGenerator
     },
     <<tab_id_1>> : {
       isActive : boolean,
       shared_krakes : {
         url1 : shared_krake_definition,
         url2 : shared_krake_definition
-      }
-    }   
+      },
+      sessionManager : SessionManager,
+      colorGenerator : ColorGenerator
+    }
   }
 
 */
 var records = {};
+
+// Variables that are tab specific — they are reinstantiated each time a new tab is clicked
+var sessionManager = null;
+
+// sharedKrake that corresponds to the current URL in the current tab
+var sharedKrake = null;
+
+// Color generator object that corresponds to the current URL in the current tab
+var colorGenerator = null;
+
+// SharedKrakeHelper object that corresponds to the current URL in the current tab
+var curr_SKH = null;
 
 /***************************************************************************/
 /************************  Browser Action Icon  ****************************/
 /***************************************************************************/
 var handleIconClick = function(tab){
   
-  console.log('Browser icon was clicked');
-  
   // Deactivation Krake within this Tab
   if(records[tab.id] && records[tab.id].isActive) {
-    disableKrake();
     records[tab.id].isActive = false;
     updateBrowserActionIcon(tab.id);
         
     clearCache();
     MixpanelEvents.event_3();
+    disableKrake();
 
   // Activating Krake within this Tab     
-   } else {
-    curr_SKH = new SharedKrakeHelper(tab.id);
+  } else {
+  
+    // Setting up of variables belonging to this tab
     records[tab.id] = records[tab.id] || {}
-    enableKrake();
     records[tab.id].isActive = true;
+    sessionManager = records[tab.id].sessionManager = records[tab.id].sessionManager || new SessionManager();    
+    colorGenerator = records[tab.id].colorGenerator = records[tab.id].colorGenerator || new ColorGenerator();   
+    curr_SKH = new SharedKrakeHelper(tab.id, tab.url);
+    sharedKrake = curr_SKH.SharedKrake;
+    
     updateBrowserActionIcon(tab.id);
-        
-    sessionManager = new SessionManager();
-    
-    // TODO : To refactor load the sharedKrake based on tab.url
-    sharedKrake = SharedKrake;
-    
-    colorGenerator = new ColorGenerator();
     clearCache();
     MixpanelEvents.event_2();
+
+    enableKrake();
     
    }
 
@@ -166,7 +174,7 @@ var insertCss = function(filename, sender){
 var getKrakeJson = function(callback){
   var json = curr_SKH.createScrapeDefinitionJSON();
   if (callback && typeof(callback) === "function")  
-      callback({status: 'success', krakeDefinition: json, sharedKrake: SharedKrake });
+      callback({status: 'success', krakeDefinition: json });
   
   sendKrakeToApp();
 };//eo getKrakeJson
@@ -180,7 +188,7 @@ var getKrakeJson = function(callback){
 var injectKrakeJson = function(callback){
   var json = curr_SKH.createScrapeDefinitionJSON();
   if (callback && typeof(callback) === "function")  
-      callback({status: 'success', krakeDefinition: json, sharedKrake: SharedKrake });
+      callback({status: 'success', krakeDefinition: json });
   
 };//eo getKrakeJson
 
@@ -237,9 +245,9 @@ var checkKrakeCookies = function(callback) {
  */
 var loadSession = function(params, callback){
   try{
-    console.log('-- before "loadSession"');
-    console.log('session\n' + JSON.stringify(sessionManager));
-    console.log('params\n' + JSON.stringify(params));
+    //console.log('-- before "loadSession"');
+    //console.log('session\n' + JSON.stringify(sessionManager));
+    //console.log('params\n' + JSON.stringify(params));
     
     switch(params.attribute) {
       case 'previous_column':
@@ -260,8 +268,8 @@ var loadSession = function(params, callback){
       break;
     }//eo switch
     
-    console.log('-- after "loadSession"');
-    console.log( JSON.stringify(sessionManager) );
+    //console.log('-- after "loadSession"');
+    //console.log( JSON.stringify(sessionManager) );
 
     if (callback && typeof(callback) === "function")  
       callback({status: 'success', session: sessionManager}); 
@@ -276,11 +284,11 @@ var loadSession = function(params, callback){
 
 var newColumn = function(params, callback){
   try{
-    console.log('-- before "addColumn"');
+    //console.log('-- before "addColumn"');
     //console.log( JSON.stringify(sessionManager) );
 
     var previousColumn = curr_SKH.findColumnByKey('url', params.url); 
-    console.log('-- previousColumn\n' + JSON.stringify(previousColumn));
+    //console.log('-- previousColumn\n' + JSON.stringify(previousColumn));
 
     sessionManager.currentColumn = ColumnFactory.createColumn(params);
     sessionManager.currentColumn.parentColumnId = sessionManager.previousColumn?  
@@ -293,8 +301,8 @@ var newColumn = function(params, callback){
 
     sessionManager.goToNextState();
 
-    console.log('-- after "addColumn"');
-    console.log( JSON.stringify(sessionManager) );
+    //console.log('-- after "addColumn"');
+    //console.log( JSON.stringify(sessionManager) );
        
     if (callback && typeof(callback) === "function")  
       callback({status: 'success', session: sessionManager});  
@@ -306,9 +314,35 @@ var newColumn = function(params, callback){
 
 
 
+// @Description : sets the pagination xpath to the current Krake
+// @param : params:Object
+// @param : callback:function({ 
+//   status : 'success' || 'error'
+//   session : sessionManager : Object
+// })
+var setPagination = function(params, callback) {
+  console.log('====================== start : Parameters sent from content.js script =====================');
+  console.log(params);
+  console.log('====================== end : Parameters sent from content.js script =====================');  
+  //alert("editCurrentColumn.next_pager := " + JSON.stringify(params));
+  try {
+    curr_SKH.setNextPager(params.values.xpath);
+    sessionManager.goToNextState(); //current state := 'idle'
+    
+    if (callback && typeof(callback) === "function")  
+      callback({status: 'success', session: sessionManager, sharedKrake: SharedKrake }); 
+      
+  }catch(err){
+    console.log(err);
+    if (callback && typeof(callback) === "function")  callback({status: 'error'});
+  }  
+  
+}
+
+
 var deleteColumn = function(params, callback){
   //try{
-    console.log('-- before "deleteColumn"');
+    //console.log('-- before "deleteColumn"');
     //console.log( JSON.stringify(SharedKrake) );
     var deletedColumn;
 
@@ -322,7 +356,7 @@ var deleteColumn = function(params, callback){
       deletedColumn = curr_SKH.removeColumn(params.columnId);
     }//eo if-else
     sessionManager.currentColumn = null;
-    console.log('-- after "deleteColumn"');
+    //console.log('-- after "deleteColumn"');
     //console.log( JSON.stringify(SharedKrake) );
     //console.log('-- deletedColumn');
     //console.log( JSON.stringify(deletedColumn) );
@@ -342,7 +376,7 @@ var deleteColumn = function(params, callback){
  */
 var editCurrentColumn = function(params, callback){
   try{    
-    console.log('-- before "editCurrentColumn"');
+    //console.log('-- before "editCurrentColumn"');
     //console.log( JSON.stringify(sessionManager) );
    
     switch(params.attribute){
@@ -364,11 +398,6 @@ var editCurrentColumn = function(params, callback){
         sessionManager.currentColumn.genericXpath = params.values.genericXpath;
       break;
 
-      case 'next_pager':
-      //alert("editCurrentColumn.next_pager := " + JSON.stringify(params));
-        curr_SKH.setNextPager(params.values.xpath);
-        sessionManager.goToNextState(); //current state := 'idle'
-      break;
     }//eo switch
     
     //console.log('-- after "editCurrentColumn"');
@@ -380,59 +409,64 @@ var editCurrentColumn = function(params, callback){
     console.log(err);
     if (callback && typeof(callback) === "function")  callback({status: 'error'});
   }
+  
 };//eo editCurrentColumn
 
 
 
 var saveColumn = function(params, callback){
+
   try{
-    //validate currentColumn
-    if(sessionManager.currentColumn.validate()){
+    
+    // when the current column exist
+    if(sessionManager.currentColumn && sessionManager.currentColumn.validate()){
       sessionManager.previousColumn = sessionManager.currentColumn;
       curr_SKH.saveColumn(sessionManager.currentColumn);
       sessionManager.currentColumn = null;
       sessionManager.goToNextState('idle');
 
-      console.log('-- after "saveColumn"');
-      console.log( JSON.stringify(sessionManager) );
-      console.log( JSON.stringify(SharedKrake) );
-
-      if (callback && typeof(callback) === "function")  
-        callback({status: 'success', session: sessionManager, sharedKrake: sharedKrake}); 
-    }else{
-      if (callback && typeof(callback) === "function")  
+      if (callback && typeof(callback) === "function")
+        callback({status: 'success', session: sessionManager, sharedKrake: sharedKrake});
+        
+    // when the current column does not exist
+    } else {
+      if (callback && typeof(callback) === "function")
         callback({status: 'error', session: sessionManager, sharedKrake: sharedKrake});
+        
     }
+    
   }catch(err){
-
+    console.log('Error saving column');
+    console.log(err)
   }
+  
 };//eo saveButton
 
 
 
 var matchPattern = function(callback){
   try{
-    console.log( JSON.stringify(sessionManager) );
+    //console.log( JSON.stringify(sessionManager) );
     //result => { status: 'success', genericXpath: array }
     var result ={};
     if(sessionManager.currentColumn.columnType == 'list'){
       result = PatternMatcher.findGenericXpath(sessionManager.currentColumn.selection1, sessionManager.currentColumn.selection2);
       sessionManager.currentColumn.genericXpath = result.genericXpath;
     }else{
-      console.log('point 0');
-      console.log(sessionManager.currentColumn.selection1.xpath);
-      console.log(sessionManager.currentColumn.genericXpath);
+      //console.log('point 0');
+      //console.log(sessionManager.currentColumn.selection1.xpath);
+      //console.log(sessionManager.currentColumn.genericXpath);
 
       sessionManager.currentColumn.genericXpath = sessionManager.currentColumn.selection1.xpath;
       result.status = 'matched';
-      console.log('point 1');
+      //console.log('point 1');
     }
     var response = {
       status : 'success',
       patternMatchingStatus : result.status,
       column : sessionManager.currentColumn
     }
-    console.log('point 2');
+    //console.log('point 2');
     //tell content script to highlight all elements covered by generic xpath
     if (callback && typeof(callback) === "function")   callback(response); 
   }catch(err){
@@ -551,7 +585,7 @@ chrome.runtime.onMessage.addListener(
       break;
 
       case 'get_shared_krake':
-        sendResponse({ sharedKrake: SharedKrake });
+        sendResponse({ sharedKrake: sharedKrake });
       break;
 
       case 'get_breadcrumb':
@@ -562,8 +596,16 @@ chrome.runtime.onMessage.addListener(
         newColumn(request.params, sendResponse);
       break;
       
+      // transits into state for handling pagination selection event
       case "add_pagination":
-        // TODO : To Extend
+        sessionManager.goToNextState(request.params.values.state);
+        sendResponse({status: 'success', session: sessionManager, sharedKrake: sharedKrake});         
+        console.log('Transited into pagination detection mode');
+        console.log(sessionManager);
+      break;      
+      
+      case "set_pagination":
+        setPagination(request.params, sendResponse);
       break;
       
       case "add_nested_krake":
@@ -583,6 +625,8 @@ chrome.runtime.onMessage.addListener(
       break;
 
       case 'save_column':
+        console.log('=========== Line 635 ========');
+        console.log(sendResponse);
         saveColumn(request.params, sendResponse);
       break;
 

@@ -57,6 +57,7 @@ var Panel = {
   
   
   
+  // @Description : the event whereby the 'list' button was clicked
   uiBtnCreateListClick : function(){
     chrome.extension.sendMessage({ action: "get_session"}, function(response){
       var sessionManager = response.session;
@@ -100,6 +101,7 @@ var Panel = {
   
   
   
+  // @Description : the event whereby the 'single' button was clicked  
   uiBtnSelectSingleClick : function(){
     chrome.extension.sendMessage({ action: "get_session"}, function(response){
       var sessionManager = response.session;
@@ -132,6 +134,7 @@ var Panel = {
               title : Params.NOTIFICATION_TITLE_SINGLE_SELECTION,
               message : Params.NOTIFICATION_MESSAGE_SINGLE_SELECTION
             });
+            
           }else{
             //show warning to user
           }//eo if-else
@@ -143,6 +146,7 @@ var Panel = {
 
 
 
+  // @Description : the event whereby the 'done' button was clicked
   uiBtnDoneClick : function(){
     //send mixpanel request
     MixPanelHelper.triggerMixpanelEvent(null, 'event_11');
@@ -151,11 +155,8 @@ var Panel = {
 
     chrome.extension.sendMessage({ action:'get_krake_json' }, function(response){
       if(response.status == 'success'){
-
-        //$('#json-definition').text(JSON.stringify(response.sharedKrake));        
-        console.log('-- sharedKrake\n' + JSON.stringify(response.sharedKrake));
+        $('#json-definition').text(JSON.stringify(response.krakeDefinition));
         
-        $('#json-definition').text(JSON.stringify(response.krakeDefinition));        
       }
     });
 
@@ -192,22 +193,32 @@ var Panel = {
 
 
 
+  // @Description : the prompt to allow users the ability to indicate if there is a pagination on this page
   showPaginationOption : function(column){
+    
     //show prompt
     NotificationManager.showOptionsYesNo({
       title: 'This is page part of a listing?',
       message: 'Pages belonging to a listing usually have hyperlinks that look like  ' +
         '<button disabled="disabled"> >> </button> or <button disabled="disabled">Next</button>',
+
+      // @Description : event is triggered when the 'yes' button is clicked
       yesFunction : function(e){
         NotificationManager.hideAllMessages();
+        console.log('going into selectNextPager');
         selectNextPager();
       },
+      
+      // @Description : event is triggered when the 'no' button is clicked
       noFunction : function(e){
         NotificationManager.hideAllMessages();
       }
+      
     });
 
+    // @Description : Handles the event whereby user goes into the mode for selecting pagination
     var selectNextPager = function(){
+
       var params = {
         attribute : 'current_state',
         values : {
@@ -215,28 +226,33 @@ var Panel = {
         }
       }
       
+      // transits into pagination mode regardless of save_column command outcome
       chrome.extension.sendMessage({ action: "save_column" }, function(response){
-        if(response.status == 'success'){
-          NotificationManager.showNotification({
-            type : 'info',
-            title : Params.NOTIFICATION_TITLE_SELECT_NEXT_PAGER,
-            message : Params.NOTIFICATION_MESSAGE_SELECT_NEXT_PAGER
-          });
-          //remove save column button
-          var columnIdentifier = "#krake-column-" + column.columnId; 
-          var selector = columnIdentifier + ' .krake-control-button-save';
-          $(selector).remove();
+        
+        NotificationManager.showNotification({
+          type : 'info',
+          title : Params.NOTIFICATION_TITLE_SELECT_NEXT_PAGER,
+          message : Params.NOTIFICATION_MESSAGE_SELECT_NEXT_PAGER
+        });
+        
+        //remove save column button
+        var columnIdentifier = "#krake-column-" + column.columnId; 
+        var selector = columnIdentifier + ' .krake-control-button-save';
+        $(selector).remove();
+        
+        // Adds the pagination declaration in the background
+        console.log('Transiting to add pagination state');
+        chrome.extension.sendMessage({ action:"add_pagination", params: params }, function(response){
+          console.log('Transited into add pagination state');            
+          console.log(response);
+          if(response.status == 'success'){
+            
+          }
+        });
           
-          // Adds the pagination declaration in the background
-          chrome.extension.sendMessage({ action:"add_pagination", params: params }, function(response){
-            if(response.status == 'success'){
-              
-            }
-          });
-          
-        }
       });
     }//eo if
+    
   },
 
 
@@ -251,7 +267,8 @@ var Panel = {
                                         style:  linkButtonImageUrl });
 
       $(selector).append($linkButton);
-
+      
+      // Handles the event whereby the link icon was clicked
       $linkButton.bind('click', function(){
         console.log('Detailed Link Clicked')
         var params = {
@@ -266,17 +283,23 @@ var Panel = {
       
         chrome.extension.sendMessage({ action:"get_session" }, function(response){ 
           console.log('-- get_session\n' + JSON.stringify(response) );
+          
+          // Do nothing with session obtained from the background
           if(response.session.currentColumn){
-            console.log('We are at line 268');
-            //notify user to save column first
+
+
+          // Gets the HREF defined by this column and redirects the users to the nested page
           }else{
-            console.log('We are at line 271');
-            chrome.extension.sendMessage({ action:'add_nested_krake', params : params}, function(response){
+            chrome.extension.sendMessage({ action:'edit_session', params : params}, function(response){
               if(response.status == 'success'){
 
                 console.log('We got back the edit_session successfully');
                 
                 //alert('column.genericXpath := ' + column.genericXpath);
+                
+                // TODO : split columns into two :
+                //   - first for value within this page
+                //   - second for the actual href to the nested page
                 var results = XpathHelper.evaluateQuery(column.genericXpath);
                 console.log('Rerouting to location %s' , results.nodesToHighlight[0].href);
 

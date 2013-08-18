@@ -18,7 +18,7 @@ This is how a single Shared Kraked data object for a page will look like
     {
       
       // The page this Krake definition is mapping to
-      "originUrl": "http://sg.yahoo.com/?p=us",
+      "origin_url": "http://sg.yahoo.com/?p=us",
             
       // some_urls_within_the_same_shared_krakes_object
       "parent_url" : "arbitrary_string",

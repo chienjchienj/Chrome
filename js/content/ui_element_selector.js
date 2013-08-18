@@ -62,14 +62,23 @@ var UIElementSelector = {
 
   // @Description : Gets and sets the element Xpath to session when a click event occurs
   selectElement : function(e){
+    
     e.preventDefault();
     e.stopPropagation();
 
     if ($(e.target).is('.k_panel')) return;
     
+    
     var self = this;
       
     chrome.extension.sendMessage({ action: 'get_session'}, function(response){
+      
+      console.log('Selected element');
+      console.log('======================================');
+      console.log(e);
+      console.log(response);
+      console.log('======================================');
+            
       var sessionManager = response.session;
       //console.log("--");
       //console.log(JSON.stringify(sessionManager));
@@ -100,13 +109,15 @@ var UIElementSelector = {
           console.log('Line 99');
           console.log(params);
           
-          chrome.extension.sendMessage({ action:'edit_current_column', params: { attribute:'next_pager', values:params}}, function(response){
+          // TODO : Refactor the next page out of edit_current_column as a separate event of its own
+          chrome.extension.sendMessage({ action:'set_pagination', params: { values:params}}, function(response){
             UIElementSelector.mode = 'select_element';
             console.log('-- select next Pager');
             console.log('status := ' + response.status);
             console.log('-- session\n' + JSON.stringify(response.session));
             console.log('-- sharedKrake\n' + JSON.stringify(response.sharedKrake));
           });
+          
         break;
 
         case 'pre_selection_1' :
@@ -117,6 +128,7 @@ var UIElementSelector = {
               UIElementSelector.updateColumnText(sessionManager.currentColumn.columnId, 1, elementText, elementPathResult.nodeName);
               //console.log( JSON.stringify(sessionManager) ); 
 
+              
               if(sessionManager.currentColumn.columnType == 'list'){
                 //send mixpanel request
                 MixPanelHelper.triggerMixpanelEvent(null, 'event_6');
@@ -126,12 +138,13 @@ var UIElementSelector = {
                   title : Params.NOTIFICATION_TITLE_PRE_SELECTION_2,
                   message : Params.NOTIFICATION_MESSAGE_PRE_SELECTION_2
                 });
+                
               }else if(sessionManager.currentColumn.columnType == 'single'){
                 //send mixpanel request
                 MixPanelHelper.triggerMixpanelEvent(null, 'event_8');
 
                 chrome.extension.sendMessage({ action:"match_pattern" }, function(response){
-                  console.log( JSON.stringify(response) );
+
                   if(response.status == 'success'){ 
                     //highlight all elements depicted by genericXpath
                     UIElementSelector.highlightElements(response.column.url, response.column.genericXpath, response.column.colorCode);
@@ -142,6 +155,7 @@ var UIElementSelector = {
                   }
                 });
               }//eo if
+              
             }
           });
         break;
@@ -164,7 +178,7 @@ var UIElementSelector = {
                 var sessionManager = response.session;
                 UIElementSelector.updateColumnText(sessionManager.currentColumn.columnId, 2, elementText, elementPathResult.nodeName);
                 chrome.extension.sendMessage({ action:"match_pattern" }, function(response){
-                  console.log( JSON.stringify(response) );
+
                   if(response.status == 'success'){
                     if(response.patternMatchingStatus != 'matched'){
                       NotificationManager.showNotification({
@@ -172,7 +186,8 @@ var UIElementSelector = {
                         title : Params.NOTIFICATION_TITLE_SELECTIONS_NOT_MATCHED,
                         message : Params.NOTIFICATION_MESSAGE_SELECTIONS_NOT_MATCHED
                       });
-                    }else{
+                      
+                    } else {
                       //highlight all elements depicted by genericXpath
                       UIElementSelector.highlightElements(response.column.url, response.column.genericXpath, response.column.colorCode);
                       //show pagination option
@@ -181,6 +196,7 @@ var UIElementSelector = {
                       //display 'link' icon
                       Panel.showLink(response.column);
                     }//eo if-else
+                    
                   }//eo if
                 });
               }

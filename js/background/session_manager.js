@@ -64,20 +64,24 @@ var SessionManager = function(){
   };//eo states
 };
 
+// @Description : sets up the initial state for this session
 SessionManager.prototype.setInitialState = function(state){
   var self = this;
   self.currentState = state;
 };
 
+// @Description : sets the event handler that will be triggered when session is transisted into state
 SessionManager.prototype.setEventForState = function(state, eventHandler){
   var self = this;
   self.states[state]['post_transition_event'] = eventHandler;
   //console.log('eventHandler for "' + state + '" set');
 };
 
+// @Description : rotates the state to the next one inline
 SessionManager.prototype.goToNextState = function(state){
   var self = this;
 
+  // When a target state is not indicated
   if(!state) {
     var previousState = self.states[self.currentState];
     self.currentState = previousState['after'];
@@ -85,6 +89,8 @@ SessionManager.prototype.goToNextState = function(state){
     if(previousState['post_transition_event'] != undefined) {
       (previousState['post_transition_event'])();
     }
+    
+  // When a target state is indicated
   } else {
     self.currentState = state;
   }//eo if-else
@@ -92,52 +98,6 @@ SessionManager.prototype.goToNextState = function(state){
   return self;
 };
 
-/***************************************************************************/
-/************************  SharedKrake Object   ****************************/
-/***************************************************************************/
-
-var SharedKrake = {
-  originUrl : null,
-  destinationUrl : null,
-  columns:[],
-  
-  reset : function(){
-    SharedKrake.originUrl = null;
-    SharedKrake.destinationUrl = null;
-    SharedKrake.columns = [];
-  }
-};
-
-
-
-var ColorGenerator = function(){
-  this.colorArray = 
-  [ " k_highlight_FFCC00 ", //yellow
-    " k_highlight_FF6600 ", //orange
-    " k_highlight_3EA99F ", //light green
-    " k_highlight_FF99FF ", //light purple
-    " k_highlight_82CAFF ", //sky blue
-    " k_highlight_99CCFF ",
-    " k_highlight_FF00FF ",
-    " k_highlight_CC33FF ",
-    " k_highlight_FFCCCC ",
-    " k_highlight_CCFF00 ",
-    " k_highlight_0099CC ",
-    " k_highlight_FFCCFF ",
-    " k_highlight_33FF33 ",
-    " k_highlight_FFFF99 "
-  ];
-
-};//eo ColorGenerator
-
-
-ColorGenerator.prototype.getColor = function()
-{
-  var self = this;
-  var color = self.colorArray.shift();
-  self.colorArray.push(color);
-  return color; 
-}
 
 
 /*

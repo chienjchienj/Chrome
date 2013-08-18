@@ -57,7 +57,7 @@ var hidePanel = function(){
 
 
 // @Description : In case there was a page reload, populates the panel 
-//   with data from previously existing column in the Krake definitions of the
+//   with data from previously existing column in the Krake definitions of theinjectKrakeJson
 //   current Tab.
 var reloadExistingColumns = function(){
   chrome.extension.sendMessage({ action: "get_shared_krake" },  function(response){ 
@@ -137,7 +137,8 @@ var param = {
 
 
 // @Description : Checks the current domain loaded and activates different mode
-if( !isKrakeDomain() ) { // Normal mode
+// Normal mode
+if( !isKrakeDomain() ) { 
   behavioral_mode = DEFAULT_MODE;
   chrome.extension.sendMessage({ action:'load_session', params: { attribute:'previous_column', values:param }}, function(response){
     if(response.status == 'success'){
@@ -145,7 +146,8 @@ if( !isKrakeDomain() ) { // Normal mode
     }
   });
 
-} else if ( isKrakeDomain() && document.location.pathname == '/tutorial' ) { // A tutorial on how to use browser ext
+// A tutorial on how to use browser ext
+} else if ( isKrakeDomain() && document.location.pathname == '/tutorial' ) { 
 
   behavioral_mode = TUTORIAL_MODE;
   chrome.extension.sendMessage({ action:'load_session', params: { attribute:'previous_column', values:param }}, function(response){
@@ -154,7 +156,8 @@ if( !isKrakeDomain() ) { // Normal mode
     }
   });
 
-} else if ( isKrakeDomain() && document.location.pathname == '/krakes/new') { // injects Krake Def
+// injects Krake Def
+} else if ( isKrakeDomain() && document.location.pathname == '/krakes/new') { 
 
   behavioral_mode = CREATION_MODE;
   chrome.extension.sendMessage({ action:'inject_krake' }, function(response){
@@ -164,7 +167,8 @@ if( !isKrakeDomain() ) { // Normal mode
     }
   });
 
-} else if ( isKrakeDomain() && document.location.pathname == '/loggedin-via-extension' ) { // redirect 
+// redirect 
+} else if ( isKrakeDomain() && document.location.pathname == '/loggedin-via-extension' ) { 
   document.location = 'https://krake.io/krakes/new'
 }
 

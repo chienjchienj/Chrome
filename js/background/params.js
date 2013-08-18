@@ -21,7 +21,7 @@ var CommonParams =
 {
   columnNameMapper : 
   {
-    originUrl : "origin_url",
+    origin_url : "origin_url",
     destinationUrl : "destination_url",
     columnName : "col_name",
     genericXpath : "xpath",

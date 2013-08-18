@@ -1,21 +1,32 @@
-var SharedKrakeHelper = function(tab_id){
+// @Description : creates a helper object that allows for easy manipulation of the sharedKrake definition object
+//  that corresponds to the current URL
+var SharedKrakeHelper = function(tab_id, url){
   var self = this;
+  records[tab_id] = records[tab_id] || {};
+  records[tab_id].shared_krakes = records[tab_id].shared_krakes || {}
+  self.SharedKrake = records[tab_id].shared_krakes[url] = records[tab_id].shared_krakes[url] || self.spawnSharedKrake();
   
 };
 
 
+
+// @Description : gets an instantiation of a sharedKrake object
+SharedKrakeHelper.prototype.spawnSharedKrake = function() {
+  return new SharedKrake();
+}
+
+
+
 SharedKrakeHelper.prototype.saveColumn = function(column){
   var self = this;
-  console.log("addColumnToSharedKrake");
-
-  if(!SharedKrake.originUrl)  
-    SharedKrake.originUrl = column.url;
+  if(!self.SharedKrake.origin_url)  
+    self.SharedKrake.origin_url = column.url;
 
   if(!column.parentColumnId){
-    SharedKrake.columns.push(column);
+    self.SharedKrake.columns.push(column);
   }
   else{
-    self.addColumnToParentColumn(SharedKrake.columns, column);
+    self.addColumnToParentColumn(self.SharedKrake.columns, column);
   }
 }//eo addColumnToSharedKrake
 
@@ -47,12 +58,12 @@ SharedKrakeHelper.prototype.addColumnToParentColumn = function(columns, column){
 SharedKrakeHelper.prototype.removeColumn = function(columnId){
   var self = this;  
   console.log("removeColumnFromSharedKrake");
-  return self.removeColumnFromSharedKrake(SharedKrake.columns, columnId);
+  return self.removeColumnFromSharedKrake(self.SharedKrake.columns, columnId);
 },//eo removeColumnFromSharedKrake
 
 
 
-SharedKrakeHelper.removeColumnFromSharedKrake = function(columns, columnId){
+SharedKrakeHelper.prototype.removeColumnFromSharedKrake = function(columns, columnId){
   var self = this;    
   for(var i=0; i<columns.length; i++){
   	//console.log('column[i].columnId := ' + columns[i].columnId + ', columnId := ' + columnId);
@@ -75,9 +86,8 @@ SharedKrakeHelper.removeColumnFromSharedKrake = function(columns, columnId){
  * @Return: column:obj
  */
 SharedKrakeHelper.prototype.findColumnByKey = function(key, value){
-  var self = this;    
-  console.log("-- sharedKrake \n" + JSON.stringify(sharedKrake));
-  return self.searchColumnByKey(SharedKrake.columns, key, value);
+  var self = this;
+  return self.searchColumnByKey(self.SharedKrake.columns, key, value);
 };
 
 
@@ -156,12 +166,12 @@ SharedKrakeHelper.prototype.getBreadcrumbArray = function(columnId){
   var result;
 
   if(sessionManager.currentColumn){
-    result = self.getBreadcrumbColumnArray(SharedKrake.columns, 
+    result = self.getBreadcrumbColumnArray(self.SharedKrake.columns, 
   	                                                  sessionManager.currentColumn.parentColumnId, 
   	                                                  breadcrumbArray, 
   	                                                  SharedKrake.columns);
   }else{
-    result = self.getBreadcrumbColumnArray(SharedKrake.columns, 
+    result = self.getBreadcrumbColumnArray(self.SharedKrake.columns, 
   	                                                  columnId, 
   	                                                  breadcrumbArray, 
   	                                                  SharedKrake.columns);
@@ -172,7 +182,9 @@ SharedKrakeHelper.prototype.getBreadcrumbArray = function(columnId){
 
   return result? result : [sessionManager.currentColumn];
 };
-  
+
+
+
 SharedKrakeHelper.prototype.getBreadcrumbColumnArray = function(columns, columnId, breadcrumbColumnArray, originalColumns){
   var self = this;  
 	for(var i=0; i<columns.length; i++){
@@ -202,35 +214,16 @@ SharedKrakeHelper.prototype.getBreadcrumbColumnArray = function(columns, columnI
 };//eo getBreadcrumbColumnArray
 
 
+
+// @Description : Given an Xpath String sets it as the xpath attribute in the next_page attribute for this current Shared_Krake
+// @param : xpath:String
 SharedKrakeHelper.prototype.setNextPager = function(xpath){ 
   var self = this;    
   console.log('setNextPager.xpath := ' + xpath);
-  return self.addNextPagerToColumns(xpath, sharedKrake.columns);
+  sharedKrake.next_page = sharedKrake.next_page || {};
+  sharedKrake.next_page.xpath = xpath;
+
 };//eo setNextPager
-
-
-SharedKrakeHelper.prototype.addNextPagerToColumns = function(xpath, columns, options){
-  var self = this;    
-  var columnId = sessionManager.previousColumn.columnId;
-
-  for(var i=0; i<columns.length; i++){
-    if(columns[i].columnId==columnId){
-      if(options == null){
-        sharedKrake.nextPager = { xpath: xpath };
-        return true;
-      }else{
-        options.nextPager = { xpath: xpath };
-      }
-      return columns[i];
-      
-    }else{
-      var result = self.addNextPagerToColumns(xpath, columns[i].options.columns, columns[i].options);
-      if(result) return result;
-      
-    }
-  }//eo for
-  return null;
-};//eo addNextPagerToColumns
 
 
 
@@ -242,7 +235,7 @@ SharedKrakeHelper.prototype.createScrapeDefinitionJSON = function(){
     var mappedColumnName = self.getMappedColumnName(key);
 
     switch(key){
-      case "originUrl":
+      case "origin_url":
         krakeJson[mappedColumnName] = sharedKrake[key];
       break;
 
@@ -252,8 +245,8 @@ SharedKrakeHelper.prototype.createScrapeDefinitionJSON = function(){
           krakeJson["columns"] = result;
       break;
 
-      case "nextPager":
-        krakeJson[mappedColumnName] = sharedKrake[key];
+      case "next_page":
+        krakeJson[key] = sharedKrake[key];
       break;
     }//eo switch
 

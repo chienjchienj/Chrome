@@ -21,7 +21,6 @@
 /*
  *  This class manages the notifications that show up at the top of the pages to prompt the users to the next action                 
  */
-
 var NotificationManager = {
   myMessages : new Array('warning','error','success', 'info', 'option'),
 
@@ -45,13 +44,15 @@ var NotificationManager = {
     }//eo for
 
   },
+  
+  
+  
   /*
    * @Param: params:obj
    *                type:string message type 'warning','error','success', 'info'
    *                title:string
    *                message:string
    */
-
   showNotification : function(params){
     console.log('Current mode %s, tutorial mode %s', NotificationManager.behavioral_mode, TUTORIAL_MODE);
     if(NotificationManager.behavioral_mode == TUTORIAL_MODE) {
@@ -86,6 +87,9 @@ var NotificationManager = {
 
     $('.k_'+params.type).animate({top:"0"}, 500);
   },
+  
+  
+  
   /*
    * @Param: params:obj
    *                title:string message type 'warning','error','success', 'info'
