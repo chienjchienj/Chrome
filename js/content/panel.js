@@ -31,13 +31,13 @@ var Panel = {
 
 
 
-  generateColumnId : function(){
+  generateColumnId : function() {
    return Math.floor( Math.random() * 10000000000 );
   },
 
 
 
-  init : function(behavioral_mode){
+  init : function(behavioral_mode) {
     jQuery('#panel-left button').tooltip();
     
     Panel.behavioral_mode = behavioral_mode;    
@@ -58,11 +58,11 @@ var Panel = {
   
   
   // @Description : the event whereby the 'list' button was clicked
-  uiBtnCreateListClick : function(){
-    chrome.extension.sendMessage({ action: "get_session"}, function(response){
+  uiBtnCreateListClick : function() {
+    chrome.extension.sendMessage({ action: "get_session"}, function(response) {
       var sessionManager = response.session;
 
-      if(sessionManager.currentState != 'idle'){
+      if(sessionManager.currentState != 'idle') {
         //alert("You must finish editing the previous column");
         NotificationManager.showNotification({
           type : 'error',
@@ -78,9 +78,9 @@ var Panel = {
           url : document.URL
         };
 
-        chrome.extension.sendMessage({ action: "add_column", params: params}, function(response){
+        chrome.extension.sendMessage({ action: "add_column", params: params}, function(response) {
           //only add UIColumn to panel once a logical column object is created in sessionManager
-          if(response.status == 'success'){
+          if(response.status == 'success') {
             Panel.uiPanelWrapper.append(UIColumnFactory.createUIColumn('list', newColumnId));
             Panel.attachEnterKeyEventToColumnTitle(newColumnId);
             Panel.addBreadCrumbToColumn(newColumnId);
@@ -102,11 +102,11 @@ var Panel = {
   
   
   // @Description : the event whereby the 'single' button was clicked  
-  uiBtnSelectSingleClick : function(){
-    chrome.extension.sendMessage({ action: "get_session"}, function(response){
+  uiBtnSelectSingleClick : function() {
+    chrome.extension.sendMessage({ action: "get_session"}, function(response) {
       var sessionManager = response.session;
 
-      if(sessionManager.currentState != 'idle'){
+      if(sessionManager.currentState != 'idle') {
         //alert("You must finish editing the previous column");
         NotificationManager.showNotification({
           type : 'error',
@@ -122,9 +122,9 @@ var Panel = {
           url : document.URL
         };
 
-        chrome.extension.sendMessage({ action: "add_column", params: params}, function(response){
+        chrome.extension.sendMessage({ action: "add_column", params: params}, function(response) {
           //only add UIColumn to panel once a logical column object is created in sessionManager
-          if(response.status == 'success'){
+          if(response.status == 'success') {
             Panel.uiPanelWrapper.append(UIColumnFactory.createUIColumn('single', newColumnId));
             Panel.attachEnterKeyEventToColumnTitle(newColumnId);
             Panel.addBreadCrumbToColumn(newColumnId);
@@ -147,14 +147,14 @@ var Panel = {
 
 
   // @Description : the event whereby the 'done' button was clicked
-  uiBtnDoneClick : function(){
+  uiBtnDoneClick : function() {
     //send mixpanel request
     MixPanelHelper.triggerMixpanelEvent(null, 'event_11');
     NotificationManager.hideAllMessages();
     $('#json-output').modal('show');
 
-    chrome.extension.sendMessage({ action:'get_krake_json' }, function(response){
-      if(response.status == 'success'){
+    chrome.extension.sendMessage({ action:'get_krake_json' }, function(response) {
+      if(response.status == 'success') {
         $('#json-definition').text(JSON.stringify(response.krakeDefinition));
         
       }
@@ -165,7 +165,7 @@ var Panel = {
 
 
 
-  attachEnterKeyEventToColumnTitle : function(columnId){
+  attachEnterKeyEventToColumnTitle : function(columnId) {
     var identifier = "#krake-column-title-" + columnId;
     $(identifier).keydown(function(e) {
       if(e.which == 13) {
@@ -175,8 +175,8 @@ var Panel = {
         var params = {
           columnName : newColumnTitle
         }
-        chrome.extension.sendMessage({ action:"edit_current_column", params: { attribute:"column_name", values:params }}, function(response){
-          if(response.status == 'success'){
+        chrome.extension.sendMessage({ action:"edit_current_column", params: { attribute:"column_name", values:params }}, function(response) {
+          if(response.status == 'success') {
             //update breadcrumb uri
             var selector = '#k_column-breadcrumb-' + columnId + ' a';
             var uriSelector = '#k_column-breadcrumb-' + columnId + ' a:nth-child(' + $(selector).length + ')' ;
@@ -194,7 +194,7 @@ var Panel = {
 
 
   // @Description : the prompt to allow users the ability to indicate if there is a pagination on this page
-  showPaginationOption : function(column){
+  showPaginationOption : function(column) {
     
     //show prompt
     NotificationManager.showOptionsYesNo({
@@ -203,21 +203,21 @@ var Panel = {
         '<button disabled="disabled"> >> </button> or <button disabled="disabled">Next</button>',
 
       // @Description : event is triggered when the 'yes' button is clicked
-      yesFunction : function(e){
+      yesFunction : function(e) {
         NotificationManager.hideAllMessages();
         console.log('going into selectNextPager');
         selectNextPager();
       },
       
       // @Description : event is triggered when the 'no' button is clicked
-      noFunction : function(e){
+      noFunction : function(e) {
         NotificationManager.hideAllMessages();
       }
       
     });
 
     // @Description : Handles the event whereby user goes into the mode for selecting pagination
-    var selectNextPager = function(){
+    var selectNextPager = function() {
 
       var params = {
         attribute : 'current_state',
@@ -227,7 +227,7 @@ var Panel = {
       }
       
       // transits into pagination mode regardless of save_column command outcome
-      chrome.extension.sendMessage({ action: "save_column" }, function(response){
+      chrome.extension.sendMessage({ action: "save_column" }, function(response) {
         
         NotificationManager.showNotification({
           type : 'info',
@@ -242,10 +242,10 @@ var Panel = {
         
         // Adds the pagination declaration in the background
         console.log('Transiting to add pagination state');
-        chrome.extension.sendMessage({ action:"add_pagination", params: params }, function(response){
+        chrome.extension.sendMessage({ action:"add_pagination", params: params }, function(response) {
           console.log('Transited into add pagination state');            
           console.log(response);
-          if(response.status == 'success'){
+          if(response.status == 'success') {
             
           }
         });
@@ -257,8 +257,8 @@ var Panel = {
 
 
 
-  showLink : function(column){
-    if(column.selection1.elementType.toLowerCase() == 'a'){
+  showLink : function(column) {
+    if(column.selection1.elementType.toLowerCase() == 'a') {
       var selector = '#krake-column-control-' + column.columnId;
 
       var linkButtonImageUrl = "background-image: url(\"" + chrome.extension.getURL("images/link.png") + "\");";
@@ -269,7 +269,7 @@ var Panel = {
       $(selector).append($linkButton);
       
       // Handles the event whereby the link icon was clicked
-      $linkButton.bind('click', function(){
+      $linkButton.bind('click', function() {
         console.log('Detailed Link Clicked')
         var params = {
           attribute : 'previous_column',
@@ -281,17 +281,17 @@ var Panel = {
           }
         }
       
-        chrome.extension.sendMessage({ action:"get_session" }, function(response){ 
+        chrome.extension.sendMessage({ action:"get_session" }, function(response) { 
           console.log('-- get_session\n' + JSON.stringify(response) );
           
           // Do nothing with session obtained from the background
-          if(response.session.currentColumn){
+          if(response.session.currentColumn) {
 
 
           // Gets the HREF defined by this column and redirects the users to the nested page
-          }else{
-            chrome.extension.sendMessage({ action:'edit_session', params : params}, function(response){
-              if(response.status == 'success'){
+          } else {
+            chrome.extension.sendMessage({ action:'edit_session', params : params}, function(response) {
+              if(response.status == 'success') {
 
                 console.log('We got back the edit_session successfully');
                 
@@ -315,16 +315,16 @@ var Panel = {
 
 
 
-  addBreadCrumbToColumn : function(columnId){
+  addBreadCrumbToColumn : function(columnId) {
     console.log('addBreadCrumbToColumn');
 
-    chrome.extension.sendMessage({action: "get_breadcrumb", params:{columnId: columnId} }, function(response){
-      if(response.status == 'success'){
+    chrome.extension.sendMessage({action: "get_breadcrumb", params:{columnId: columnId} }, function(response) {
+      if(response.status == 'success') {
         var breadcrumbArray = response.breadcrumbArray;
         
         var selector = "#k_column-breadcrumb-" + columnId;
 
-        for(var i=breadcrumbArray.length-1; i>=0; i--){
+        for(var i=breadcrumbArray.length-1; i>=0; i--) {
           console.log("columnId:= " + breadcrumbArray[i].columnId + ", columnName:= " + breadcrumbArray[i].columnName);
           
 
@@ -338,7 +338,7 @@ var Panel = {
           var href = breadcrumbArray[i].url;
 
 
-          $link.unbind('click').bind('click', function(e){
+          $link.unbind('click').bind('click', function(e) {
             e.stopPropagation();
           });
 

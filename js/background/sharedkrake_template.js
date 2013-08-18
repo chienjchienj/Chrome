@@ -7,7 +7,7 @@ var SharedKrake = function() {
   
 };
 
-SharedKrake.prototype.reset = function(){
+SharedKrake.prototype.reset = function() {
   var self = this;
   self.origin_url = null;
   self.destinationUrl = null;

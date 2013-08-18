@@ -24,9 +24,9 @@
 var NotificationManager = {
   myMessages : new Array('warning','error','success', 'info', 'option'),
 
-  init : function(behavioral_mode){
+  init : function(behavioral_mode) {
     // When message is clicked, hide it
-    $('.k_message').click(function(){    
+    $('.k_message').click(function() {    
       $(this).animate({top: -$(this).outerHeight()}, 500);
     });
     
@@ -35,10 +35,10 @@ var NotificationManager = {
   },
 
 
-  hideAllMessages : function(){
+  hideAllMessages : function() {
     var messagesHeights = new Array(); // this array will store height for each
    
-    for (i=0; i<NotificationManager.myMessages.length; i++){
+    for (i=0; i<NotificationManager.myMessages.length; i++) {
       messagesHeights[i] = $('.k_' + NotificationManager.myMessages[i]).outerHeight(); // fill array
       $('.k_' + NotificationManager.myMessages[i]).css('top', -messagesHeights[i]); //move element outside viewport   
     }//eo for
@@ -53,7 +53,7 @@ var NotificationManager = {
    *                title:string
    *                message:string
    */
-  showNotification : function(params){
+  showNotification : function(params) {
     console.log('Current mode %s, tutorial mode %s', NotificationManager.behavioral_mode, TUTORIAL_MODE);
     if(NotificationManager.behavioral_mode == TUTORIAL_MODE) {
       return;
@@ -78,7 +78,7 @@ var NotificationManager = {
 
     $('.k_'+params.type).html(notification);
 
-    $('#k_message_close_button').bind('click', function(e){
+    $('#k_message_close_button').bind('click', function(e) {
       //trigger parent <div> click action
       coonsole.log('Line 830');
       $('.k_message').animate({top: -$('.k_message').outerHeight()}, 500);      
@@ -97,7 +97,7 @@ var NotificationManager = {
    *                yesFunction:function
    *                noFunction:function
    */
-  showOptionsYesNo : function(params){
+  showOptionsYesNo : function(params) {
     NotificationManager.hideAllMessages();
 
     if(params.title)

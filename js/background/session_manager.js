@@ -25,7 +25,7 @@
  * 'second_column_selected' => xpath2 is selected
  * 'ready_for_pagination_selection' => before pagination is defined
  */
-var SessionManager = function(){
+var SessionManager = function() {
   this.currentState = 'idle';
   this.previousColumn = null; //used for setting next_pager
   this.currentColumn = null;
@@ -65,20 +65,20 @@ var SessionManager = function(){
 };
 
 // @Description : sets up the initial state for this session
-SessionManager.prototype.setInitialState = function(state){
+SessionManager.prototype.setInitialState = function(state) {
   var self = this;
   self.currentState = state;
 };
 
 // @Description : sets the event handler that will be triggered when session is transisted into state
-SessionManager.prototype.setEventForState = function(state, eventHandler){
+SessionManager.prototype.setEventForState = function(state, eventHandler) {
   var self = this;
   self.states[state]['post_transition_event'] = eventHandler;
   //console.log('eventHandler for "' + state + '" set');
 };
 
 // @Description : rotates the state to the next one inline
-SessionManager.prototype.goToNextState = function(state){
+SessionManager.prototype.goToNextState = function(state) {
   var self = this;
 
   // When a target state is not indicated
@@ -123,7 +123,7 @@ if(!module.parent) {
   console.log("initial state := " + sessionManager.currentState);
   sessionManager.setInitialState('first_column_selected');
   console.log(sessionManager.currentState);
-  sessionManager.setEventForState('first_column_selected', function(){ console.log("hello world!"); });
+  sessionManager.setEventForState('first_column_selected', function() { console.log("hello world!"); });
   sessionManager.goToNextState();
 
   

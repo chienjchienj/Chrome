@@ -1,4 +1,4 @@
-(function(){
+(function() {
 
 var panel = null;
 var elementUIManager = null;
@@ -15,19 +15,19 @@ function isKrakeDomain() {
 }
 
 // @Description : Checks if jQuery library exist in the page
-$.fn.isExist = function(){
+$.fn.isExist = function() {
   return jQuery(this).length > 0;
 };
 
 // @Description : Shows the panel within the page by loading all the scripts
-var showPanel = function(){
-  if(!$('#k-panel-wrapper').isExist()){
+var showPanel = function() {
+  if(!$('#k-panel-wrapper').isExist()) {
     var element = document.createElement('div');
     element.id = "k-panel-wrapper";
     $('body').prepend(element); 
     var panelWrapper = $('#k-panel-wrapper');
 
-    panelWrapper.load(chrome.extension.getURL("html/panel.html"),function(){
+    panelWrapper.load(chrome.extension.getURL("html/panel.html"),function() {
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/params.js" } }); 
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/xpath_helper.js" } });
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/mixpanel_helper.js" } });
@@ -46,8 +46,8 @@ var showPanel = function(){
 
 
 // @Description : Hides the panel
-var hidePanel = function(){
-  if($('#k-panel-wrapper').isExist()){
+var hidePanel = function() {
+  if($('#k-panel-wrapper').isExist()) {
     $('#k-panel-wrapper').remove();
     //elementUIManager.disableElementSelection();
     //elementUIManager = null;
@@ -59,8 +59,8 @@ var hidePanel = function(){
 // @Description : In case there was a page reload, populates the panel 
 //   with data from previously existing column in the Krake definitions of theinjectKrakeJson
 //   current Tab.
-var reloadExistingColumns = function(){
-  chrome.extension.sendMessage({ action: "get_shared_krake" },  function(response){ 
+var reloadExistingColumns = function() {
+  chrome.extension.sendMessage({ action: "get_shared_krake" },  function(response) { 
     console.log( '-- sharedKrake: ');
     console.log( JSON.stringify(response.sharedKrake) );
 
@@ -72,8 +72,8 @@ var reloadExistingColumns = function(){
 
 
 // @Description : Given an array of columns populates the columns wrapper
-var populateColumns = function(wrapper, columns){
-  for(var i=0; i<columns.length; i++){
+var populateColumns = function(wrapper, columns) {
+  for(var i=0; i<columns.length; i++) {
     var params = {};
     params.columnId = columns[i].columnId;
     params.columnType = columns[i].columnType;
@@ -98,8 +98,8 @@ var populateColumns = function(wrapper, columns){
 
 // @Description : Handles calls from the background script
 chrome.extension.onMessage.addListener(
-  function(request, sender, sendResponse){
-  	switch(request.action){
+  function(request, sender, sendResponse) {
+  	switch(request.action) {
       case "enable_krake":
         if(document.domain != 'krake.io') {      
           showPanel();
@@ -114,7 +114,7 @@ chrome.extension.onMessage.addListener(
 
       case "load_script_done":
         console.log("load_script_done := " + request.params.filename);
-        if(request.params.filename == "js/content/krake.js"){
+        if(request.params.filename == "js/content/krake.js") {
           Panel.init(behavioral_mode);
           UIElementSelector.init();
           reloadExistingColumns();
@@ -140,8 +140,8 @@ var param = {
 // Normal mode
 if( !isKrakeDomain() ) { 
   behavioral_mode = DEFAULT_MODE;
-  chrome.extension.sendMessage({ action:'load_session', params: { attribute:'previous_column', values:param }}, function(response){
-    if(response.status == 'success'){
+  chrome.extension.sendMessage({ action:'load_session', params: { attribute:'previous_column', values:param }}, function(response) {
+    if(response.status == 'success') {
       console.log('-- load_session');
     }
   });
@@ -150,8 +150,8 @@ if( !isKrakeDomain() ) {
 } else if ( isKrakeDomain() && document.location.pathname == '/tutorial' ) { 
 
   behavioral_mode = TUTORIAL_MODE;
-  chrome.extension.sendMessage({ action:'load_session', params: { attribute:'previous_column', values:param }}, function(response){
-    if(response.status == 'success'){
+  chrome.extension.sendMessage({ action:'load_session', params: { attribute:'previous_column', values:param }}, function(response) {
+    if(response.status == 'success') {
       console.log('-- load_session');
     }
   });
@@ -160,8 +160,8 @@ if( !isKrakeDomain() ) {
 } else if ( isKrakeDomain() && document.location.pathname == '/krakes/new') { 
 
   behavioral_mode = CREATION_MODE;
-  chrome.extension.sendMessage({ action:'inject_krake' }, function(response){
-    if(response.status == 'success'){
+  chrome.extension.sendMessage({ action:'inject_krake' }, function(response) {
+    if(response.status == 'success') {
       console.log(response)
       $('#krake_content').html(JSON.stringify(response.krakeDefinition));
     }
