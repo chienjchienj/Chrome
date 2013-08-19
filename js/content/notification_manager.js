@@ -25,13 +25,14 @@ var NotificationManager = {
   myMessages : new Array('warning','error','success', 'info', 'option'),
 
   init : function(behavioral_mode) {
+    NotificationManager.behavioral_mode = behavioral_mode;
+    
+    console.log('NM init');
     // When message is clicked, hide it
     $('.k_message').click(function() {    
       $(this).animate({top: -$(this).outerHeight()}, 500);
     });
-    
-    NotificationManager.behavioral_mode = behavioral_mode;
-    console.log('Behavioral mode set : %s', this.behavioral_mode);
+
   },
 
 
@@ -48,17 +49,23 @@ var NotificationManager = {
   
   
   /*
+   * @Description : Shows the notifications in the notifications bar. They are only shown when in tutorial mode
    * @Param: params:obj
    *                type:string message type 'warning','error','success', 'info'
    *                title:string
    *                message:string
    */
   showNotification : function(params) {
-    console.log('Current mode %s, tutorial mode %s', NotificationManager.behavioral_mode, TUTORIAL_MODE);
-    if(NotificationManager.behavioral_mode == TUTORIAL_MODE) {
-      return;
-    }
 
+    if( NotificationManager.behavioral_mode == DEFAULT_MODE ) {
+      console.log('Not showing any further notifications');
+      return;
+      
+    } else {
+      console.log('Showing notifications');
+      
+    }
+    
     NotificationManager.hideAllMessages();
 
     var notification = "";
@@ -80,8 +87,7 @@ var NotificationManager = {
 
     $('#k_message_close_button').bind('click', function(e) {
       //trigger parent <div> click action
-      coonsole.log('Line 830');
-      $('.k_message').animate({top: -$('.k_message').outerHeight()}, 500);      
+      $('.k_message').animate({top: -$('.k_message').outerHeight()}, 500);
       
     });
 

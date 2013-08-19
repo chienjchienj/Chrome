@@ -6,11 +6,25 @@ This is the source code for the Krake browser extension in Google Chrome
 
 Backlog
 ===
+— TODO : Merge the two select buttons to one
+    If more than one item is selected then know it is a list and should use the generic xPath
+    If only one item is selected then know its a single item
+    If new button is pressed when still defining column and has already more than one item selected in column then 
+      automatically save the current column and move on to the new column
+    
+— TODO : Make notifications bar small and petite with close button
+— TODO : Ability to toggle bar at the bottom between visibility and non-visibility
+— TODO : Column Name when [enter] is do nothing 
+— TODO : Split Tutorial mode from normal usage mode
+    Normal usage mode will have no notifications
+    
+— TODO : Notifications should only be 49px high
 — TODO : Ensure not records are created for pages with no URLs
 — TODO : Ensure when sub link is clicked
     create a sharedKrake with the following
       parentColumnId
       parentURL
+
 - TODO : have the array of separate Krake definitions compiled for a specific Tab on the fly when the done button is clicked
 
 

@@ -37,17 +37,16 @@ var Panel = {
 
 
 
-  init : function(behavioral_mode) {
+  init : function() {
     jQuery('#panel-left button').tooltip();
     
-    Panel.behavioral_mode = behavioral_mode;    
     Panel.uiBtnCreateList.bind('click', Panel.uiBtnCreateListClick);
     Panel.uiBtnCreateList.bind('click', {eventNumber: 'event_4'}, MixPanelHelper.triggerMixpanelEvent);
     Panel.uiBtnSelectSingle.bind('click', Panel.uiBtnSelectSingleClick);
     Panel.uiBtnSelectSingle.bind('click', {eventNumber: 'event_5'}, MixPanelHelper.triggerMixpanelEvent);
     Panel.uiBtnEditPagination.bind('click', Panel.uiBtnEditPaginationClick);
     Panel.uiBtnDone.bind('click', Panel.uiBtnDoneClick);
-
+    
     NotificationManager.showNotification({
       type : 'info',
       title : Params.NOTIFICATION_TITLE_IDLE,
@@ -69,7 +68,7 @@ var Panel = {
           title : Params.NOTIFICATION_TITLE_PREVIOUS_COLUMN_NOT_SAVED,
           message : Params.NOTIFICATION_MESSAGE_PREVIOUS_COLUMN_NOT_SAVED
         });
-      }else{
+      } else {
         var newColumnId = Panel.generateColumnId();
 
         var params = {
@@ -91,7 +90,7 @@ var Panel = {
               message : Params.NOTIFICATION_MESSAGE_PRE_SELECTION_1
             });
      
-          }else{
+          } else {
             //show warning to user
           }//eo if-else
         });
@@ -113,7 +112,7 @@ var Panel = {
           title : Params.NOTIFICATION_TITLE_PREVIOUS_COLUMN_NOT_SAVED,
           message : Params.NOTIFICATION_MESSAGE_PREVIOUS_COLUMN_NOT_SAVED
         });
-      }else{
+      } else {
         var newColumnId = Panel.generateColumnId();
 
         var params = {
@@ -135,7 +134,7 @@ var Panel = {
               message : Params.NOTIFICATION_MESSAGE_SINGLE_SELECTION
             });
             
-          }else{
+          } else {
             //show warning to user
           }//eo if-else
         });
@@ -198,9 +197,8 @@ var Panel = {
     
     //show prompt
     NotificationManager.showOptionsYesNo({
-      title: 'This is page part of a listing?',
-      message: 'Pages belonging to a listing usually have hyperlinks that look like  ' +
-        '<button disabled="disabled"> >> </button> or <button disabled="disabled">Next</button>',
+      title: Params.NOTIFICATION_TITLE_ACTIVATE_NEXT_PAGER,
+      message: Params.NOTIFICATION_MESSAGE_ACTIVATE_NEXT_PAGER,
 
       // @Description : event is triggered when the 'yes' button is clicked
       yesFunction : function(e) {
@@ -270,6 +268,7 @@ var Panel = {
       
       // Handles the event whereby the link icon was clicked
       $linkButton.bind('click', function() {
+        
         console.log('Detailed Link Clicked')
         var params = {
           attribute : 'previous_column',

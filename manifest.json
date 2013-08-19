@@ -14,7 +14,7 @@
    },
    "browser_action": {
       "default_icon": "images/krake_icon_disabled_24.png",
-      "default_title": "Release the Kraken!"
+      "default_title": "Get Data"
    },
 
    "content_scripts": [ {

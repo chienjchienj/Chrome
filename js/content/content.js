@@ -103,7 +103,6 @@ chrome.extension.onMessage.addListener(
       case "enable_krake":
         if(document.domain != 'krake.io') {      
           showPanel();
-          console.log("enable_krake");
         }
       break;
 
@@ -113,15 +112,15 @@ chrome.extension.onMessage.addListener(
       break;
 
       case "load_script_done":
-        console.log("load_script_done := " + request.params.filename);
+
         if(request.params.filename == "js/content/krake.js") {
-          Panel.init(behavioral_mode);
           UIElementSelector.init();
+          NotificationManager.init(behavioral_mode);          
+          Panel.init();
           reloadExistingColumns();
-          console.log('Line 30 : %s', behavioral_mode);
-          NotificationManager.init(behavioral_mode);
 
         }//eo if
+
 
       break;
 

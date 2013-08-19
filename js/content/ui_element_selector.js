@@ -68,12 +68,8 @@ var UIElementSelector = {
     var self = this;
     
     // do not handle any elements that are part of or child elements of the Krake panel
-    if ( $(e.target).is('.k_panel') || 
-      $(e.target).parents().hasClass('k_panel') ) {
-      
-      console.log('Not handling');
+    if ( $(e.target).is('.k_panel') || $(e.target).parents().hasClass('k_panel') ) {
       return;
-      
     }
     
     e.preventDefault();
