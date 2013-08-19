@@ -49,10 +49,33 @@ This is how a single Shared Kraked data object for a page will look like
       "columns": [
           {
               "columnId": 5452399814,
-              "columnType": "list",
               "columnName": "category name",
               "colorCode": " k_highlight_FFCC00 ",
               "url": "http://sg.yahoo.com/?p=us",
+              
+              
+              
+              // Start : New data structure
+              "selections" : [{
+                  "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]/span[2]",
+                  "elementType": "SPAN",
+                  "elementText": "Messenger",
+                  "elementLink": null
+              },{
+                  "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[3]/a[1]/span[2]",
+                  "elementType": "SPAN",
+                  "elementText": "News",
+                  "elementLink": null
+              },{
+                  "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[3]/a[1]/span[2]",
+                  "elementType": "SPAN",
+                  "elementText": "News",
+                  "elementLink": null
+              }],
+              // End : New data structure
+              
+              // Start : Existing data structure
+              "columnType": "list",              
               "selection1": {
                   "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]/span[2]",
                   "elementType": "SPAN",
@@ -65,6 +88,10 @@ This is how a single Shared Kraked data object for a page will look like
                   "elementText": "News",
                   "elementLink": null
               },
+              // End : Existing data structure
+              
+              
+              
               "genericXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]/span[2]",
               "requiredAttribute": null
           },

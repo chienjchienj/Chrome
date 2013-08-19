@@ -374,36 +374,32 @@ var deleteColumn = function(params, callback) {
  * @Param: params:object { attribute:"xpath_1", values:params } 
  */
 var editCurrentColumn = function(params, callback) {
-  try{    
-    //console.log('-- before "editCurrentColumn"');
-    //console.log( JSON.stringify(sessionManager) );
-   
-    switch(params.attribute) {
-      case 'xpath_1':
-        sessionManager.currentColumn.setSelection1(params.values);
-        sessionManager.goToNextState().goToNextState(); //current state := 'pre_selection_2'
-      break;
+  
+  //console.log('-- before "editCurrentColumn"');
+  //console.log( JSON.stringify(sessionManager) );
+ 
+  switch(params.attribute) {
+    case 'xpath_1':
+      sessionManager.currentColumn.setSelection1(params.values);
+      sessionManager.goToNextState().goToNextState(); //current state := 'pre_selection_2'
+    break;
 
-      case 'xpath_2':
-        sessionManager.currentColumn.setSelection2(params.values);
-        sessionManager.goToNextState(); //current state := 'post_selection_2'
-      break;
+    case 'xpath_2':
+      sessionManager.currentColumn.setSelection2(params.values);
+      sessionManager.goToNextState(); //current state := 'post_selection_2'
+    break;
 
-      case 'column_name':
-       sessionManager.currentColumn.columnName = params.values.columnName;
-      break;
+    case 'column_name':
+     sessionManager.currentColumn.columnName = params.values.columnName;
+    break;
 
-    }//eo switch
-    
-    //console.log('-- after "editCurrentColumn"');
-    //console.log( JSON.stringify(sessionManager) );
+  }//eo switch
+  
+  //console.log('-- after "editCurrentColumn"');
+  //console.log( JSON.stringify(sessionManager) );
 
-    if (callback && typeof(callback) === "function")  
-      callback({status: 'success', session: sessionManager, sharedKrake: SharedKrake }); 
-  }catch(err) {
-    console.log(err);
-    if (callback && typeof(callback) === "function")  callback({status: 'error'});
-  }
+  if (callback && typeof(callback) === "function")  
+    callback({status: 'success', session: sessionManager, sharedKrake: SharedKrake }); 
   
 };//eo editCurrentColumn
 

@@ -70,7 +70,18 @@ Column.prototype.setSelection2 = function(params){
   self.selection2.elementType = params.elementType;
   self.selection2.elementText = params.elementText;
   self.selection2.elementLink = params.elementLink;
-}; 
+};
+
+
+
+// @Description: validate column before saving into sharedKrake
+// @param : generic_xpath:String
+Column.prototype.setGenericXpath = function(generic_xpath){
+  var self = this;
+  self.genericXpath = generic_xpath;
+};
+
+
 
 /*
  * @Description: validate column before saving into sharedKrake

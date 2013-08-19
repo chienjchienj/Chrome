@@ -79,10 +79,8 @@ var UIElementSelector = {
     chrome.extension.sendMessage({ action: 'get_session'}, function(response) {
             
       var sessionManager = response.session;
-      //console.log("--");
-      //console.log(JSON.stringify(sessionManager));
-      
-      // TODO : determine the element to map to depending on state when given a sessionManager.currenState
+
+      // If is in the pre_next_pager_selection state always map to a hyperlink
       if(sessionManager.currentState == 'pre_next_pager_selection') {
         selected_dom_element = XpathHelper.findUpTag(self, 'A');
         
@@ -108,16 +106,13 @@ var UIElementSelector = {
           // sets the xpath for the next_page operator & hides the next pager notification message
           chrome.extension.sendMessage({ action:'set_pagination', params: { values:params}}, function(response) {
             UIElementSelector.mode = 'select_element';
-            console.log('-- select next Pager');
-            console.log('status := ' + response.status);
-            console.log('-- session\n' + JSON.stringify(response.session));
-            console.log('-- sharedKrake\n' + JSON.stringify(response.sharedKrake));
             NotificationManager.hideAllMessages();
             
           });
           
         break;
 
+        /************************************** Start : To refactor entire section ***********************************************/
         case 'pre_selection_1' :
 
           chrome.extension.sendMessage({ action:"edit_current_column", params: { attribute:"xpath_1", values:params }}, function(response) {
@@ -142,6 +137,7 @@ var UIElementSelector = {
                 //send mixpanel request
                 MixPanelHelper.triggerMixpanelEvent(null, 'event_8');
 
+
                 chrome.extension.sendMessage({ action:"match_pattern" }, function(response) {
 
                   if(response.status == 'success') { 
@@ -157,6 +153,8 @@ var UIElementSelector = {
                   
                   }
                 });
+                
+                
               }//eo if
               
             }
@@ -180,6 +178,8 @@ var UIElementSelector = {
 
                 var sessionManager = response.session;
                 UIElementSelector.updateColumnText(sessionManager.currentColumn.columnId, 2, elementText, elementPathResult.nodeName);
+                
+
                 chrome.extension.sendMessage({ action:"match_pattern" }, function(response) {
 
                   if(response.status == 'success') {
@@ -202,15 +202,23 @@ var UIElementSelector = {
                     
                   }//eo if
                 });
+                
               }
             });
           };//eo editSelectionTwo
         break;
+        
+        /************************************** End : To refactor entire section ***********************************************/        
+        
       }//eo switch
     });
 
   },
 
+
+
+  // @Description : removes the DOM elements highlighted given a column detail
+  // @param : column:Object
   highlightElements : function(url, genericXpath, colorCode) {
     console.log("-- highlightElements");
     console.log(url + '\n' + genericXpath + '\n' + colorCode);
@@ -224,7 +232,12 @@ var UIElementSelector = {
     }
   },
 
+
+
+  // @Description : removes the DOM elements highlighted given a column detail
+  // @param : column:Object
   unHighLightElements : function(column) {
+    
     if(document.URL != column.url) return;
        
     var selector = '.' + $.trim(column.colorCode);
