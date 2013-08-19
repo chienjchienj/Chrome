@@ -1,18 +1,23 @@
 var PatternMatcher = {
-  findGenericXpath: function(selection1, selection2){
-    var xpath1Array = selection1.xpath.split("/");
-    var xpath2Array = selection2.xpath.split("/");
+  
+  // @Description : Given two xpath returned generic xpath
+  //    in the event whereby one xpath is shorter than the other, use the shorter one as the default
+  // @param : xpath1:String
+  // @param : xpath2:String
+  findGenericXpath: function(xpath1, xpath2){
+    var xpath1Array = xpath1.split("/");
+    var xpath2Array = xpath2.split("/");
+
+    // swap the arrays in case array1 is longer
+    if(xpath1Array.length > xpath2Array.length ) {
+      var tempArray = xpath1Array;
+      xpath1Array = xpath2Array;
+      xpath2Array = tempArray;
+    }
+    
     var genericXpathArray = [];
 
-    // the selected element, the leaf of the xpath nnn
-    if(selection1.elementType != selection2.elementType)
-      return { status : 'unmatched' };
-
-    if(selection1.xpath == selection2.xpath)
-      return { status : 'duplicated' };
-
-    for(var i=0; i<xpath1Array.length; i++)
-    {
+    for(var i = 0; i < xpath1Array.length; i++ ) {
       //also check if the node names are the same
       if((xpath1Array[i].split("["))[0] != (xpath2Array[i].split("["))[0])
         return { status : 'unmatched' };
@@ -26,4 +31,5 @@ var PatternMatcher = {
     var genericXpath = genericXpathArray.join("/");
     return { status: 'matched', genericXpath: genericXpath };
   }//eo findGenericXpath
+  
 }//eo brain

@@ -15,10 +15,7 @@ Backlog
 — TODO : Make notifications bar small and petite with close button
 — TODO : Ability to toggle bar at the bottom between visibility and non-visibility
 — TODO : Column Name when [enter] is do nothing 
-— TODO : Split Tutorial mode from normal usage mode
-    Normal usage mode will have no notifications
     
-— TODO : Notifications should only be 49px high
 — TODO : Ensure not records are created for pages with no URLs
 — TODO : Ensure when sub link is clicked
     create a sharedKrake with the following

@@ -1,4 +1,3 @@
-/*************************************************************************/
 var ColumnFactory = {
   createColumn: function(params){
     var column = new Column(params);

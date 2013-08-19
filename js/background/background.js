@@ -103,7 +103,6 @@ var pageReloaded = function(tabId, changeInfo, tab) {
 
 // @Description : Changes the icon on display depending on the current state of the browser extension
 var updateBrowserActionIcon = function(tab_id) {
-  console.log(records[tab_id]);
   if( records[tab_id] && records[tab_id].isActive ) {
     chrome.browserAction.setIcon({path:"images/krake_icon_24.png"});
     
@@ -394,10 +393,6 @@ var editCurrentColumn = function(params, callback) {
        sessionManager.currentColumn.columnName = params.values.columnName;
       break;
 
-      case 'generic_xpath':
-        sessionManager.currentColumn.genericXpath = params.values.genericXpath;
-      break;
-
     }//eo switch
     
     //console.log('-- after "editCurrentColumn"');
@@ -444,34 +439,34 @@ var saveColumn = function(params, callback) {
 
 
 
-var matchPattern = function(callback) {
-  try{
-    //console.log( JSON.stringify(sessionManager) );
-    //result => { status: 'success', genericXpath: array }
-    var result ={};
-    if(sessionManager.currentColumn.columnType == 'list') {
-      result = PatternMatcher.findGenericXpath(sessionManager.currentColumn.selection1, sessionManager.currentColumn.selection2);
-      sessionManager.currentColumn.genericXpath = result.genericXpath;
-    }else{
-      //console.log('point 0');
-      //console.log(sessionManager.currentColumn.selection1.xpath);
-      //console.log(sessionManager.currentColumn.genericXpath);
 
-      sessionManager.currentColumn.genericXpath = sessionManager.currentColumn.selection1.xpath;
-      result.status = 'matched';
-      //console.log('point 1');
-    }
-    var response = {
-      status : 'success',
-      patternMatchingStatus : result.status,
-      column : sessionManager.currentColumn
-    }
-    //console.log('point 2');
-    //tell content script to highlight all elements covered by generic xpath
-    if (callback && typeof(callback) === "function")   callback(response); 
-  }catch(err) {
-    console.log(err);
+// @Description : Method that wraps the generic xPath call
+var matchPattern = function(callback) {
+
+  var result ={};
+  
+  // In the event generic xpath generation is called on a list of items
+  if(sessionManager.currentColumn.columnType == 'list') {
+    result = PatternMatcher.findGenericXpath(sessionManager.currentColumn.selection1.xpath, 
+      sessionManager.currentColumn.selection2.xpath);
+      
+    sessionManager.currentColumn.genericXpath = result.genericXpath;
+
+  // In the event generic xpath generation is called on a single item
+  }else{
+    sessionManager.currentColumn.genericXpath = sessionManager.currentColumn.selection1.xpath;
+    result.status = 'matched';
+    
   }
+  
+  var response = {
+    status : 'success',
+    patternMatchingStatus : result.status,
+    column : sessionManager.currentColumn
+  }
+  
+  if (callback && typeof(callback) === "function")   callback(response); 
+
 };//eo matchPattern
 
 

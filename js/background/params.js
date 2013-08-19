@@ -14,7 +14,9 @@
   this program. If not, see <http://www.gnu.org/licenses/>.
 
   Author:
+  Gary Teh <garyjob@krake.io>  
   Joseph Yang <sirjosephyang@krake.io>
+  
 */
 
 var CommonParams = 
