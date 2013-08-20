@@ -37,6 +37,9 @@ var SessionManager = function() {
 	    'after': 'pre_selection_1',
 	    'post_transition_event': undefined 
 	  },
+	  
+	  // TODO : To define new state that allows for unlimited adding of elements to a column
+	  
     'pre_selection_1': {
       'before': 'idle',
       'after': 'post_selection_1',

@@ -37,10 +37,16 @@ var colorGenerator = null;
 // SharedKrakeHelper object that corresponds to the current URL in the current tab
 var curr_SKH = null;
 
+// id of the current tab. Reference to ease debugging of chrome browser extension
+var curr_tab_id = null;
+
 /***************************************************************************/
 /************************  Browser Action Icon  ****************************/
 /***************************************************************************/
 var handleIconClick = function(tab) {
+  
+  // Sets the tab.id to global for easier reference during debugging
+  curr_tab_id = tab.id;
   
   // Deactivation Krake within this Tab
   if(records[tab.id] && records[tab.id].isActive) {
@@ -76,8 +82,18 @@ var handleIconClick = function(tab) {
 
 // @Description : When a new tab is clicks
 var newTabFocused = function(action_info) {
-  updateBrowserActionIcon(action_info.tabId);  
-  curr_SKH = new SharedKrakeHelper(action_info.tabId);  
+
+  // Updates the Browser extension ICON
+  updateBrowserActionIcon(action_info.tabId);
+  
+  // Gets the current tab
+  chrome.tabs.get(action_info.tabId, function(tab) {
+    console.log(tab);
+    curr_SKH = new SharedKrakeHelper(tab.id, tab.url);
+  });
+  
+  // Sets the tab.id to global for easier reference during debugging
+  curr_tab_id = action_info.tabId;
   
 }
 
@@ -244,9 +260,6 @@ var checkKrakeCookies = function(callback) {
  */
 var loadSession = function(params, callback) {
   try{
-    //console.log('-- before "loadSession"');
-    //console.log('session\n' + JSON.stringify(sessionManager));
-    //console.log('params\n' + JSON.stringify(params));
     
     switch(params.attribute) {
       case 'previous_column':
@@ -266,9 +279,6 @@ var loadSession = function(params, callback) {
         sessionManager.goToNextState(params.values.state);
       break;
     }//eo switch
-    
-    //console.log('-- after "loadSession"');
-    //console.log( JSON.stringify(sessionManager) );
 
     if (callback && typeof(callback) === "function")  
       callback({status: 'success', session: sessionManager}); 
@@ -283,8 +293,6 @@ var loadSession = function(params, callback) {
 
 var newColumn = function(params, callback) {
   try{
-    //console.log('-- before "addColumn"');
-    //console.log( JSON.stringify(sessionManager) );
 
     var previousColumn = curr_SKH.findColumnByKey('url', params.url); 
     //console.log('-- previousColumn\n' + JSON.stringify(previousColumn));
@@ -300,9 +308,6 @@ var newColumn = function(params, callback) {
 
     sessionManager.goToNextState();
 
-    //console.log('-- after "addColumn"');
-    //console.log( JSON.stringify(sessionManager) );
-       
     if (callback && typeof(callback) === "function")  
       callback({status: 'success', session: sessionManager});  
   } catch(err) {
@@ -320,10 +325,7 @@ var newColumn = function(params, callback) {
 //   session : sessionManager : Object
 // })
 var setPagination = function(params, callback) {
-  console.log('====================== start : Parameters sent from content.js script =====================');
-  console.log(params);
-  console.log('====================== end : Parameters sent from content.js script =====================');  
-  //alert("editCurrentColumn.next_pager := " + JSON.stringify(params));
+
   try {
     curr_SKH.setNextPager(params.values.xpath);
     sessionManager.goToNextState(); //current state := 'idle'
@@ -437,6 +439,7 @@ var saveColumn = function(params, callback) {
 
 
 // @Description : Method that wraps the generic xPath call
+// TODO : to refactor this method to generate generiXpath using the entire array of columns elements
 var matchPattern = function(callback) {
 
   var result ={};
@@ -559,6 +562,7 @@ var executeMixpanelEvent = function(eventNumber, callback) {
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     switch(request.action) {
+      
       case "load_script":
         loadScript(request.params.filename, sender);
       break;
@@ -621,6 +625,7 @@ chrome.runtime.onMessage.addListener(
         stageColumn(request.params, sendResponse);
       break;
 
+      // method is to be called only at the end of the items selection exercise for columns;
       case 'match_pattern':
         matchPattern(sendResponse);
       break;
@@ -636,6 +641,7 @@ chrome.runtime.onMessage.addListener(
       case 'fire_mixpanel_event':
         executeMixpanelEvent(request.params.eventNumber);
       break;
+      
     }//eo switch
   });
 
