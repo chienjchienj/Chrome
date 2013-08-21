@@ -259,34 +259,29 @@ var checkKrakeCookies = function(callback) {
  * @Param: params:object { attribute:"xpath_1", values:params } 
  */
 var loadSession = function(params, callback) {
-  try{
     
-    switch(params.attribute) {
-      case 'previous_column':
+  switch(params.attribute) {
+    case 'previous_column':
+    
+      if(params.event == 'detail_link_clicked') {
+        var previousColumn = curr_SKH.findColumnByKey('columnId', params.columnId);
+
+      // When in top level page
+      } else {
+        var column = curr_SKH.findColumnByKey('elementLink', params.values.currentUrl);
+        if(column)
+          sessionManager.previousColumn = curr_SKH.findColumnByKey('parentColumnId', column.parentColumnId);
+      }
+    break;
+
+    case 'current_state':
+      sessionManager.goToNextState(params.values.state);
+    break;
+  }//eo switch
+
+  if (callback && typeof(callback) === "function")  
+    callback({status: 'success', session: sessionManager}); 
       
-        if(params.event == 'detail_link_clicked') {
-          var previousColumn = curr_SKH.findColumnByKey('columnId', params.columnId);
-
-        // When in top level page
-        } else {
-          var column = curr_SKH.findColumnByKey('elementLink', params.values.currentUrl);
-          if(column)
-            sessionManager.previousColumn = curr_SKH.findColumnByKey('parentColumnId', column.parentColumnId);
-        }
-      break;
-
-      case 'current_state':
-        sessionManager.goToNextState(params.values.state);
-      break;
-    }//eo switch
-
-    if (callback && typeof(callback) === "function")  
-      callback({status: 'success', session: sessionManager}); 
-      
-  } catch(err) {
-    console.log(err);
-    if (callback && typeof(callback) === "function")  callback({status: 'error'});
-  }
 };//eo loadSession
 
 
@@ -294,18 +289,7 @@ var loadSession = function(params, callback) {
 var newColumn = function(params, callback) {
   try{
 
-    var previousColumn = curr_SKH.findColumnByKey('url', params.url); 
-    //console.log('-- previousColumn\n' + JSON.stringify(previousColumn));
-
     sessionManager.currentColumn = ColumnFactory.createColumn(params);
-    sessionManager.currentColumn.parentColumnId = sessionManager.previousColumn?  
-                                                  sessionManager.previousColumn.columnId : null;
-
-    if(previousColumn) {
-      sessionManager.previousColumn = previousColumn;
-      sessionManager.currentColumn.parentColumnId = previousColumn.parentColumnId;
-    }
-
     sessionManager.goToNextState();
 
     if (callback && typeof(callback) === "function")  
@@ -340,7 +324,7 @@ var setPagination = function(params, callback) {
   
 }
 
-
+// @Description : deletes this column from the records
 var deleteColumn = function(params, callback) {
   //try{
     //console.log('-- before "deleteColumn"');
@@ -373,6 +357,7 @@ var deleteColumn = function(params, callback) {
 
 
 /*
+ * @Description : Adding more data to this particular column
  * @Param: params:object { attribute:"xpath_1", values:params } 
  */
 var editCurrentColumn = function(params, callback) {
@@ -381,14 +366,9 @@ var editCurrentColumn = function(params, callback) {
   //console.log( JSON.stringify(sessionManager) );
  
   switch(params.attribute) {
-    case 'xpath_1':
-      sessionManager.currentColumn.setSelection1(params.values);
-      sessionManager.goToNextState().goToNextState(); //current state := 'pre_selection_2'
-    break;
-
-    case 'xpath_2':
-      sessionManager.currentColumn.setSelection2(params.values);
-      sessionManager.goToNextState(); //current state := 'post_selection_2'
+    case 'xpath':
+      sessionManager.currentColumn.addSelection(params.values);
+      // sessionManager.goToNextState().goToNextState(); //current state := 'pre_selection_2'
     break;
 
     case 'column_name':
@@ -409,30 +389,23 @@ var editCurrentColumn = function(params, callback) {
 
 var saveColumn = function(params, callback) {
 
-  try{
-    
-    // when the current column exist
-    if(sessionManager.currentColumn && sessionManager.currentColumn.validate()) {
-      sessionManager.previousColumn = sessionManager.currentColumn;
-      curr_SKH.saveColumn(sessionManager.currentColumn);
-      sessionManager.currentColumn = null;
-      sessionManager.goToNextState('idle');
+  // when the current column exist
+  if(sessionManager.currentColumn && sessionManager.currentColumn.validate()) {
+    sessionManager.previousColumn = sessionManager.currentColumn;
+    curr_SKH.saveColumn(sessionManager.currentColumn);
+    sessionManager.currentColumn = null;
+    sessionManager.goToNextState('idle');
 
-      if (callback && typeof(callback) === "function")
-        callback({status: 'success', session: sessionManager, sharedKrake: sharedKrake});
-        
-    // when the current column does not exist
-    } else {
-      if (callback && typeof(callback) === "function")
-        callback({status: 'error', session: sessionManager, sharedKrake: sharedKrake});
-        
-    }
-    
-  }catch(err) {
-    console.log('Error saving column');
-    console.log(err)
+    if (callback && typeof(callback) === "function")
+      callback({status: 'success', session: sessionManager, sharedKrake: sharedKrake});
+      
+  // when the current column does not exist
+  } else {
+    if (callback && typeof(callback) === "function")
+      callback({status: 'error', session: sessionManager, sharedKrake: sharedKrake});
+      
   }
-  
+      
 };//eo saveButton
 
 
@@ -444,19 +417,25 @@ var matchPattern = function(callback) {
 
   var result ={};
   
+  /* 
   // In the event generic xpath generation is called on a list of items
   if(sessionManager.currentColumn.columnType == 'list') {
-    result = PatternMatcher.findGenericXpath(sessionManager.currentColumn.selection1.xpath, 
-      sessionManager.currentColumn.selection2.xpath);
+    result = PatternMatcher.findGenericXpath(sessionManager.currentColumn.selections[0].xpath, 
+      sessionManager.currentColumn.selections[1].xpath);
       
     sessionManager.currentColumn.genericXpath = result.genericXpath;
 
   // In the event generic xpath generation is called on a single item
   }else{
-    sessionManager.currentColumn.genericXpath = sessionManager.currentColumn.selection1.xpath;
+    sessionManager.currentColumn.genericXpath = sessionManager.currentColumn.selections[0].xpath;
     result.status = 'matched';
     
   }
+  */
+  
+  // To refactor later on
+  sessionManager.currentColumn.genericXpath = sessionManager.currentColumn.selections[0].xpath;
+  result.status = 'matched';  
   
   var response = {
     status : 'success',

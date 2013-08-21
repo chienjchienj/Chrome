@@ -34,32 +34,17 @@ var SessionManager = function() {
   this.states = {
     'idle': {
 	    'before': undefined,
-	    'after': 'pre_selection_1',
+	    'after': 'selection_addition',
 	    'post_transition_event': undefined 
 	  },
 	  
 	  // TODO : To define new state that allows for unlimited adding of elements to a column
-	  
-    'pre_selection_1': {
+    'selection_addition': {
       'before': 'idle',
-      'after': 'post_selection_1',
-      'post_transition_event': undefined 
-    },
-    'post_selection_1': {
-      'before': 'pre_selection_1',
-      'after': 'pre_selection_2',
-      'post_transition_event': undefined 
-    },
-    'pre_selection_2': {
-      'before': 'post_selection_1',
-      'after': 'post_selection_2',
-      'post_transition_event': undefined 
-    },
-    'post_selection_2': {
-      'before': 'pre_selection_2',
       'after': 'idle',
       'post_transition_event': undefined 
     },
+    
     'pre_next_pager_selection' : {
       'before': 'idle',
       'after': 'idle',

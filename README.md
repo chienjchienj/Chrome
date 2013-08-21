@@ -6,15 +6,15 @@ This is the source code for the Krake browser extension in Google Chrome
 
 Backlog
 ===
+— TO DO : rewire addSelection to recompute xpath on each new element Add. 
+— TO DO : recompute highlighted DOM elements on each add
 — TODO : Merge the two select buttons to one
-    If more than one item is selected then know it is a list and should use the generic xPath
-    If only one item is selected then know its a single item
     If new button is pressed when still defining column and has already more than one item selected in column then 
       automatically save the current column and move on to the new column
     
 — TODO : Make notifications bar small and petite with close button
 — TODO : Ability to toggle bar at the bottom between visibility and non-visibility
-— TODO : Column Name when [enter] is do nothing 
+— TODO : Column Name focused when [enter] is do nothing 
     
 — TODO : Ensure not records are created for pages with no URLs
 — TODO : Ensure when sub link is clicked

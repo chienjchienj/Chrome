@@ -78,9 +78,9 @@ var populateColumns = function(wrapper, columns) {
     params.columnId = columns[i].columnId;
     params.columnType = columns[i].columnType;
     params.columnName = columns[i].columnName==null? Params.DEFAULT_BREADCRUMB_TEXT : columns[i].columnName;
-    params.firstSelectionText = columns[i].selection1.elementText; 
-    params.secondSelectionText = columns[i].selection2.elementText;
-    params.elementLink = columns[i].selection1.elementLink;
+    params.firstSelectionText = columns[i].selection[0] && columns[i].selection[0].elementText; 
+    params.secondSelectionText = columns[i].selection[1] && columns[i].selection[1].elementText;
+    params.elementLink = columns[i].selection[0] && columns[i].selection[0].elementLink;
     params.breadcrumb = "";
 
     wrapper.append(UIColumnFactory.recreateUIColumn(params));

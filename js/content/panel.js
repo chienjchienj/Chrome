@@ -58,90 +58,70 @@ var Panel = {
   
   // @Description : the event whereby the 'list' button was clicked
   uiBtnCreateListClick : function() {
-    chrome.extension.sendMessage({ action: "get_session"}, function(response) {
-      var sessionManager = response.session;
-
-      if(sessionManager.currentState != 'idle') {
-        //alert("You must finish editing the previous column");
-        NotificationManager.showNotification({
-          type : 'error',
-          title : Params.NOTIFICATION_TITLE_PREVIOUS_COLUMN_NOT_SAVED,
-          message : Params.NOTIFICATION_MESSAGE_PREVIOUS_COLUMN_NOT_SAVED
-        });
-      } else {
-        var newColumnId = Panel.generateColumnId();
-
-        var params = {
-          columnId : newColumnId,
-          columnType : 'list',
-          url : document.URL
-        };
-
-        chrome.extension.sendMessage({ action: "add_column", params: params}, function(response) {
-          //only add UIColumn to panel once a logical column object is created in sessionManager
-          if(response.status == 'success') {
-            Panel.uiPanelWrapper.append(UIColumnFactory.createUIColumn('list', newColumnId));
-            Panel.attachEnterKeyEventToColumnTitle(newColumnId);
-            Panel.addBreadCrumbToColumn(newColumnId);
-            
-            NotificationManager.showNotification({
-              type : 'info',
-              title : Params.NOTIFICATION_TITLE_PRE_SELECTION_1,
-              message : Params.NOTIFICATION_MESSAGE_PRE_SELECTION_1
-            });
-     
-          } else {
-            //show warning to user
-          }//eo if-else
-        });
-      }//eo if-else 
-    });
-  },
-  
-  
-  
-  // @Description : the event whereby the 'single' button was clicked  
-  uiBtnSelectSingleClick : function() {
-    chrome.extension.sendMessage({ action: "get_session"}, function(response) {
-      var sessionManager = response.session;
-
-      if(sessionManager.currentState != 'idle') {
-        //alert("You must finish editing the previous column");
-        NotificationManager.showNotification({
-          type : 'error',
-          title : Params.NOTIFICATION_TITLE_PREVIOUS_COLUMN_NOT_SAVED,
-          message : Params.NOTIFICATION_MESSAGE_PREVIOUS_COLUMN_NOT_SAVED
-        });
-      } else {
-        var newColumnId = Panel.generateColumnId();
-
-        var params = {
-          columnId : newColumnId,
-          columnType : 'single',
-          url : document.URL
-        };
-
-        chrome.extension.sendMessage({ action: "add_column", params: params}, function(response) {
-          //only add UIColumn to panel once a logical column object is created in sessionManager
-          if(response.status == 'success') {
-            Panel.uiPanelWrapper.append(UIColumnFactory.createUIColumn('single', newColumnId));
-            Panel.attachEnterKeyEventToColumnTitle(newColumnId);
-            Panel.addBreadCrumbToColumn(newColumnId);
-
-            NotificationManager.showNotification({
-              type : 'info',
-              title : Params.NOTIFICATION_TITLE_SINGLE_SELECTION,
-              message : Params.NOTIFICATION_MESSAGE_SINGLE_SELECTION
-            });
-            
-          } else {
-            //show warning to user
-          }//eo if-else
-        });
-      }//eo if-else 
-    });
     
-  },
+    // Sequence to generate new list on the interface
+    var transitToNewList = function() {
+      var newColumnId = Panel.generateColumnId();
+
+      var params = {
+        columnId : newColumnId,
+        columnType : 'list',
+        url : document.URL
+      };
+      
+      chrome.extension.sendMessage({ action: "add_column", params: params}, function(response) {
+        //only add UIColumn to panel once a logical column object is created in sessionManager
+        if(response.status == 'success') {
+          Panel.uiPanelWrapper.append(UIColumnFactory.createUIColumn('list', newColumnId));
+          Panel.attachEnterKeyEventToColumnTitle(newColumnId);
+          Panel.addBreadCrumbToColumn(newColumnId);
+          
+          NotificationManager.showNotification({
+            type : 'info',
+            title : Params.NOTIFICATION_TITLE_PRE_SELECTION_1,
+            message : Params.NOTIFICATION_MESSAGE_PRE_SELECTION_1
+          });
+   
+        } else {
+          //show warning to user
+        }//eo if-else
+      });
+    }
+    
+    chrome.extension.sendMessage({ action: "get_session"}, function(response) {
+      var sessionManager = response.session;
+      
+      // when is in the mode for selecting new elements for inclusion into an existing column
+      if(sessionManager.currentState == 'selection_addition') {
+        
+        // when has already selected an item for the current column
+        if(sessionManager.currentColumn && sessionManager.currentColumn.selections && 
+          sessionManager.currentColumn.selections.length > 0) {
+            
+            // saves the current column
+            chrome.extension.sendMessage({ action: "save_column" }, function(response) {
+              //remove save column button
+              var columnIdentifier = "#krake-column-" + sessionManager.currentColumn.columnId; 
+              var selector = columnIdentifier + ' .krake-control-button-save';
+              $(selector).remove();
+              
+              // transit to new column
+              transitToNewList();
+              
+            });
+            
+        } else {
+          console.log('Ignoring this command, since no DOM elements has been picked for this column yet.');
+          
+        }
+        
+        
+      } else {
+        transitToNewList();
+        
+      }//eo if-else 
+    });
+  },  
 
 
 
@@ -256,8 +236,11 @@ var Panel = {
 
 
   showLink : function(column) {
-    if(column.selection1.elementType.toLowerCase() == 'a') {
+    if(column.elementType.toLowerCase() == 'a') {
       var selector = '#krake-column-control-' + column.columnId;
+      
+      // ensures link is only added once
+      if($(selector + ' .krake-control-button-link').length > 0 ) return;
 
       var linkButtonImageUrl = "background-image: url(\"" + chrome.extension.getURL("images/link.png") + "\");";
 
@@ -276,7 +259,7 @@ var Panel = {
           values : {
             currentUrl : document.URL,
             columnId : column.columnId,
-            elementLink : column.selection1.elementLink
+            elementLink : column.selection[0].elementLink
           }
         }
       

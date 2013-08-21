@@ -71,10 +71,7 @@ SharedKrakeHelper.prototype.removeColumnFromSharedKrake = function(columns, colu
     	var deletedColumn = columns[i];
 
     	columns.splice(i, 1);
-      return deletedColumn;
-    }else{
-      var result = self.removeColumnFromSharedKrake(columns[i].options.columns, columnId);
-      if(result) return result;
+      return deletedColumn; 
     }
   }
   return null;
@@ -96,18 +93,20 @@ SharedKrakeHelper.prototype.searchColumnByKey = function(columns, key, value) {
   var self = this;    
   //console.log('key := ' + key);
   for(var i=0; i<columns.length; i++) {
-    console.log('columns['+ i +'][key] := ' + columns[i][key] + '\nvalue := ' + value);
-    console.log('columns['+ i +'].selection1.elementLink := ' + columns[i].selection1.elementLink)
     //dirty hack, address this properly later
-    if(key == 'elementLink' && columns[i].selection1.elementLink == value) {
+    if(key == 'elementLink' && columns[i].selection[0] && columns[i].selection[0].elementLink == value) {
       return columns[i];
+      
     }else if(columns[i][key] == value) {
-      console.log('columns[i].selection1.elementLink := ' + columns[i].selection1.elementLink)
+      console.log('columns[i].selection[0].elementLink := ' + columns[i].selection[0].elementLink)
       return columns[i];
-    }else{
+      
+    }
+    /* 
+    else{
       var result = self.searchColumn(columns[i].options.columns, key, value);
       if(result) return result;
-    }
+    } */
   }
   return null;
 };//eo searchColumn
@@ -146,10 +145,12 @@ SharedKrakeHelper.prototype.searchColumn = function(columns, columnId) {
   for(var i=0; i<columns.length; i++) {
     if(columns[i].columnId==columnId) {
       return columns[i];
-    }else{
+    }
+    /*
+    else{
       var result = self.searchColumn(columns[i].options.columns, columnId);
       if(result) return result;
-    }
+    }*/
   }
   return null;
 };//eo searchColumn
@@ -205,10 +206,12 @@ SharedKrakeHelper.prototype.getBreadcrumbColumnArray = function(columns, columnI
       }//eo if
         
       return breadcrumbColumnArray;
-    }else{
+    }
+    /*
+    else{
       var result = self.getBreadcrumbColumnArray(columns[i].options.columns, columnId, breadcrumbColumnArray, originalColumns);
       if(result) return result;
-    }
+    }*/
   }//eo for
   return null;
 };//eo getBreadcrumbColumnArray

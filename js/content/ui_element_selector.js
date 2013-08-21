@@ -113,99 +113,35 @@ var UIElementSelector = {
         break;
 
         /************************************** Start : To refactor entire section ***********************************************/
-        case 'pre_selection_1' :
-
-          chrome.extension.sendMessage({ action:"edit_current_column", params: { attribute:"xpath_1", values:params }}, function(response) {
+        case 'selection_addition' :
+          console.log('Adding a selected element to the selections array')
+          chrome.extension.sendMessage({ action:"edit_current_column", params: { attribute:"xpath", values:params }}, function(response) {
             if(response.status == 'success') {
               var sessionManager = response.session;
               UIElementSelector.updateColumnText(sessionManager.currentColumn.columnId, 1, elementText, elementPathResult.nodeName);
               //console.log( JSON.stringify(sessionManager) ); 
 
-              if(sessionManager.currentColumn.columnType == 'list') {
-                
-                //send mixpanel request
-                MixPanelHelper.triggerMixpanelEvent(null, 'event_6');
-                
-                //show notification 
-                NotificationManager.showNotification({
-                  type : 'info',
-                  title : Params.NOTIFICATION_TITLE_PRE_SELECTION_2,
-                  message : Params.NOTIFICATION_MESSAGE_PRE_SELECTION_2
-                });
-                
-              } else if(sessionManager.currentColumn.columnType == 'single') {
-                //send mixpanel request
-                MixPanelHelper.triggerMixpanelEvent(null, 'event_8');
+              //send mixpanel request
+              MixPanelHelper.triggerMixpanelEvent(null, 'event_8');
 
+              chrome.extension.sendMessage({ action:"match_pattern" }, function(response) {
 
-                chrome.extension.sendMessage({ action:"match_pattern" }, function(response) {
-
-                  if(response.status == 'success') { 
-                    
-                    //highlight all elements depicted by genericXpath
-                    UIElementSelector.highlightElements(response.column.url, response.column.genericXpath, response.column.colorCode);
-                    
-                    //show pagination option
-                    Panel.showPaginationOption(response.column);
-                    
-                    //display 'link' icon
-                    Panel.showLink(response.column);
+                if(response.status == 'success') { 
                   
-                  }
-                });
+                  //highlight all elements depicted by genericXpath
+                  UIElementSelector.highlightElements(response.column.url, response.column.genericXpath, response.column.colorCode);
+                  
+                  //show pagination option
+                  Panel.showPaginationOption(response.column);
+                  
+                  //display 'link' icon
+                  Panel.showLink(response.column);
                 
-                
-              }//eo if
+                }
+              });
               
             }
           });
-        break;
-
-        case 'pre_selection_2' :
-          console.log('pre_selection_2');
-
-          chrome.extension.sendMessage({ action: "get_session" }, function(response) {
-            if(response.session.currentColumn.columnType == 'list')
-              editSelectionTwo();         
-          });
-          
-          var editSelectionTwo = function() {
-            console.log('checkpoint 2');
-            chrome.extension.sendMessage({ action:"edit_current_column", params: { attribute:"xpath_2", values:params }}, function(response) {
-              if(response.status == 'success') {
-                //send mixpanel request
-                MixPanelHelper.triggerMixpanelEvent(null, 'event_7');
-
-                var sessionManager = response.session;
-                UIElementSelector.updateColumnText(sessionManager.currentColumn.columnId, 2, elementText, elementPathResult.nodeName);
-                
-
-                chrome.extension.sendMessage({ action:"match_pattern" }, function(response) {
-
-                  if(response.status == 'success') {
-                    if(response.patternMatchingStatus != 'matched') {
-                      NotificationManager.showNotification({
-                        type : 'error',
-                        title : Params.NOTIFICATION_TITLE_SELECTIONS_NOT_MATCHED,
-                        message : Params.NOTIFICATION_MESSAGE_SELECTIONS_NOT_MATCHED
-                      });
-                      
-                    } else {
-                      //highlight all elements depicted by genericXpath
-                      UIElementSelector.highlightElements(response.column.url, response.column.genericXpath, response.column.colorCode);
-                      //show pagination option
-                      Panel.showPaginationOption(response.column);
-                    
-                      //display 'link' icon
-                      Panel.showLink(response.column);
-                    }//eo if-else
-                    
-                  }//eo if
-                });
-                
-              }
-            });
-          };//eo editSelectionTwo
         break;
         
         /************************************** End : To refactor entire section ***********************************************/        

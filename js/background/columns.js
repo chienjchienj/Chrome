@@ -7,70 +7,75 @@ var ColumnFactory = {
 };
 
 var Column = function(params){
-  this.parentColumnId = null;
-  this.columnId = params.columnId;
-  this.columnType = params.columnType;
-  this.columnName = CommonParams.text.defaultColumnTitleText ; 
-  this.colorCode = null;
+  var self = this;
+  
+  self.columnId = params.columnId;
+  self.columnType = params.columnType;
+  self.columnName = CommonParams.text.defaultColumnTitleText ; 
+  self.colorCode = null;
   
   //the url in which the column is defined
-  this.url = params.url; //
-  /*
-  selection1:obj , selection2:obj 
-  { elementType: xxx, 
-    xpath: xxx,
-    elementText: xxx, 
-    elementLink: xxx //href for "a", img for "img"
-  }
-  */
-  this.selection1 = {}; 
-  this.selection2 = {}; 
+  self.url = params.url;
   
-  this.options = {};
-  this.options.columns = [];
-  this.genericXpath = null;
-  this.requiredAttribute = null;
+  /*
+  selections = [
+    { elementType: xxx, 
+      xpath: xxx,
+      elementText: xxx, 
+      elementLink: xxx //href for "a", img for "img"
+    },
+    { elementType: xxx, 
+      xpath: xxx,
+      elementText: xxx, 
+      elementLink: xxx //href for "a", img for "img"
+    }  
+  ]
+  */
+  self.selections = [];
+  self.elementType = null;
+  self.genericXpath = null;
+  self.requiredAttribute = null;
 
 };
 
+
+
+// @Description : Sets the DOM attribute to the current column
 Column.prototype.setAttribute = function(key, value){
   var self = this;
   self[key] = value;
 };
 
-Column.prototype.setSelection1 = function(params){
-  var self = this;
-  self.selection1.xpath = params.xpath;
-  self.selection1.elementType = params.elementType;
-  self.selection1.elementText = params.elementText;
-  self.selection1.elementLink = params.elementLink;
 
-  var elementType = params.elementType.toLowerCase();
+
+// @Description : Adds a new sample Xpath to a column
+Column.prototype.addSelection = function(params){
+  var self = this;
+  self.selections.push(params);
+  self.elementType = params.elementType.toLowerCase();
 
   /* 
     // Disabled for easier demonstration purposes
     // To consider splitting into two different logical columns
     
-    if(elementType == "a")
+    if(self.elementType == "a")
       self.requiredAttribute = "href";
   */
   
-  if(elementType == "img")
+  if(self.elementType == "img")
     self.requiredAttribute = "src";
   
 };
 
-/*
- * @Description: validate column before saving into sharedKrake
- * @Return: true => validataion passed, false => validation failed
- */
-Column.prototype.setSelection2 = function(params){
-  var self = this;
-  self.selection2.xpath = params.xpath;
-  self.selection2.elementType = params.elementType;
-  self.selection2.elementText = params.elementText;
-  self.selection2.elementLink = params.elementLink;
-};
+
+
+// @Description : computes a generic xpath from self.selections[]
+// @return : result:Object
+//    generic_xpath:String
+//    elementType:String
+Column.prototype.computeGenericXpath = function() {
+  
+}
 
 
 
@@ -91,14 +96,11 @@ Column.prototype.validate = function(){
   var self = this;
   
   var isComplete = function(){
-    if(self.columnType == 'list')
-      return (self.selection1.xpath == null || self.selection2.xpath == null)? false : true;
     
-    if(self.columnType == 'single')
-      return (self.selection1.xpath == null)? false : true;
+    // TODO : Refactor this crap
+    return (self.selections[0].xpath == null) ? false : true;
+    
   };
-  console.log('-- validation');
-  console.log('isComplete: ' + isComplete());
 
   return isComplete();
 };
