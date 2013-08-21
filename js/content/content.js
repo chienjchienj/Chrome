@@ -61,9 +61,8 @@ var hidePanel = function() {
 //   current Tab.
 var reloadExistingColumns = function() {
   chrome.extension.sendMessage({ action: "get_shared_krake" },  function(response) { 
-    console.log( '-- sharedKrake: ');
-    console.log( JSON.stringify(response.sharedKrake) );
-
+    console.log('repopulating the panel');
+    console.log( response.sharedKrake );
     var wrapper = $("#inner-wrapper");
     populateColumns(wrapper, response.sharedKrake.columns);
   });
@@ -78,17 +77,25 @@ var populateColumns = function(wrapper, columns) {
     params.columnId = columns[i].columnId;
     params.columnType = columns[i].columnType;
     params.columnName = columns[i].columnName==null? Params.DEFAULT_BREADCRUMB_TEXT : columns[i].columnName;
-    params.firstSelectionText = columns[i].selection[0] && columns[i].selection[0].elementText; 
-    params.secondSelectionText = columns[i].selection[1] && columns[i].selection[1].elementText;
-    params.elementLink = columns[i].selection[0] && columns[i].selection[0].elementLink;
+    params.firstSelectionText = columns[i].selections[0] && columns[i].selections[0].elementText; 
+    params.secondSelectionText = columns[i].selections[1] && columns[i].selections[1].elementText;
+    params.elementLink = columns[i].selections[0] && columns[i].selections[0].elementLink;
     params.breadcrumb = "";
+    
+    //highlight all elements depicted by genericXpath
+    UIElementSelector.highlightElements(
+      columns[i].url, 
+      columns[i].genericXpath, 
+      columns[i].colorCode );    
+    
+    console.log(columns[i]);
 
     wrapper.append(UIColumnFactory.recreateUIColumn(params));
     Panel.addBreadCrumbToColumn(columns[i].columnId);
 
     // TODO : Refactor this
     // Recursively populates the nested columns.
-    populateColumns(wrapper, columns[i].options.columns); //add UI columns to panel
+    //populateColumns(wrapper, columns[i].options.columns); //add UI columns to panel
 
     //elementUIManager.evaluateXpath(columns[i]); //highlight columns
   }
@@ -117,6 +124,7 @@ chrome.extension.onMessage.addListener(
           UIElementSelector.init();
           NotificationManager.init(behavioral_mode);          
           Panel.init();
+          console.log('==== Line 119  ====');
           reloadExistingColumns();
 
         }//eo if
