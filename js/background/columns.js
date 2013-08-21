@@ -74,7 +74,16 @@ Column.prototype.addSelection = function(params){
 //    generic_xpath:String
 //    elementType:String
 Column.prototype.computeGenericXpath = function() {
+  var self = this;  
+  self.genericXpath = self.genericXpath || self.selections[0].xpath;
   
+  for( var x = 0; x < self.selections.length ; x++ ) {
+    computedXpathObj = PatternMatcher.findGenericXpath(self.genericXpath,
+      self.selections[x].xpath);          
+    self.genericXpath = computedXpathObj.genericXpath;
+    
+  }
+  return self.genericXpath;
 }
 
 

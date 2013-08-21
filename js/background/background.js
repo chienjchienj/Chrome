@@ -435,6 +435,7 @@ var matchPattern = function(callback) {
   
   // To refactor later on
   sessionManager.currentColumn.genericXpath = sessionManager.currentColumn.selections[0].xpath;
+  sessionManager.currentColumn.genericXpath = sessionManager.currentColumn.computeGenericXpath();
   result.status = 'matched';  
   
   var response = {

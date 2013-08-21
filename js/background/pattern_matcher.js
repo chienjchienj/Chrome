@@ -4,6 +4,9 @@ var PatternMatcher = {
   //    in the event whereby one xpath is shorter than the other, use the shorter one as the default
   // @param : xpath1:String
   // @param : xpath2:String
+  // @return : result:Object
+  //    status:String
+  //    genericXpath:String
   findGenericXpath: function(xpath1, xpath2){
     var xpath1Array = xpath1.split("/");
     var xpath2Array = xpath2.split("/");
