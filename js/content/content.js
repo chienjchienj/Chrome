@@ -61,8 +61,6 @@ var hidePanel = function() {
 //   current Tab.
 var reloadExistingColumns = function() {
   chrome.extension.sendMessage({ action: "get_shared_krake" },  function(response) { 
-    console.log('repopulating the panel');
-    console.log( response.sharedKrake );
     var wrapper = $("#inner-wrapper");
     populateColumns(wrapper, response.sharedKrake.columns);
   });
@@ -87,8 +85,6 @@ var populateColumns = function(wrapper, columns) {
       columns[i].url, 
       columns[i].genericXpath, 
       columns[i].colorCode );    
-    
-    console.log(columns[i]);
 
     wrapper.append(UIColumnFactory.recreateUIColumn(params));
     Panel.addBreadCrumbToColumn(columns[i].columnId);
@@ -124,7 +120,6 @@ chrome.extension.onMessage.addListener(
           UIElementSelector.init();
           NotificationManager.init(behavioral_mode);          
           Panel.init();
-          console.log('==== Line 119  ====');
           reloadExistingColumns();
 
         }//eo if

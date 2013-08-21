@@ -72,7 +72,7 @@ var Panel = {
       chrome.extension.sendMessage({ action: "add_column", params: params}, function(response) {
         //only add UIColumn to panel once a logical column object is created in sessionManager
         if(response.status == 'success') {
-          Panel.uiPanelWrapper.append(UIColumnFactory.createUIColumn('list', newColumnId));
+          Panel.uiPanelWrapper.prepend(UIColumnFactory.createUIColumn('list', newColumnId));
           Panel.attachEnterKeyEventToColumnTitle(newColumnId);
           Panel.addBreadCrumbToColumn(newColumnId);
           
@@ -148,8 +148,12 @@ var Panel = {
     var identifier = "#krake-column-title-" + columnId;
     $(identifier).keydown(function(e) {
       if(e.which == 13) {
-        //update breadcrumb segment title
+
+        // TODO : automatically remove \n\r characters when they are entered
+        
+        //update breadcrumb segment title        
         var newColumnTitle = $(identifier).text();
+        
         //self.updateBreadcrumbSegmentTitle(columnId, $.trim(newColumnTitle)); 
         var params = {
           columnName : newColumnTitle

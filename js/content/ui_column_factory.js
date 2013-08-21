@@ -46,9 +46,7 @@ var UIColumnFactory = {
     var firstSelectionText = params.firstSelectionText;
     var secondSelectionText = params.secondSelectionText;
     var elementLink = params.elementLink;
-
-    console.log("params: " + JSON.stringify(params));
-
+    
     var divKrakeColumnId = "krake-column-" + columnId;
     var columnNameId = "krake-column-title-" + columnId;
 
@@ -58,8 +56,6 @@ var UIColumnFactory = {
     var columnControlId =  "krake-column-control-" + columnId;
     var $columnControl = $("<div>", { id: columnControlId,
                                       class: "krake-column-control k_panel" });
-
-    console.log("elementLink:= " + elementLink);
     
     var $detailPageLink = null;
 
@@ -75,7 +71,6 @@ var UIColumnFactory = {
      
       $linkButton.bind('click', function(){
         chrome.extension.sendMessage({ action:"get_column_by_id", params: {columnId: columnId} }, function(response){
-          console.log( JSON.stringify(response) );
           //if(response.session.currentColumn){
               //notify user to save column first
           //}else{
@@ -119,6 +114,7 @@ var UIColumnFactory = {
                                     class: "krake-column-row krake-column-title k_panel",
                                     text: columnTitle });
     
+    /*
     var firstSelectionId = "krake-first-selection-" + columnId;
     var $firstSelection = $("<div>", { id: firstSelectionId,
                                        class: "krake-column-row krake-selection-1 k_panel",
@@ -142,6 +138,7 @@ var UIColumnFactory = {
     var thirdSelectionId = "krake-third-selection-" + columnId;
     var $thirdSelection = $("<div>", { id: thirdSelectionId,
                                        class: "krake-column-row krake-selection-3 k_panel" });
+    */
 
 
     $deleteButton.bind('click', function(){
@@ -162,7 +159,12 @@ var UIColumnFactory = {
 
     $columnControl = $columnControl.append($deleteButton);
 
-    $wrapper.append($columnControl.append($detailPageLink).append($deleteButton)).append($breadcrumb).append($columnName).append($firstSelection).append($secondSelection).append($thirdSelection);
+    $wrapper.append($columnName)
+      .append($breadcrumb)
+      .append(
+        $columnControl.append($detailPageLink).append($deleteButton)
+      )
+      
 
     return $wrapper;
 
@@ -251,23 +253,15 @@ var UIColumnFactory = {
                                     contenteditable: "true", 
                                     "data-placeholder": Params.DEFAULT_COLUMN_NAME });
     
-    var firstSelectionId = "krake-first-selection-" + columnId;
-    var $firstSelection = $("<div>", { id: firstSelectionId,
-                                       class: "krake-column-row krake-selection-1 k_panel" });
-
-    var secondSelectionId = "krake-second-selection-" + columnId;
-    var $secondSelection = $("<div>", { id: secondSelectionId,
-                                          class: "krake-column-row krake-selection-3 k_panel" });
-  
-    var thirdSelectionId = "krake-third-selection-" + columnId;
-    var $thirdSelection = $("<div>", { id: thirdSelectionId,
-                                          class: "krake-column-row krake-selection-3 k_panel" });
-
-    
-
     $columnControl = $columnControl.append($deleteButton);
 
-    $wrapper.append($columnControl.append($deleteButton).append($saveButton)).append($breadcrumb).append($columnTitle).append($firstSelection).append($secondSelection).append($thirdSelection);
+    $wrapper.append($columnTitle)
+      .append($breadcrumb)
+      .append(
+        $columnControl.append($deleteButton)
+            .append($saveButton)
+        );
+        
 
     return $wrapper;
   },//eo createColumn
