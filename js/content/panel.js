@@ -72,7 +72,9 @@ var Panel = {
       chrome.extension.sendMessage({ action: "add_column", params: params}, function(response) {
         //only add UIColumn to panel once a logical column object is created in sessionManager
         if(response.status == 'success') {
-          Panel.uiPanelWrapper.prepend(UIColumnFactory.createUIColumn('list', newColumnId));
+          console.log('LIne 75');
+          console.log(response)
+          Panel.uiPanelWrapper.prepend( UIColumnFactory.createUIColumn( response.session.currentColumn ) );
           Panel.attachEnterKeyEventToColumnTitle(newColumnId);
           Panel.addBreadCrumbToColumn(newColumnId);
           
@@ -268,8 +270,6 @@ var Panel = {
         }
       
         chrome.extension.sendMessage({ action:"get_session" }, function(response) { 
-          console.log('==== get session response ====');
-          console.log(response);
           
           // Do nothing with session obtained from the background
           if(response.session.currentColumn) {
@@ -280,10 +280,6 @@ var Panel = {
           } else {
             chrome.extension.sendMessage({ action:'edit_session', params : params}, function(response) {
               if(response.status == 'success') {
-
-                console.log('We got back the edit_session successfully');
-                
-                //alert('column.genericXpath := ' + column.genericXpath);
                 
                 // TODO : split columns into two :
                 //   - first for value within this page

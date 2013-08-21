@@ -79,6 +79,7 @@ var populateColumns = function(wrapper, columns) {
     params.secondSelectionText = columns[i].selections[1] && columns[i].selections[1].elementText;
     params.elementLink = columns[i].selections[0] && columns[i].selections[0].elementLink;
     params.breadcrumb = "";
+    params.colorCode = columns[i].colorCode;    
     
     //highlight all elements depicted by genericXpath
     UIElementSelector.highlightElements(

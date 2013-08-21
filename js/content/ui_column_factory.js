@@ -43,8 +43,6 @@ var UIColumnFactory = {
     var columnId = params.columnId;
     var type = params.columnType;
     var columnTitle = params.columnName;
-    var firstSelectionText = params.firstSelectionText;
-    var secondSelectionText = params.secondSelectionText;
     var elementLink = params.elementLink;
     
     var divKrakeColumnId = "krake-column-" + columnId;
@@ -75,7 +73,7 @@ var UIColumnFactory = {
               //notify user to save column first
           //}else{
             if(response.status == 'success'){
-              window.location.href = response.column.selection1.elementLink;
+              window.location.href = response.column.selection[0].elementLink;
             }
             
           //} 
@@ -107,38 +105,16 @@ var UIColumnFactory = {
     var $breadcrumb = $("<div>", { id: breadcrumbId,
                                    class: "krake-breadcrumb k_panel" });
 
-
+     var color_palette_id = "k_column-color-palette-" + columnId;
+     var $color_palette = $("<div>", { 
+         id: color_palette_id,
+         class: "krake-column-color-palette k_panel " + params.colorCode,
+       });
 
 
     var $columnName = $("<div>", { id: columnNameId, 
                                     class: "krake-column-row krake-column-title k_panel",
                                     text: columnTitle });
-    
-    /*
-    var firstSelectionId = "krake-first-selection-" + columnId;
-    var $firstSelection = $("<div>", { id: firstSelectionId,
-                                       class: "krake-column-row krake-selection-1 k_panel",
-                                       text: firstSelectionText });
-
-    if(type=="list")
-    {
-      var secondSelectionId = "krake-second-selection-" + columnId;
-      var $secondSelection = $("<div>", { id: secondSelectionId,
-                                          class: "krake-column-row krake-selection-2 k_panel",
-                                          text: secondSelectionText });
-
-    }
-    else
-    {
-      var secondSelectionId = "krake-second-selection-" + columnId;
-      var $secondSelection = $("<div>", { id: secondSelectionId,
-                                          class: "krake-column-row krake-selection-2 k_panel"});
-    }
-
-    var thirdSelectionId = "krake-third-selection-" + columnId;
-    var $thirdSelection = $("<div>", { id: thirdSelectionId,
-                                       class: "krake-column-row krake-selection-3 k_panel" });
-    */
 
 
     $deleteButton.bind('click', function(){
@@ -159,7 +135,8 @@ var UIColumnFactory = {
 
     $columnControl = $columnControl.append($deleteButton);
 
-    $wrapper.append($columnName)
+    $wrapper.append($color_palette)
+      .append($columnName)
       .append($breadcrumb)
       .append(
         $columnControl.append($detailPageLink).append($deleteButton)
@@ -173,14 +150,17 @@ var UIColumnFactory = {
 
 
 
-  createUIColumn: function(type, columnId)
+  createUIColumn: function(column_obj)
   {
+    var type = column_obj.columnType;
+    var columnId = column_obj.columnId;
+    
     var divKrakeColumnId = "krake-column-" + columnId;
     var columnTitleId = "krake-column-title-" + columnId;
 
     var $wrapper = $("<div>", { id: divKrakeColumnId, 
                                 class: "krake-column k_panel"});
-
+    
     var columnControlId =  "krake-column-control-" + columnId;
     var $columnControl = $("<div>", {  id: columnControlId,
                                        class: "krake-column-control k_panel" });
@@ -253,9 +233,16 @@ var UIColumnFactory = {
                                     contenteditable: "true", 
                                     "data-placeholder": Params.DEFAULT_COLUMN_NAME });
     
+    var color_palette_id = "k_column-color-palette-" + column_obj.columnId;
+    var $color_palette = $("<div>", { 
+        id: color_palette_id,
+        class: "krake-column-color-palette k_panel " + column_obj.colorCode,
+      });
+    
     $columnControl = $columnControl.append($deleteButton);
 
-    $wrapper.append($columnTitle)
+    $wrapper.append($color_palette)
+      .append($columnTitle)
       .append($breadcrumb)
       .append(
         $columnControl.append($deleteButton)
