@@ -2,7 +2,7 @@
 
 var panel = null;
 var elementUIManager = null;
-var behavioral_mode = DEFAULT_MODE;
+var behavioral_mode = TUTORIAL_MODE;
 
 
 // @Description : Checks if the domain allows for loading of the Krake Panel in the Page
@@ -119,6 +119,7 @@ chrome.extension.onMessage.addListener(
 
         if(request.params.filename == "js/content/krake.js") {
           UIElementSelector.init();
+          console.log('Sending behavioral_mode to NM %s', behavioral_mode);
           NotificationManager.init(behavioral_mode);          
           Panel.init();
           reloadExistingColumns();

@@ -20,6 +20,6 @@
 
 */
 
-var DEFAULT_MODE = 0;
-var TUTORIAL_MODE = 1;
+var DEFAULT_MODE = 0; 
+var TUTORIAL_MODE = 1; 
 var CREATION_MODE = 2;

@@ -25,6 +25,7 @@ var NotificationManager = {
   myMessages : new Array('warning','error','success', 'info', 'option'),
 
   init : function(behavioral_mode) {
+    console.log('Setting behavioral_mode to %s ', behavioral_mode);
     NotificationManager.behavioral_mode = behavioral_mode;
     
     console.log('NM init');
@@ -56,30 +57,40 @@ var NotificationManager = {
    *                message:string
    */
   showNotification : function(params) {
-
+    console.log('Showing notification at line 59');
+    console.log(NotificationManager);
+    console.log(params);
     if( NotificationManager.behavioral_mode == DEFAULT_MODE ) {
-      console.log('Not showing any further notifications');
-      return;
+      console.log('Showing notifications');
+      //return;
       
     } else {
-      console.log('Showing notifications');
-      
+      console.log('Not notifications');
+      return;      
     }
     
     NotificationManager.hideAllMessages();
 
     var notification = "";
 
+
+    notification = notification +
+                   "<a id=\"k_message_close_button\">x</a>";
+    
+    /*
     notification = notification +
                    "<img id=\"k_message_close_button\" class=\"k_panel\" src=\"" + 
                    chrome.extension.getURL("images/close.png") + 
                    "\" alt=\"Smiley face\">";
+    */
 
     if(params.title)
-      notification = notification + "<h3 class=\"k_panel\">" + params.title + "</h3>";
+      notification = notification + "<span class=\"k_panel\">" + params.title + "</span>";
 
+    /*
     if(params.message)
       notification = notification + "<p class=\"k_panel\">" + params.message + "</p>";
+    */
  
 
 
@@ -91,7 +102,7 @@ var NotificationManager = {
       
     });
 
-    $('.k_'+params.type).animate({top:"0"}, 500);
+    $('.k_'+params.type).animate({top:"10"}, 500);
   },
   
   
@@ -107,7 +118,7 @@ var NotificationManager = {
     NotificationManager.hideAllMessages();
 
     if(params.title)
-      $('.k_option>h3').html(params.title);
+      $('#k_option_title').html(params.title);
 
     if(params.message)
       $('.k_option>p').html(params.message);
@@ -120,7 +131,7 @@ var NotificationManager = {
 
     //$('#k_message_close_button').attr("src", chrome.extension.getURL("images/close.png"));
     
-    $('.k_option').animate({top:"0"}, 500);
+    $('.k_option').animate({top:"10"}, 500);
   }
   
 };//eo NotificationManager
