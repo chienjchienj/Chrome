@@ -25,10 +25,7 @@ var NotificationManager = {
   myMessages : new Array('warning','error','success', 'info', 'option'),
 
   init : function(behavioral_mode) {
-    console.log('Setting behavioral_mode to %s ', behavioral_mode);
     NotificationManager.behavioral_mode = behavioral_mode;
-    
-    console.log('NM init');
     // When message is clicked, hide it
     $('.k_message').click(function() {    
       $(this).animate({top: -$(this).outerHeight()}, 500);
@@ -57,9 +54,6 @@ var NotificationManager = {
    *                message:string
    */
   showNotification : function(params) {
-    console.log('Showing notification at line 59');
-    console.log(NotificationManager);
-    console.log(params);
     if( NotificationManager.behavioral_mode == DEFAULT_MODE ) {
       console.log('Showing notifications');
       //return;

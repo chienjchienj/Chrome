@@ -41,8 +41,6 @@ var UIElementSelector = {
     if ($(e.target).is('.k_panel') || $(e.target).parent('.k_panel').length ) return;
     
     if (this.tagName != 'body') {
-      console.log('Line 44 color highlighting');
-      console.log(UIElementSelector.highLightColor);
       this.style.outline = '4px solid ' + UIElementSelector.highLightColor; 
     }
     return false; //preventDefault & stopPropogation
@@ -123,7 +121,6 @@ var UIElementSelector = {
 
         /************************************** Start : To refactor entire section ***********************************************/
         case 'selection_addition' :
-          console.log('Adding a selected element to the selections array')
           chrome.extension.sendMessage({ action:"edit_current_column", params: { attribute:"xpath", values:params }}, function(response) {
             if(response.status == 'success') {
               var sessionManager = response.session;
@@ -165,8 +162,6 @@ var UIElementSelector = {
   // @Description : removes the DOM elements highlighted given a column detail
   // @param : column:Object
   highlightElements : function(url, genericXpath, colorCode) {
-    console.log("-- highlightElements");
-    console.log(url + '\n' + genericXpath + '\n' + colorCode);
     if(document.URL != url) return;
     
     var result = XpathHelper.evaluateQuery(genericXpath);
