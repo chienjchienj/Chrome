@@ -199,7 +199,7 @@ var UIColumnFactory = {
         }   
       });
     });
-    $deleteButton.tooltip();    
+    $deleteButton.tooltip();
 
     //save button
     var saveButtonImageUrl = "background-image: url(\"" +
@@ -219,15 +219,18 @@ var UIColumnFactory = {
           var columnIdentifier = "#krake-column-" + columnId;
           var selector = columnIdentifier + ' .krake-control-button-save';
           $(selector).remove();
+          
+          // remove visible tool tip just in case          
           $('.tooltip').remove();
           //UIColumnFactory.addEditButton(columnId);
           
-        }else{
+        } else {
           NotificationManager.showNotification({
             type : 'error',
             title : Params.NOTIFICATION_TITLE_SAVE_COLUMN_FAILED,
             message : Params.NOTIFICATION_MESSAGE_SAVE_COLUMN_FAILED
           });
+          
         }   
       });
     });

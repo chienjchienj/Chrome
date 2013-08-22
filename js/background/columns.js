@@ -109,7 +109,7 @@ Column.prototype.validate = function(){
   var isComplete = function(){
     
     // TODO : Refactor this crap
-    return (self.selections[0].xpath == null) ? false : true;
+    return ( self.selections.length == 0 || self.selections[0].xpath == null) ? false : true;
     
   };
 

@@ -543,7 +543,10 @@ chrome.runtime.onMessage.addListener(
       break;
 
       case "get_session":
-        sendResponse({ session: sessionManager });
+        sendResponse({ 
+          session: sessionManager,
+          sharedKrake : sharedKrake
+        });
       break;
 
       case 'load_session':

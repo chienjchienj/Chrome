@@ -117,7 +117,12 @@ var Panel = {
             });
             
         } else {
-          console.log('Ignoring this command, since no DOM elements has been picked for this column yet.');
+          
+          NotificationManager.showNotification({
+            type : 'error',
+            title : Params.NOTIFICATION_TITLE_SAVE_COLUMN_FAILED,
+            message : Params.NOTIFICATION_MESSAGE_SAVE_COLUMN_FAILED
+          });
           
         }
         
@@ -133,18 +138,73 @@ var Panel = {
 
   // @Description : the event whereby the 'done' button was clicked
   uiBtnDoneClick : function() {
-    //send mixpanel request
-    MixPanelHelper.triggerMixpanelEvent(null, 'event_11');
-    NotificationManager.hideAllMessages();
-    $('#json-output').modal('show');
+    
+    var finished = function() {
+      
+      // send mixpanel request
+      MixPanelHelper.triggerMixpanelEvent(null, 'event_11');
+      NotificationManager.hideAllMessages();
+      $('#json-output').modal('show');
 
-    chrome.extension.sendMessage({ action:'get_krake_json' }, function(response) {
-      if(response.status == 'success') {
-        $('#json-definition').text(JSON.stringify(response.krakeDefinition));
+      chrome.extension.sendMessage({ action:'get_krake_json' }, function(response) {
+        if(response.status == 'success') {
+          $('#json-definition').text(JSON.stringify(response.krakeDefinition));
+
+        }
+      });
+      
+    }
+
+    // checks the status first
+    chrome.extension.sendMessage({ action: "get_session"}, function(response) {
+      
+      var sessionManager = response.session;
+      var sharedKrake = response.sharedKrake;
+      
+      // when is in selection mode
+      if(sessionManager.currentState == 'selection_addition') {
+        
+        // When there is at least 1 selection for current column suffice
+        if (sessionManager.currentColumn.selections.length > 0) {
+          chrome.extension.sendMessage({ action: "save_column" }, function(response) {
+            
+            var columnIdentifier = "#krake-column-" + sessionManager.currentColumn.columnId;
+            var selector = columnIdentifier + ' .krake-control-button-save';
+            $(selector).remove();
+            
+            // remove visible tool tip just in case
+            $('.tooltip').remove();
+                        
+            finished();
+          });
+        
+        // When no selections have been made for this column yet.
+        } else {
+          NotificationManager.showNotification({
+            type : 'error',
+            title : Params.NOTIFICATION_TITLE_SAVE_COLUMN_FAILED,
+            message : Params.NOTIFICATION_MESSAGE_SAVE_COLUMN_FAILED
+          });
+          
+        }
+
+      
+      // when not columns have been defined in this Krake yet
+      } else if ( sessionManager.currentColumn == null && sharedKrake.columns.length == 0 ) {
+        NotificationManager.showNotification({
+          type : 'error',
+          title : Params.NOTIFICATION_TITLE_NO_COLUMN_FAILED,
+          message : Params.NOTIFICATION_MESSAGE_NO_COLUMN_FAILED
+        });
+
+
+      // when is in any other mode        
+      } else {
+        finished();
         
       }
+      
     });
-
 
   },
 

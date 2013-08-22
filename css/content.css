@@ -9,54 +9,67 @@
 /*  column highlight colours  */
 .k_highlight_FFCC00 {
   background-color: #FFCC00 !important;
+  color : #000000;
 }
 
 .k_highlight_FF6600 {
   background-color: #FF6600 !important;
+  color : #000000;  
 }
 
 .k_highlight_3EA99F {
   background-color: #3EA99F !important;
+  color : #000000;  
 }
 
 .k_highlight_FF99FF {
   background-color: #FF99FF !important;
+  color : #000000;  
 }
 
 .k_highlight_82CAFF {
   background-color: #82CAFF !important;
+  color : #000000;  
 }
 
 .k_highlight_99CCFF {
   background-color: #99CCFF !important;
+  color : #000000;  
 }
 
 .k_highlight_FF00FF {
   background-color: #FF00FF !important;
+  color : #000000;  
 }
 
 .k_highlight_CC33FF {
   background-color: #CC33FF !important;
+  color : #000000;  
 }
 
 .k_highlight_CCFF00 {
   background-color: #CCFF00 !important;
+  color : #000000;  
 }
 
 .k_highlight_0099CC {
   background-color: #0099CC !important;
+  color : #000000;  
 }
 
 .k_highlight_FFCCFF {
   background-color: #FFCCFF !important;
+  color : #000000;  
 }
 
 .k_highlight_33FF33 {
   background-color: #33FF33 !important;
+  color : #000000;  
 }
 
 .k_highlight_FFFF99 {
   background-color: #FFFF99 !important;
+  color : #000000;  
 }
 
 img.k_highlight_FFCC00 
@@ -103,6 +116,17 @@ img.k_highlight_FFFF99
   font-family : "Metrophobic","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+.k_message a, .k_message span {
+  color : #0088cc;
+  font-size : 14px;
+  font-weight : normal;
+}
+
+.k_message b {
+  font-weight : bold;
+}
+
+
 .k_option{
   z-index: 999999;
   position: fixed;
@@ -123,27 +147,45 @@ img.k_highlight_FFFF99
   background-color: #d9edf7;
 }
 
+
+.k_info:before {
+  content : "Info : ";
+  font-weight :bold;
+
+}
+
 .k_error{
-     background-color: #de4343;
-     border-color: #c43d3d;
+  background-color: #f2dede;
+}
+
+.k_error:before {
+  content: "Error : ";
+  font-weight :bold;
+  color: #b94a48;   
+}
+
+.k_message.k_error a, .k_message.k_error span {
+  color : #b94a48;
+  font-size : 14px;
+  font-weight : normal;
 }
      
 .k_warning{
-     background-color: #eaaf51;
-     border-color: #d99a36;
+  background-color: #eaaf51;
+  border-color: #d99a36;
 }
 
 .k_success{
-     background-color: #61b832;
-     border-color: #55a12c;
+  background-color: #61b832;
+  border-color: #55a12c;
 }
 
 .k_message h3{
-     margin: 0 0 0px 0;                          
+  margin: 0 0 0px 0;                          
 }
 
 .k_message p{
-     margin: 0;                          
+  margin: 0;                          
 }
 
 #k_message_close_button{
