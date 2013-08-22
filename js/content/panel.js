@@ -76,14 +76,16 @@ var Panel = {
           Panel.uiPanelWrapper.prepend( UIColumnFactory.createUIColumn( response.session.currentColumn ) );
           Panel.attachEnterKeyEventToColumnTitle(newColumnId);
           Panel.addBreadCrumbToColumn(newColumnId);
+
+          $('#krake-column-title-' + response.session.currentColumn.columnId).focus();
           
           // Attached detach event
           UIElementSelector.setHighLightColor(response.session.currentColumn.colorHex);
           
           NotificationManager.showNotification({
             type : 'info',
-            title : Params.NOTIFICATION_TITLE_PRE_SELECTION_1,
-            message : Params.NOTIFICATION_MESSAGE_PRE_SELECTION_1
+            title : Params.NOTIFICATION_TITLE_ENTER_COLUMN_NAME,
+            message : Params.NOTIFICATION_MESSAGE_ENTER_COLUMN_NAME
           });
    
         } else {
@@ -154,9 +156,18 @@ var Panel = {
       if(e.which == 13) {
 
         // TODO : automatically remove \n\r characters when they are entered
+        $(identifier).text($(identifier).text());
         
         //update breadcrumb segment title        
         var newColumnTitle = $(identifier).text();
+        
+        
+        // Sends notification to click on elements on page
+        NotificationManager.showNotification({
+          type : 'info',
+          title : Params.NOTIFICATION_TITLE_ADD_SELECTIONS,
+          message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS
+        });        
         
         //self.updateBreadcrumbSegmentTitle(columnId, $.trim(newColumnTitle)); 
         var params = {
