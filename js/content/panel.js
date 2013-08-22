@@ -72,11 +72,13 @@ var Panel = {
       chrome.extension.sendMessage({ action: "add_column", params: params}, function(response) {
         //only add UIColumn to panel once a logical column object is created in sessionManager
         if(response.status == 'success') {
-          console.log('LIne 75');
-          console.log(response)
+          
           Panel.uiPanelWrapper.prepend( UIColumnFactory.createUIColumn( response.session.currentColumn ) );
           Panel.attachEnterKeyEventToColumnTitle(newColumnId);
           Panel.addBreadCrumbToColumn(newColumnId);
+          
+          // Attached detach event
+          UIElementSelector.setHighLightColor(response.session.currentColumn.colorHex);
           
           NotificationManager.showNotification({
             type : 'info',
@@ -160,7 +162,8 @@ var Panel = {
         var params = {
           columnName : newColumnTitle
         }
-        chrome.extension.sendMessage({ action:"edit_current_column", params: { attribute:"column_name", values:params }}, function(response) {
+        chrome.extension.sendMessage({ action:"edit_current_column", params: { attribute:"column_name", values:params }}, 
+        function(response) {
           if(response.status == 'success') {
             //update breadcrumb uri
             var selector = '#k_column-breadcrumb-' + columnId + ' a';
@@ -189,7 +192,6 @@ var Panel = {
       // @Description : event is triggered when the 'yes' button is clicked
       yesFunction : function(e) {
         NotificationManager.hideAllMessages();
-        console.log('going into selectNextPager');
         selectNextPager();
       },
       
@@ -225,10 +227,7 @@ var Panel = {
         $(selector).remove();
         
         // Adds the pagination declaration in the background
-        console.log('Transiting to add pagination state');
         chrome.extension.sendMessage({ action:"add_pagination", params: params }, function(response) {
-          console.log('Transited into add pagination state');            
-          console.log(response);
           if(response.status == 'success') {
             
           }
@@ -258,7 +257,6 @@ var Panel = {
       // Handles the event whereby the link icon was clicked
       $linkButton.bind('click', function() {
         
-        console.log('Detailed Link Clicked')
         var params = {
           attribute : 'previous_column',
           event : 'detail_link_clicked',
@@ -285,7 +283,6 @@ var Panel = {
                 //   - first for value within this page
                 //   - second for the actual href to the nested page
                 var results = XpathHelper.evaluateQuery(column.genericXpath);
-                console.log('Rerouting to location %s' , results.nodesToHighlight[0].href);
 
                 window.location.href = results.nodesToHighlight[0].href;
               } 
@@ -300,7 +297,6 @@ var Panel = {
 
 
   addBreadCrumbToColumn : function(columnId) {
-    console.log('addBreadCrumbToColumn');
 
     chrome.extension.sendMessage({action: "get_breadcrumb", params:{columnId: columnId} }, function(response) {
       if(response.status == 'success') {

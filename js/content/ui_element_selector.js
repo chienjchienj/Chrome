@@ -27,26 +27,29 @@ var UIElementSelector = {
 
   init : function() {
     UIElementSelector.attachElementHighlightListeners();
-    console.log("UIElementSelector.init");
+    UIElementSelector.highLightColor = false;
+    //UIElementSelector.highLightColor = false;
   },
-
+  
   mouseOut : function(e) {
     this.style.outline = '';
     return false;
   },
 
+  // To apply color change based on
   mouseOver : function(e) {
     if ($(e.target).is('.k_panel') || $(e.target).parent('.k_panel').length ) return;
     
     if (this.tagName != 'body') {
-
-      this.style.outline = '4px solid #0000A0'; 
+      console.log('Line 44 color highlighting');
+      console.log(UIElementSelector.highLightColor);
+      this.style.outline = '4px solid ' + UIElementSelector.highLightColor; 
     }
     return false; //preventDefault & stopPropogation
   },
   
   // @Description : attached events to DOM elements that are not part of the krake panel
-  attachElementHighlightListeners : function() {   
+  attachElementHighlightListeners : function() {    
     $('*:not(".k_panel")').bind('mouseover', UIElementSelector.mouseOver);
     $('*:not(".k_panel")').bind('mouseout', UIElementSelector.mouseOut);
     $('*:not(".k_panel")').bind('click', UIElementSelector.selectElement);
@@ -58,6 +61,12 @@ var UIElementSelector = {
     $('*').unbind('mouseout', UIElementSelector.mouseOut);
     $('*').unbind('click', UIElementSelector.selectElement);
   },
+  
+  // @Description : Sets the color to use during mouse over events
+  setHighLightColor : function(hex_value) {
+    UIElementSelector.highLightColor = hex_value;
+  },
+  
 
   restoreElementDefaultActions : function() {
     UIElementSelector.detachElementHighlightListeners();

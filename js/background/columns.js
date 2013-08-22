@@ -1,7 +1,9 @@
 var ColumnFactory = {
   createColumn: function(params){
     var column = new Column(params);
-    column.colorCode = colorGenerator.getColor();
+    var color_obj = colorGenerator.getColor();
+    column.colorCode = color_obj.css_class;
+    column.colorHex = color_obj.hex;
     return column;
   }//eo createColumn
 };
@@ -11,7 +13,7 @@ var Column = function(params){
   
   self.columnId = params.columnId;
   self.columnType = params.columnType;
-  self.columnName = CommonParams.text.defaultColumnTitleText ; 
+  self.columnName = CommonParams.text.defaultColumnTitleText;
   self.colorCode = null;
   
   //the url in which the column is defined
@@ -113,46 +115,6 @@ Column.prototype.validate = function(){
 
   return isComplete();
 };
-
-
-/*
- * @Description : Rotates through a list of color and returns a new color each time
- *    the getColor() is called
- */
-var ColorGenerator = function()
-{
-  this.colorArray = 
-  [ " k_highlight_FFCC00 ", //yellow
-    " k_highlight_FF6600 ", //orange
-    " k_highlight_3EA99F ", //light green
-    " k_highlight_FF99FF ", //light purple
-    " k_highlight_82CAFF ", //sky blue
-    " k_highlight_99CCFF ",
-    " k_highlight_FF00FF ",
-    " k_highlight_CC33FF ",
-    " k_highlight_FFCCCC ",
-    " k_highlight_CCFF00 ",
-    " k_highlight_0099CC ",
-    " k_highlight_FFCCFF ",
-    " k_highlight_33FF33 ",
-    " k_highlight_FFFF99 "
-  ];
-
-};//eo ColorGenerator
-
-/*
- *  @Description : Returns a color code from the colorArray
- *    Auto rotates the most recent color returned to the end of the array after its been returned for use
- *  @return : color:String
- */
-
-ColorGenerator.prototype.getColor = function()
-{
-  var self = this;
-  var color = self.colorArray.shift();
-  self.colorArray.push(color);
-  return color; 
-}
 
 /*
 module.exports = Column;

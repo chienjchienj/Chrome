@@ -10,7 +10,7 @@ var Params = {
     '<button class="k_panel" disabled="disabled">Select a list of items</button>, ' + 
     '<button class="k_panel" disabled="disabled">Select a single item</button>',
   
-  NOTIFICATION_TITLE_PRE_SELECTION_1 : 'Click to add items in field',
+  NOTIFICATION_TITLE_PRE_SELECTION_1 : 'Click on items to add in field',
   NOTIFICATION_MESSAGE_PRE_SELECTION_1 : '',
     
   NOTIFICATION_TITLE_SELECTIONS_NOT_MATCHED : 'The two selections are not matched due to one of the following reasons:',

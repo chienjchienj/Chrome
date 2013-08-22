@@ -88,7 +88,6 @@ var newTabFocused = function(action_info) {
   
   // Gets the current tab
   chrome.tabs.get(action_info.tabId, function(tab) {
-    console.log(tab);
     curr_SKH = new SharedKrakeHelper(tab.id, tab.url);
   });
   
@@ -326,32 +325,24 @@ var setPagination = function(params, callback) {
 
 // @Description : deletes this column from the records
 var deleteColumn = function(params, callback) {
-  //try{
-    //console.log('-- before "deleteColumn"');
-    //console.log( JSON.stringify(SharedKrake) );
-    var deletedColumn;
 
-    if(sessionManager.currentColumn && sessionManager.currentColumn.columnId == params.columnId) {
-      //console.log('if');
-      deletedColumn = sessionManager.currentColumn;
-      sessionManager.currentColumn = null;
-      sessionManager.goToNextState('idle');
-    }else{
-      //console.log('else');
-      deletedColumn = curr_SKH.removeColumn(params.columnId);
-    }//eo if-else
+  var deletedColumn;
+
+  // when current column is deleted
+  if(sessionManager.currentColumn && sessionManager.currentColumn.columnId == params.columnId) {
+    deletedColumn = sessionManager.currentColumn;
     sessionManager.currentColumn = null;
-    //console.log('-- after "deleteColumn"');
-    //console.log( JSON.stringify(SharedKrake) );
-    //console.log('-- deletedColumn');
-    //console.log( JSON.stringify(deletedColumn) );
+    sessionManager.goToNextState('idle');
+  
+  // when some other column is deleted
+  }else{
 
-    if (callback && typeof(callback) === "function")  
-      callback({status: 'success', session: sessionManager, deletedColumn: deletedColumn}); 
- // }catch(err) {
- //   console.log(err);
- //   if (callback && typeof(callback) === "function")  callback({status: 'error'}); 
- // }
+    deletedColumn = curr_SKH.removeColumn(params.columnId);
+  }//eo if-else
+
+  if (callback && typeof(callback) === "function")  
+    callback({status: 'success', session: sessionManager, deletedColumn: deletedColumn}); 
+
 };//eo deleteColumn
 
 

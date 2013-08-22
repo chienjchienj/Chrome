@@ -119,7 +119,6 @@ chrome.extension.onMessage.addListener(
 
         if(request.params.filename == "js/content/krake.js") {
           UIElementSelector.init();
-          console.log('Sending behavioral_mode to NM %s', behavioral_mode);
           NotificationManager.init(behavioral_mode);          
           Panel.init();
           reloadExistingColumns();
@@ -166,7 +165,6 @@ if( !isKrakeDomain() ) {
   behavioral_mode = CREATION_MODE;
   chrome.extension.sendMessage({ action:'inject_krake' }, function(response) {
     if(response.status == 'success') {
-      console.log(response)
       $('#krake_content').html(JSON.stringify(response.krakeDefinition));
     }
   });

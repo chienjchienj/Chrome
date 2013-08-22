@@ -182,14 +182,23 @@ var UIColumnFactory = {
 
       var columnIdentifier = "#krake-column-" + columnId; 
       chrome.extension.sendMessage({ action: "delete_column", params: { columnId: columnId } }, function(response){
+
         if(response.status == 'success'){
+          
           $(columnIdentifier).remove();
+          
           //remove highlights
           UIElementSelector.unHighLightElements(response.deletedColumn);
+          
+          // disables in-page element highlighting when its the current column that gets deleted
+          if(response.session.currentState == 'idle') {
+            UIElementSelector.setHighLightColor(false);
+            
+          }
+          
         }   
       });
     });
-
     $deleteButton.tooltip();    
 
     //save button
@@ -207,11 +216,12 @@ var UIColumnFactory = {
           //send mixpanel request
           MixPanelHelper.triggerMixpanelEvent(null, 'event_9');
 
-          var columnIdentifier = "#krake-column-" + columnId; 
+          var columnIdentifier = "#krake-column-" + columnId;
           var selector = columnIdentifier + ' .krake-control-button-save';
           $(selector).remove();
-          $('.tooltip').remove();          
+          $('.tooltip').remove();
           //UIColumnFactory.addEditButton(columnId);
+          
         }else{
           NotificationManager.showNotification({
             type : 'error',
