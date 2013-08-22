@@ -6,7 +6,6 @@ This is the source code for the Krake browser extension in Google Chrome
 
 Backlog
 ===
-— TODO : Make notifications bar small and petite with close button
 — TODO : Ability to toggle bar at the bottom between visibility and non-visibility
 — TODO : Column Name focused when [enter] is do nothing 
     
