@@ -10,11 +10,14 @@ var Params = {
     '<button class="k_panel" disabled="disabled">Select a list of items</button>, ' + 
     '<button class="k_panel" disabled="disabled">Select a single item</button>',
   
-  NOTIFICATION_TITLE_ADD_SELECTIONS : 'Click to add an item to field',
+  NOTIFICATION_TITLE_ADD_SELECTIONS : 'Click to add an item to this field',
   NOTIFICATION_MESSAGE_ADD_SELECTIONS : '',
   
-  NOTIFICATION_TITLE_ADD_MORE_SELECTIONS : 'Add more similar items if any',
-  NOTIFICATION_MESSAGE_ADD_MORE_SELECTIONS : '',  
+  NOTIFICATION_TITLE_ADD_MORE_SELECTIONS : 'Add more items or click <b>save</b>',
+  NOTIFICATION_MESSAGE_ADD_MORE_SELECTIONS : '',
+  
+  NOTIFICATION_TITLE_SAVED_SELECTIONS : 'Click <b>Done</b> or <b>Add New</b>',
+  NOTIFICATION_MESSAGE_SAVED_SELECTIONS : '',  
     
   NOTIFICATION_TITLE_SELECTIONS_NOT_MATCHED : 'The two selections are not matched due to one of the following reasons:',
   NOTIFICATION_MESSAGE_SELECTIONS_NOT_MATCHED : '[1] Repeating selection of the same DOM element, and/or [2] Two selections are of different element type',

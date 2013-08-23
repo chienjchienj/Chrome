@@ -12,9 +12,17 @@
   color : #000000;
 }
 
+img.k_highlight_FFCC00 {
+  outline : 4px solid #FFCC00 !important;
+}
+
 .k_highlight_FF6600 {
   background-color: #FF6600 !important;
   color : #000000;  
+}
+
+img.k_highlight_FF6600 {
+  outline : 4px solid #FF6600 !important;
 }
 
 .k_highlight_3EA99F {
@@ -22,9 +30,17 @@
   color : #000000;  
 }
 
+img.k_highlight_3EA99F {
+  outline : 4px solid #3EA99F !important;
+}
+
 .k_highlight_FF99FF {
   background-color: #FF99FF !important;
   color : #000000;  
+}
+
+img.k_highlight_FF99FF {
+  outline : 4px solid #FF99FF !important;
 }
 
 .k_highlight_82CAFF {
@@ -32,9 +48,17 @@
   color : #000000;  
 }
 
+img.k_highlight_82CAFF {
+  outline : 4px solid #82CAFF !important;
+}
+
 .k_highlight_99CCFF {
   background-color: #99CCFF !important;
   color : #000000;  
+}
+
+img.k_highlight_99CCFF {
+  outline : 4px solid #99CCFF !important;
 }
 
 .k_highlight_FF00FF {
@@ -42,9 +66,17 @@
   color : #000000;  
 }
 
+img.k_highlight_FF00FF {
+  outline : 4px solid #FF00FF !important;
+}
+
 .k_highlight_CC33FF {
   background-color: #CC33FF !important;
   color : #000000;  
+}
+
+img.k_highlight_CC33FF {
+  outline : 4px solid #CC33FF !important;
 }
 
 .k_highlight_CCFF00 {
@@ -52,9 +84,17 @@
   color : #000000;  
 }
 
+img.k_highlight_CCFF00 {
+  outline : 4px solid #CCFF00 !important;
+}
+
 .k_highlight_0099CC {
   background-color: #0099CC !important;
   color : #000000;  
+}
+
+img.k_highlight_0099CC {
+  outline : 4px solid #0099CC !important;
 }
 
 .k_highlight_FFCCFF {
@@ -62,14 +102,26 @@
   color : #000000;  
 }
 
+img.k_highlight_FFCCFF {
+  outline : 4px solid #FFCCFF !important;
+}
+
 .k_highlight_33FF33 {
   background-color: #33FF33 !important;
   color : #000000;  
 }
 
+img.k_highlight_33FF33 {
+  outline : 4px solid #33FF33 !important;
+}
+
 .k_highlight_FFFF99 {
   background-color: #FFFF99 !important;
   color : #000000;  
+}
+
+img.k_highlight_FFFF99 {
+  outline : 4px solid #FFFF99 !important;
 }
 
 img.k_highlight_FFCC00 

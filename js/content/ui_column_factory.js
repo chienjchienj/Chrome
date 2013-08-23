@@ -63,6 +63,7 @@ var UIColumnFactory = {
       var selector = '#krake-column-control-' + columnId;
       var linkButtonImageUrl = "background-image: url(\"" + chrome.extension.getURL("images/link.png") + "\");";
       var $linkButton = $("<button>", { class: "k_panel krake-control-button krake-control-button-link",
+                                        title: "get more fields within this page",      
                                         style:  linkButtonImageUrl });
 
       $columnControl.append($linkButton);
@@ -79,6 +80,7 @@ var UIColumnFactory = {
           //} 
         });
       });//eo click
+      $linkButton.tooltip();      
 
 
       //create pagination
@@ -132,6 +134,7 @@ var UIColumnFactory = {
         }   
       });
     });
+    $deleteButton.tooltip();    
 
     $columnControl = $columnControl.append($deleteButton);
 
@@ -142,7 +145,7 @@ var UIColumnFactory = {
         $columnControl.append($detailPageLink).append($deleteButton)
       )
       
-
+    
     return $wrapper;
 
 
@@ -220,9 +223,17 @@ var UIColumnFactory = {
           var selector = columnIdentifier + ' .krake-control-button-save';
           $(selector).remove();
           
-          // remove visible tool tip just in case          
+          // remove visible tool tip just in case 
           $('.tooltip').remove();
           //UIColumnFactory.addEditButton(columnId);
+          
+          UIElementSelector.setHighLightColor(false);          
+          NotificationManager.showNotification({
+            type : 'info',
+            title : Params.NOTIFICATION_TITLE_SAVED_SELECTIONS,
+            message : Params.NOTIFICATION_MESSAGE_SAVED_SELECTIONS
+          });
+          
           
         } else {
           NotificationManager.showNotification({
@@ -235,7 +246,7 @@ var UIColumnFactory = {
       });
     });
     
-    $saveButton.tooltip();    
+    $saveButton.tooltip();
 
     var breadcrumbId = "k_column-breadcrumb-" + columnId;
     var $breadcrumb = $("<div>", { id: breadcrumbId,

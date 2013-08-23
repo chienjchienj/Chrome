@@ -119,7 +119,6 @@ var UIElementSelector = {
           
         break;
 
-        /************************************** Start : To refactor entire section ***********************************************/
         case 'selection_addition' :
           chrome.extension.sendMessage({ action:"edit_current_column", params: { attribute:"xpath", values:params }}, function(response) {
             if(response.status == 'success') {
@@ -143,7 +142,7 @@ var UIElementSelector = {
                     type : 'info',
                     title : Params.NOTIFICATION_TITLE_ADD_MORE_SELECTIONS,
                     message : Params.NOTIFICATION_MESSAGE_ADD_MORE_SELECTIONS
-                  });                  
+                  });  
                   
                   //display 'link' icon
                   Panel.showLink(response.column);
@@ -154,8 +153,6 @@ var UIElementSelector = {
             }
           });
         break;
-        
-        /************************************** End : To refactor entire section ***********************************************/        
         
       }//eo switch
     });

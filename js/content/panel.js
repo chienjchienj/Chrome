@@ -321,9 +321,12 @@ var Panel = {
       var linkButtonImageUrl = "background-image: url(\"" + chrome.extension.getURL("images/link.png") + "\");";
 
       var $linkButton = $("<button>", { class: "k_panel krake-control-button krake-control-button-link",
+                                        title: "get more fields within this page",
                                         style:  linkButtonImageUrl });
 
       $(selector).append($linkButton);
+
+      $linkButton.tooltip();
       
       // Handles the event whereby the link icon was clicked
       $linkButton.bind('click', function() {
