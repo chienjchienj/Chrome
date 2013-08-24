@@ -10,7 +10,7 @@ var Params = {
     '<button class="k_panel" disabled="disabled">Select a list of items</button>, ' + 
     '<button class="k_panel" disabled="disabled">Select a single item</button>',
   
-  NOTIFICATION_TITLE_ADD_SELECTIONS : 'Click to add an item to this field',
+  NOTIFICATION_TITLE_ADD_SELECTIONS : 'Mouseover & click any add item in page to add',
   NOTIFICATION_MESSAGE_ADD_SELECTIONS : '',
   
   NOTIFICATION_TITLE_ADD_MORE_SELECTIONS : 'Add more items or click <b>save</b>',

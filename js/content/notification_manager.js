@@ -27,8 +27,11 @@ var NotificationManager = {
   init : function(behavioral_mode) {
     NotificationManager.behavioral_mode = behavioral_mode;
     // When message is clicked, hide it
-    $('.k_message').click(function() {    
-      $(this).animate({top: -$(this).outerHeight()}, 500);
+    $('.k_message').click(function() {
+      $('.k_message').fadeOut(100)
+        .css({
+          top: -$('.k_message').outerHeight()
+        });      
     });
 
   },
@@ -39,7 +42,12 @@ var NotificationManager = {
    
     for (i=0; i<NotificationManager.myMessages.length; i++) {
       messagesHeights[i] = $('.k_' + NotificationManager.myMessages[i]).outerHeight(); // fill array
-      $('.k_' + NotificationManager.myMessages[i]).css('top', -messagesHeights[i]); //move element outside viewport   
+      $('.k_' + NotificationManager.myMessages[i]).fadeOut(100)
+        .css({
+          top : -messagesHeights[i]
+        });      
+      
+      
     }//eo for
 
   },
@@ -52,8 +60,18 @@ var NotificationManager = {
    *                type:string message type 'warning','error','success', 'info'
    *                title:string
    *                message:string
+   *                elements_to_highlight : [
+   *                    css_selector1:String, 
+   *                    css_selector2:String
+   *                ],
+   *                anchor_element : css_selector:String
    */
   showNotification : function(params) {
+    
+    // set the elements to highlight
+    NotificationManager.clearHints();    
+    if(params.elements_to_highlight) NotificationManager.showHints(params.elements_to_highlight);
+    
     if( NotificationManager.behavioral_mode == DEFAULT_MODE ) {
       console.log('Showing notifications');
       //return;
@@ -68,35 +86,60 @@ var NotificationManager = {
     var notification = "";
 
 
-    notification = notification +
-                   "<a id=\"k_message_close_button\">x</a>";
+    notification = notification + "<a id=\"k_message_close_button\">x</a>";
     
-    /*
-    notification = notification +
-                   "<img id=\"k_message_close_button\" class=\"k_panel\" src=\"" + 
-                   chrome.extension.getURL("images/close.png") + 
-                   "\" alt=\"Smiley face\">";
-    */
-
     if(params.title)
       notification = notification + "<span class=\"k_panel\">" + params.title + "</span>";
-
-    /*
-    if(params.message)
-      notification = notification + "<p class=\"k_panel\">" + params.message + "</p>";
-    */
- 
-
 
     $('.k_'+params.type).html(notification);
 
     $('#k_message_close_button').bind('click', function(e) {
       //trigger parent <div> click action
-      $('.k_message').animate({top: -$('.k_message').outerHeight()}, 500);
+      $('.k_message').fadeOut(100)
+        .css({
+          top: -$('.k_message').outerHeight()
+        });
       
     });
 
-    $('.k_'+params.type).animate({top:"10"}, 500);
+
+    if(params.anchor_element) {
+      var anchor_item_position = NotificationManager.getRelativeAttributes(params.anchor_element);
+      
+      $('.k_'+params.type).hide()
+        .css({
+          left : anchor_item_position.left ,
+          top : anchor_item_position.top - 75
+        }).fadeIn({
+          duration : 100
+        });
+        
+    } else {
+      $('.k_'+params.type).css({ top : '10px', left : "", right : '10px' }).fadeIn(100);
+      
+    }
+
+  },
+  
+  
+  
+  // @Description : given an array of css_selector strings make them glow
+  // @param : array_of_selectors:array[ css_selector:String, css_selector:String... ] 
+  showHints : function(array_of_selectors) {
+    for(var x = 0; x < array_of_selectors.length ; x++ ) {
+      $(array_of_selectors[x]).addClass('k_tutorial_hint');
+      $(array_of_selectors[x]).addClass('k_focus');      
+    }
+    
+  },
+  
+  
+  
+  // @Description : clear hints
+  clearHints : function()  {
+    $('.k_tutorial_hint').removeClass('k_tutorial_hint');
+    $('.k_focus').removeClass('k_focus');
+    
   },
   
   
@@ -126,6 +169,42 @@ var NotificationManager = {
     //$('#k_message_close_button').attr("src", chrome.extension.getURL("images/close.png"));
     
     $('.k_option').animate({top:"10"}, 500);
-  }
+  },
+  
+  
+  
+  // @Description : Get relative position of the first element, height and width
+  // @param : css_selector:String
+  // @return : result:Object 
+  //    relative top
+  //    relative left
+  //    width
+  //    height
+  getRelativeAttributes : function(css_selector) {
+    var result = {}
+    console.log(jQuery(css_selector));
+    result.top = jQuery(css_selector).offset().top - $(window).scrollTop();
+    result.left = jQuery(css_selector).offset().left - $(window).scrollLeft();
+    result.width = 
+      jQuery(css_selector).width() +
+      parseInt( jQuery(css_selector).css("borderLeftWidth"), 10) +
+      parseInt( jQuery(css_selector).css("borderRightWidth"), 10) +
+      parseInt( jQuery(css_selector).css("padding-left"), 10) +
+      parseInt( jQuery(css_selector).css("padding-right"), 10) +
+      parseInt( jQuery(css_selector).css("margin-left"), 10) +
+      parseInt( jQuery(css_selector).css("margin-right"), 10);
+
+    result.height = 
+      jQuery(css_selector).width() +
+      parseInt( jQuery(css_selector).css("borderTopWidth"), 10) +
+      parseInt( jQuery(css_selector).css("borderBottomWidth"), 10) +
+      parseInt( jQuery(css_selector).css("padding-top"), 10) +
+      parseInt( jQuery(css_selector).css("padding-bottom"), 10) +
+      parseInt( jQuery(css_selector).css("margin-top"), 10) +
+      parseInt( jQuery(css_selector).css("margin-bottom"), 10);
+
+    
+    return result
+  } 
   
 };//eo NotificationManager

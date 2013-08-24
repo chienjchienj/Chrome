@@ -4,13 +4,42 @@ This is the source code for the Krake browser extension in Google Chrome
 
 
 
+Usability Testing Results
+===
+
+23th August 2013
+---
+- Subjects
+  - Darius Cheung
+    - Had difficulties knowing he needs to highlight elements in page
+    - Thought to click on the notification box instead since its highlighted
+    - Force users to watch video before doing shit
+    
+  - MIT friend of Darius Cheung
+    - Hint Bar is too far away from location of required action
+    
+  - Fred 
+    - Did not know to highlight items in page
+    - Hint Bar is too far away from location of required action    
+
+  - Thomas
+    - Always give visual clue on what's next
+    - OK save button
+    - Grey off the existing green button and then change the save to green
+    - When Run button then ask for parameters if its declared
+    - When run krake 
+        - route https://krake.io/krakes/7-itunes-app-store/run?param1=x&param2=x
+    - /show?
+    - /run?
+    - Google Compute Engine
+
 Backlog
 ===
-— TODO : Ability to toggle bar at the bottom between visibility and non-visibility
-— TODO : Column Name focused when [enter] is do nothing 
-    
-— TODO : Ensure not records are created for pages with no URLs
-— TODO : Ensure when sub link is clicked
+- TODO : TUTORIAL MODE : highlight elements for selection when in the next state
+- TODO : Ability to toggle bar at the bottom between visibility and non-visibility
+- TODO : Column Name focused when [enter] is do nothing    
+- TODO : Ensure not records are created for pages with no URLs
+- TODO : Ensure when sub link is clicked
     create a sharedKrake with the following
       parentColumnId
       parentURL

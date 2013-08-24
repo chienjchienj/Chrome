@@ -50,7 +50,11 @@ var Panel = {
     NotificationManager.showNotification({
       type : 'info',
       title : Params.NOTIFICATION_TITLE_IDLE,
-      message : Params.NOTIFICATION_MESSAGE_IDLE
+      message : Params.NOTIFICATION_MESSAGE_IDLE,
+      elements_to_highlight : [
+        '#btn-create-list'
+      ],
+      anchor_element : '#btn-create-list'
     });
   },
   
@@ -85,7 +89,11 @@ var Panel = {
           NotificationManager.showNotification({
             type : 'info',
             title : Params.NOTIFICATION_TITLE_ENTER_COLUMN_NAME,
-            message : Params.NOTIFICATION_MESSAGE_ENTER_COLUMN_NAME
+            message : Params.NOTIFICATION_MESSAGE_ENTER_COLUMN_NAME,
+            elements_to_highlight : [
+              '#krake-column-title-' + response.session.currentColumn.columnId
+            ],
+            anchor_element : '#krake-column-title-' + response.session.currentColumn.columnId
           });
    
         } else {
@@ -144,12 +152,12 @@ var Panel = {
       // send mixpanel request
       MixPanelHelper.triggerMixpanelEvent(null, 'event_11');
       NotificationManager.hideAllMessages();
-      $('#json-output').modal('show');
+
+      // $('#json-output').modal('show');
 
       chrome.extension.sendMessage({ action:'get_krake_json' }, function(response) {
         if(response.status == 'success') {
           $('#json-definition').text(JSON.stringify(response.krakeDefinition));
-
         }
       });
       
@@ -226,7 +234,7 @@ var Panel = {
         NotificationManager.showNotification({
           type : 'info',
           title : Params.NOTIFICATION_TITLE_ADD_SELECTIONS,
-          message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS
+          message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS,
         });        
         
         //self.updateBreadcrumbSegmentTitle(columnId, $.trim(newColumnTitle)); 

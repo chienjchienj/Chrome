@@ -205,13 +205,15 @@ var UIColumnFactory = {
     $deleteButton.tooltip();
 
     //save button
+    /*
     var saveButtonImageUrl = "background-image: url(\"" +
                                chrome.extension.getURL("images/save.png") + 
-                              "\");";
+                              "\");";*/
 
-    var $saveButton = $("<button>", { class: "k_panel krake-control-button krake-control-button-save",
-                                      title: "save column",
-                                      style:  saveButtonImageUrl });
+    var $saveButton = $("<button>", { class: "k_panel krake-control-button-save k_btn",
+                                      html : "save",
+                                      /* style:  saveButtonImageUrl, */
+                                      title: "save column" });
 
     $saveButton.bind('click', function(){
       chrome.extension.sendMessage({ action: "save_column" }, function(response){
@@ -231,7 +233,11 @@ var UIColumnFactory = {
           NotificationManager.showNotification({
             type : 'info',
             title : Params.NOTIFICATION_TITLE_SAVED_SELECTIONS,
-            message : Params.NOTIFICATION_MESSAGE_SAVED_SELECTIONS
+            message : Params.NOTIFICATION_MESSAGE_SAVED_SELECTIONS,
+            elements_to_highlight : [
+              '#panel-left button'
+            ],
+            anchor_element : '#panel-left button'
           });
           
           

@@ -28,6 +28,7 @@ var showPanel = function() {
     var panelWrapper = $('#k-panel-wrapper');
 
     panelWrapper.load(chrome.extension.getURL("html/panel.html"),function() {
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/tutorial_manager.js" } });       
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/params.js" } }); 
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/xpath_helper.js" } });
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/mixpanel_helper.js" } });

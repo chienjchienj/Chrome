@@ -141,7 +141,11 @@ var UIElementSelector = {
                   NotificationManager.showNotification({
                     type : 'info',
                     title : Params.NOTIFICATION_TITLE_ADD_MORE_SELECTIONS,
-                    message : Params.NOTIFICATION_MESSAGE_ADD_MORE_SELECTIONS
+                    message : Params.NOTIFICATION_MESSAGE_ADD_MORE_SELECTIONS,
+                    elements_to_highlight : [
+                      '#krake-column-control-' + response.column.columnId + ' .krake-control-button-save'
+                    ],
+                    anchor_element : '#krake-column-control-' + response.column.columnId + ' .krake-control-button-save'
                   });  
                   
                   //display 'link' icon

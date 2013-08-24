@@ -145,7 +145,7 @@ img.k_highlight_FFFF99
 /************************  notifications  *************************/
 .k_alert_boxes {
   width : 269px;
-  height : 21px;
+  min-height : 21px;
   font-size : 14px;  
   line-height : 21px;
   padding : 8px 35px 8px 14px;
@@ -160,7 +160,7 @@ img.k_highlight_FFFF99
   position: fixed;
   top: -50px; 
   right: 10px; 
-  text-align: right;
+  text-align: left;
   color : #0088cc;
   background-color: #d9edf7;
   border : #fbeed5;
@@ -196,14 +196,17 @@ img.k_highlight_FFFF99
 }
 
 .k_info{
-  background-color: #d9edf7;
+  background-color: #dff0d8;
 }
 
+.k_message.k_info a, .k_message.k_info span {
+  color : #468847;
+}
 
 .k_info:before {
   content : "Info : ";
   font-weight :bold;
-
+  color : #468847;
 }
 
 .k_error{
@@ -259,17 +262,34 @@ img.k_highlight_FFFF99
   cursor : pointer;
 }
 
-/*
-@keyframes animate-bg {
-    from {
-        background-position: 0 0;
-    }
-    to {
-       background-position: -80px 0;
-    }
-}
-*/
 
 .k_panel button[disabled="disabled"] {
   cursor : default;
+}
+
+
+.k_tutorial_hint {
+  -webkit-animation-name: hint-blinking;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;  
+}
+
+@-webkit-keyframes hint-blinking {
+  from {
+    -webkit-box-shadow: 0px 0px 5px 5px rgba(163, 171, 246, 0.1);
+    -moz-box-shadow: 0px 0px 5px 5px rgba(163, 171, 246, 0.1);
+    box-shadow: 0px 0px 5px 5px rgba(163, 171, 246, 0.1);
+  }
+  
+  50% {
+    -webkit-box-shadow: 0px 0px 5px 5px rgba(163, 171, 246, 1);
+    -moz-box-shadow: 0px 0px 5px 5px rgba(163, 171, 246, 1);
+    box-shadow: 0px 0px 5px 5px rgba(163, 171, 246, 1);    
+  }
+
+  to {
+    -webkit-box-shadow: 0px 0px 5px 5px rgba(163, 171, 246, 0.2);
+    -moz-box-shadow: 0px 0px 5px 5px rgba(163, 171, 246, 0.2);
+    box-shadow: 0px 0px 5px 5px rgba(163, 171, 246, 0.2);
+  }
 }
