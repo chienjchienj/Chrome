@@ -37,81 +37,45 @@
 var UIColumnFactory = {
   
   
+  recreateUIColumn: function(column){
 
-  recreateUIColumn: function(params){
-    
-    var columnId = params.columnId;
-    var type = params.columnType;
-    var columnTitle = params.columnName;
-    var elementLink = params.elementLink;
-    
+    var columnId = column.columnId;
+    var type = column.columnType;
+    var columnTitle = column.columnName;
+    var elementLink = column.elementLink;
     var divKrakeColumnId = "krake-column-" + columnId;
     var columnNameId = "krake-column-title-" + columnId;
+    var columnControlId =  "krake-column-control-" + columnId;
+
 
     var $wrapper = $("<div>", { id: divKrakeColumnId, 
                                 class: "krake-column k_panel"});
-
-    var columnControlId =  "krake-column-control-" + columnId;
     var $columnControl = $("<div>", { id: columnControlId,
-                                      class: "krake-column-control k_panel" });
-    
-    var $detailPageLink = null;
-
-    // hyperlink incon in the column in case of hyperlink
-    if(elementLink)
-    {
-      var selector = '#krake-column-control-' + columnId;
-      var linkButtonImageUrl = "background-image: url(\"" + chrome.extension.getURL("images/link.png") + "\");";
-      var $linkButton = $("<button>", { class: "k_panel krake-control-button krake-control-button-link",
-                                        title: "get more fields within this page",      
-                                        style:  linkButtonImageUrl });
-
-      $columnControl.append($linkButton);
-     
-      $linkButton.bind('click', function(){
-        chrome.extension.sendMessage({ action:"get_column_by_id", params: {columnId: columnId} }, function(response){
-          //if(response.session.currentColumn){
-              //notify user to save column first
-          //}else{
-            if(response.status == 'success'){
-              window.location.href = response.column.selection[0].elementLink;
-            }
-            
-          //} 
-        });
-      });//eo click
-      $linkButton.tooltip();      
-
-
-      //create pagination
-    }
+                                      class: "krake-column-control k_panel" });    
+                                      
+    var $detailPageLink = PageDivingHandler.getLink(column);
 
     var editButtonImageUrl = "background-image: url(\"" +
                                chrome.extension.getURL("images/edit.png") + 
                               "\");";
-
     var $editButton = $("<button>", { class: "k_panel krake-control-button krake-control-button-edit",
                                       style:  editButtonImageUrl });
+    $editButton.bind('click', function(){});
 
-    $editButton.bind('click', function(){
-      alert("editButtonClicked");
-    });
 
-    var deleteButtonImageUrl = "background-image: url(\"" +
-                               chrome.extension.getURL("images/bin.png") + 
-                               "\");";
-    var $deleteButton = $("<button>", { class: "krake-control-button k_panel krake-control-button-delete",
-                                        style: deleteButtonImageUrl });
 
     var breadcrumbId = "k_column-breadcrumb-" + columnId;
     var $breadcrumb = $("<div>", { id: breadcrumbId,
                                    class: "krake-breadcrumb k_panel" });
 
+
+
      var color_palette_id = "k_column-color-palette-" + columnId;
      var $color_palette = $("<div>", { 
          id: color_palette_id,
-         class: "krake-column-color-palette k_panel " + params.colorCode,
+         class: "krake-column-color-palette k_panel " + column.colorCode,
        });
+
 
 
     var $columnName = $("<div>", { id: columnNameId, 
@@ -119,6 +83,12 @@ var UIColumnFactory = {
                                     text: columnTitle });
 
 
+
+    var deleteButtonImageUrl = "background-image: url(\"" +
+                               chrome.extension.getURL("images/bin.png") + 
+                               "\");";
+    var $deleteButton = $("<button>", { class: "krake-control-button k_panel krake-control-button-delete",
+                                        style: deleteButtonImageUrl });
     $deleteButton.bind('click', function(){
       //send mixpanel request
       MixPanelHelper.triggerMixpanelEvent(null, 'event_10');
@@ -135,8 +105,9 @@ var UIColumnFactory = {
       });
     });
     $deleteButton.tooltip();    
-
     $columnControl = $columnControl.append($deleteButton);
+
+
 
     $wrapper.append($color_palette)
       .append($columnName)
@@ -144,8 +115,8 @@ var UIColumnFactory = {
       .append(
         $columnControl.append($detailPageLink).append($deleteButton)
       )
-      
-    
+
+
     return $wrapper;
 
 
@@ -211,7 +182,7 @@ var UIColumnFactory = {
                               "\");";*/
 
     var $saveButton = $("<button>", { class: "k_panel krake-control-button-save k_btn",
-                                      html : "save",
+                                      html : "Save",
                                       /* style:  saveButtonImageUrl, */
                                       title: "save column" });
 

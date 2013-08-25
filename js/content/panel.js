@@ -38,7 +38,7 @@ var Panel = {
 
 
   init : function() {
-    jQuery('#panel-left button').tooltip();
+    // jQuery('#panel-left button').tooltip();
     
     Panel.uiBtnCreateList.bind('click', Panel.uiBtnCreateListClick);
     Panel.uiBtnCreateList.bind('click', {eventNumber: 'event_4'}, MixPanelHelper.triggerMixpanelEvent);
@@ -257,124 +257,6 @@ var Panel = {
       }
     }); 
   },
-
-
-
-  // @Description : the prompt to allow users the ability to indicate if there is a pagination on this page
-  showPaginationOption : function(column) {
-    
-    //show prompt
-    NotificationManager.showOptionsYesNo({
-      title: Params.NOTIFICATION_TITLE_ACTIVATE_NEXT_PAGER,
-      message: Params.NOTIFICATION_MESSAGE_ACTIVATE_NEXT_PAGER,
-
-      // @Description : event is triggered when the 'yes' button is clicked
-      yesFunction : function(e) {
-        NotificationManager.hideAllMessages();
-        selectNextPager();
-      },
-      
-      // @Description : event is triggered when the 'no' button is clicked
-      noFunction : function(e) {
-        NotificationManager.hideAllMessages();
-      }
-      
-    });
-
-    // @Description : Handles the event whereby user goes into the mode for selecting pagination
-    var selectNextPager = function() {
-
-      var params = {
-        attribute : 'current_state',
-        values : {
-          state : 'pre_next_pager_selection'
-        }
-      }
-      
-      // transits into pagination mode regardless of save_column command outcome
-      chrome.extension.sendMessage({ action: "save_column" }, function(response) {
-        
-        NotificationManager.showNotification({
-          type : 'info',
-          title : Params.NOTIFICATION_TITLE_SELECT_NEXT_PAGER,
-          message : Params.NOTIFICATION_MESSAGE_SELECT_NEXT_PAGER
-        });
-        
-        //remove save column button
-        var columnIdentifier = "#krake-column-" + column.columnId; 
-        var selector = columnIdentifier + ' .krake-control-button-save';
-        $(selector).remove();
-        
-        // Adds the pagination declaration in the background
-        chrome.extension.sendMessage({ action:"add_pagination", params: params }, function(response) {
-          if(response.status == 'success') {
-            
-          }
-        });
-          
-      });
-    }//eo if
-    
-  },
-
-
-
-  showLink : function(column) {
-    if(column.elementType.toLowerCase() == 'a') {
-      var selector = '#krake-column-control-' + column.columnId;
-      
-      // ensures link is only added once
-      if($(selector + ' .krake-control-button-link').length > 0 ) return;
-
-      var linkButtonImageUrl = "background-image: url(\"" + chrome.extension.getURL("images/link.png") + "\");";
-
-      var $linkButton = $("<button>", { class: "k_panel krake-control-button krake-control-button-link",
-                                        title: "get more fields within this page",
-                                        style:  linkButtonImageUrl });
-
-      $(selector).append($linkButton);
-
-      $linkButton.tooltip();
-      
-      // Handles the event whereby the link icon was clicked
-      $linkButton.bind('click', function() {
-        
-        var params = {
-          attribute : 'previous_column',
-          event : 'detail_link_clicked',
-          values : {
-            currentUrl : document.URL,
-            columnId : column.columnId,
-            elementLink : column.selection[0].elementLink
-          }
-        }
-      
-        chrome.extension.sendMessage({ action:"get_session" }, function(response) { 
-          
-          // Do nothing with session obtained from the background
-          if(response.session.currentColumn) {
-            
-            // TODO : Need to extend this part
-
-          // Gets the HREF defined by this column and redirects the users to the nested page
-          } else {
-            chrome.extension.sendMessage({ action:'edit_session', params : params}, function(response) {
-              if(response.status == 'success') {
-                
-                // TODO : split columns into two :
-                //   - first for value within this page
-                //   - second for the actual href to the nested page
-                var results = XpathHelper.evaluateQuery(column.genericXpath);
-
-                window.location.href = results.nodesToHighlight[0].href;
-              } 
-            });
-          } 
-        });//eo sendMessage
-      });//eo click
-    }//eo if
-    
-  },//eo showLink
 
 
 

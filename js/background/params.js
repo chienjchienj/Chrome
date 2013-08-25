@@ -34,7 +34,7 @@ var CommonParams =
   },
   text :
   {
-  	defaultColumnTitleText : "*New Column*",
+  	defaultColumnTitleText : "New Bookmark",
   	paginationSelectionDoneText : "Collect data from multiple pages"
   }
 

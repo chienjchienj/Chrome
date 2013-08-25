@@ -137,7 +137,6 @@ var UIElementSelector = {
                   UIElementSelector.highlightElements(response.column.url, response.column.genericXpath, response.column.colorCode);
                   
                   //TODO : refactor this as a separate use case show pagination option
-                  // Panel.showPaginationOption(response.column);
                   NotificationManager.showNotification({
                     type : 'info',
                     title : Params.NOTIFICATION_TITLE_ADD_MORE_SELECTIONS,
@@ -149,7 +148,8 @@ var UIElementSelector = {
                   });  
                   
                   //display 'link' icon
-                  Panel.showLink(response.column);
+                  PageDivingHandler.showLink(response.column);
+                  PaginationHandler.showPaginationOption(response.column);
                 
                 }
               });

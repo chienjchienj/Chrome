@@ -63,6 +63,7 @@ setup_mixpanel_muuid = function() {
           localStorage.setItem('old_extension_version', chrome.runtime.getManifest().version );
           console.log('-- inside first install := ' + localStorage.getItem('first_install'));
         })();
+        
       }else{
         (function(){
           mixpanel.track("developer - extension updated - browser", {
@@ -72,6 +73,7 @@ setup_mixpanel_muuid = function() {
           localStorage.setItem('old_extension_version', chrome.runtime.getManifest().version );
           console.log('-- browser extension updated --');
         })();
+        
       };//eo mixpanel      
     } else {
       setup_muuid_frame();
@@ -93,8 +95,6 @@ setup_muuid_frame = function() {
     }
   }
   xhr.send();  
-
-
 
 };
 

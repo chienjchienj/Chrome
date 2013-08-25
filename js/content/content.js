@@ -28,12 +28,13 @@ var showPanel = function() {
     var panelWrapper = $('#k-panel-wrapper');
 
     panelWrapper.load(chrome.extension.getURL("html/panel.html"),function() {
-        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/tutorial_manager.js" } });       
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/params.js" } }); 
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/xpath_helper.js" } });
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/mixpanel_helper.js" } });
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/ui_element_selector.js" } });          
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/ui_column_factory.js" } });   
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/page_diving_handler.js" } });        
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/pagination_handler.js" } });
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/panel.js" } });         
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/notification_manager.js" } });         
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/libs/bootstrap/bootstrap.min.js" } });   
@@ -74,11 +75,10 @@ var populateColumns = function(wrapper, columns) {
   for(var i=0; i<columns.length; i++) {
     var params = {};
     params.columnId = columns[i].columnId;
-    params.columnType = columns[i].columnType;
+    // params.columnType = columns[i].columnType;    
     params.columnName = columns[i].columnName==null? Params.DEFAULT_BREADCRUMB_TEXT : columns[i].columnName;
-    params.firstSelectionText = columns[i].selections[0] && columns[i].selections[0].elementText; 
-    params.secondSelectionText = columns[i].selections[1] && columns[i].selections[1].elementText;
-    params.elementLink = columns[i].selections[0] && columns[i].selections[0].elementLink;
+    params.genericXpath = columns[i].selections[0] && columns[i].genericXpath;
+    params.elementType = columns[i].selections[0] && columns[i].elementType;    
     params.breadcrumb = "";
     params.colorCode = columns[i].colorCode;    
     
@@ -88,7 +88,7 @@ var populateColumns = function(wrapper, columns) {
       columns[i].genericXpath, 
       columns[i].colorCode );    
 
-    wrapper.append(UIColumnFactory.recreateUIColumn(params));
+    wrapper.append(UIColumnFactory.recreateUIColumn(columns[i]));
     Panel.addBreadCrumbToColumn(columns[i].columnId);
 
     // TODO : Refactor this

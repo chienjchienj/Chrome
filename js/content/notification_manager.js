@@ -152,6 +152,7 @@ var NotificationManager = {
    *                noFunction:function
    */
   showOptionsYesNo : function(params) {
+    
     NotificationManager.hideAllMessages();
 
     if(params.title)
@@ -168,7 +169,7 @@ var NotificationManager = {
 
     //$('#k_message_close_button').attr("src", chrome.extension.getURL("images/close.png"));
     
-    $('.k_option').animate({top:"10"}, 500);
+    $('.k_option').hide().css({top:"10", right : "10", left : ""}).fadeIn();
   },
   
   
