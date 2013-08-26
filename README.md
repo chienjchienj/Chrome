@@ -1,5 +1,5 @@
-Introduction 
-===
+# Introduction 
+
 This is the source code for the Krake browser extension in Google Chrome.
 
 To download and test run the currently publish version go to the 
@@ -8,71 +8,69 @@ To download and test run the currently publish version go to the
 To check out the online engine go to
 [Krake.IO](https://krake.io "Data Harvesting")
 
+# Backlog
+## To Do list
+  - TODO : Ability to toggle bar at the bottom between visibility and non-visibility
+  - TODO : Column Name focused when [enter] is do nothing
+  - TODO : Ensure not records are created for pages with no URLs
+  - TODO : Ensure when sub link is clicked
+      create a sharedKrake with the following
+        parentColumnId
+        parentURL
 
-Usability Testing Results
-===
+  - TODO : have the array of separate Krake definitions compiled for a specific Tab on the fly when the done button is clicked
 
-23th August 2013
----
+
+
+## Usability Testing Results
+
+### 23th August 2013
 - Subjects
   - Darius Cheung
-    - Had difficulties knowing he needs to highlight elements in page
-    - Thought to click on the notification box instead since its highlighted
-    - Force users to watch video before doing shit
+      - Had difficulties knowing he needs to highlight elements in page
+      - Thought to click on the notification box instead since its highlighted
+      - Force users to watch video before doing shit
     
   - MIT friend of Darius Cheung
-    - Hint Bar is too far away from location of required action
-    - Tried to highlight the item in the page
+      - Hint Bar is too far away from location of required action
+      - Tried to highlight the item in the page
     
   - Fred 
-    - Did not know to highlight items in page
-    - Hint Bar is too far away from location of required action    
+      - Did not know to highlight items in page
+      - Hint Bar is too far away from location of required action    
 
   - Thomas
-    - Always give visual clue on what's next
-    - OK save button
-    - Grey off the existing green button and then change the save to green
-    - When Run button then ask for parameters if its declared
-    - When run krake 
-        - route https://krake.io/krakes/7-itunes-app-store/run?param1=x&param2=x
-    - /show?
-    - /run?
-    - Google Compute Engine
+      - Always give visual clue on what's next
+      - OK save button
+      - Grey off the existing green button and then change the save to green
+      - When Run button then ask for parameters if its declared
+      - When run krake 
+          - route https://krake.io/krakes/7-itunes-app-store/run?param1=x&param2=x
+      - /show?
+      - /run?
+      - Google Compute Engine
     
   - Stephanie
-    - watching video before use is really helpful
-    - Did not know to press Enter after typing in the field name
-    - Feels that any instruction video above 1 min 30 secs is too long to watch
-    - was surprised the Krake name was not the same as the field name she typed in
-    - tried to drag and drop the item from the page to the field in the browser extension
-    - http://www.zotero.org/
-    - tried to press done after creating a new field without having added any items to the field
-      - subsequent message to add more items was never read
-    - When creating list only wanted specific items on the page not all of them.
-    - Saw it to be potentially useful to help her do price comparison
-      - experienced pain from prior experience of having to press multiple tab 
-      - experience pain from prior experience of having to write down everything on a piece of paper
-    - Was expecting to see results when done button is clicked
-    - used the term Bookmark
-      - http://list.qoo10.sg/item/UAG-CASES-SAMSUNG-GALAXY-MEGA-S4/407258995?sid=1411
-    - Expresses difficulty undoing previous action if wrongly added an item to bookmark
-
-Backlog
-===
-- TODO : Ability to toggle bar at the bottom between visibility and non-visibility
-- TODO : Column Name focused when [enter] is do nothing
-- TODO : Ensure not records are created for pages with no URLs
-- TODO : Ensure when sub link is clicked
-    create a sharedKrake with the following
-      parentColumnId
-      parentURL
-
-- TODO : have the array of separate Krake definitions compiled for a specific Tab on the fly when the done button is clicked
+      - watching video before use is really helpful
+      - Did not know to press Enter after typing in the field name
+      - Feels that any instruction video above 1 min 30 secs is too long to watch
+      - was surprised the Krake name was not the same as the field name she typed in
+      - tried to drag and drop the item from the page to the field in the browser extension
+      - http://www.zotero.org/
+      - tried to press done after creating a new field without having added any items to the field
+          - subsequent message to add more items was never read
+      - When creating list only wanted specific items on the page not all of them.
+      - Saw it to be potentially useful to help her do price comparison
+          - experienced pain from prior experience of having to press multiple tab 
+          - experience pain from prior experience of having to write down everything on a piece of paper
+      - Was expecting to see results when done button is clicked
+      - used the term Bookmark
+          - http://list.qoo10.sg/item/UAG-CASES-SAMSUNG-GALAXY-MEGA-S4/407258995?sid=1411
+      - Expresses difficulty undoing previous action if wrongly added an item to bookmark
 
 
 
-Documentation
-===
+# Documentation
 This is how a single Shared Kraked data object for a page will look like
 
     {
