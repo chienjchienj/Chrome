@@ -31,6 +31,9 @@ var sessionManager = null;
 // sharedKrake that corresponds to the current URL in the current tab
 var sharedKrake = null;
 
+// The actual krake definition object to be used for populating the edit field on https://krake.io/krakes/new
+var compiledKDO = null;
+
 // Color generator object that corresponds to the current URL in the current tab
 var colorGenerator = null;
 
@@ -184,29 +187,33 @@ var insertCss = function(filename, sender) {
 
 
 
-// @Description : Gets the 
+// @Description : Gets the actual krake definition for the current sharedKrake
+// @param : callback:Function
+//    status:String — 'success' || 'error'
+//    krakeDefinition:Object
 var getKrakeJson = function(callback) {
-  var json = curr_SKH.createScrapeDefinitionJSON();
-  if (callback && typeof(callback) === "function")  
-      callback({status: 'success', krakeDefinition: json });
-  
-  sendKrakeToApp();
-};//eo getKrakeJson
-
-
-
-
-/* 
- *  @Description : returns the Krake definition without additional action
- */
-var injectKrakeJson = function(callback) {
-  var json = curr_SKH.createScrapeDefinitionJSON();
-  if (callback && typeof(callback) === "function")  
-      callback({status: 'success', krakeDefinition: json });
+  if(compiledKDO) {
+    callback({status: 'success', krakeDefinition: compiledKDO });
+    
+  } else {
+    callback({status: 'error', krakeDefinition: compiledKDO });
+    
+  }
   
 };//eo getKrakeJson
 
 
+
+// @Description : Compiles the current sharedKraked to an actual KrakeDefinitionObject
+//    sets the KDO to local variable for latter reference
+var compileKrakeJson = function(callback) {
+  curr_SKH.createScrapeDefinitionJSON(function(status, krakeDefinitionObj) {
+    console.log('Line 191 : Finished compiling the Krake Definition Object');
+    compiledKDO = krakeDefinitionObj;
+    console.log(compiledKDO);    
+    callback && callback();
+  });
+}
 
 /* 
  *  @Description : Creates a new Tab to location https://krake.io/krakes/new
@@ -604,12 +611,16 @@ chrome.runtime.onMessage.addListener(
         matchPattern(sendResponse);
       break;
 
-      case 'get_krake_json':
-        getKrakeJson(sendResponse);
+      // Action gets triggered when the done button is clicked
+      case 'complete':
+        compileKrakeJson(function() {
+          sendKrakeToApp();          
+        });
       break;
       
+      // Injects the complete Krake Definition into the Edit Tab of the page
       case 'inject_krake':
-        injectKrakeJson(sendResponse);      
+        getKrakeJson(sendResponse); 
       break;
 
       case 'fire_mixpanel_event':

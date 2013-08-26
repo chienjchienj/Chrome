@@ -148,19 +148,10 @@ var Panel = {
   uiBtnDoneClick : function() {
     
     var finished = function() {
-      
       // send mixpanel request
       MixPanelHelper.triggerMixpanelEvent(null, 'event_11');
       NotificationManager.hideAllMessages();
-
-      // $('#json-output').modal('show');
-
-      chrome.extension.sendMessage({ action:'get_krake_json' }, function(response) {
-        if(response.status == 'success') {
-          $('#json-definition').text(JSON.stringify(response.krakeDefinition));
-        }
-      });
-      
+      chrome.extension.sendMessage({ action:'complete' }, function(response) {});
     }
 
     // checks the status first
@@ -175,15 +166,12 @@ var Panel = {
         // When there is at least 1 selection for current column suffice
         if (sessionManager.currentColumn.selections.length > 0) {
           chrome.extension.sendMessage({ action: "save_column" }, function(response) {
-            
             var columnIdentifier = "#krake-column-" + sessionManager.currentColumn.columnId;
             var selector = columnIdentifier + ' .krake-control-button-save';
-            $(selector).remove();
-            
-            // remove visible tool tip just in case
-            $('.tooltip').remove();
-                        
+            $(selector).remove();   // removes the save button
+            $('.tooltip').remove(); // remove visible tool tip just in case
             finished();
+            
           });
         
         // When no selections have been made for this column yet.
@@ -195,7 +183,6 @@ var Panel = {
           });
           
         }
-
       
       // when not columns have been defined in this Krake yet
       } else if ( sessionManager.currentColumn == null && sharedKrake.columns.length == 0 ) {
@@ -205,11 +192,10 @@ var Panel = {
           message : Params.NOTIFICATION_MESSAGE_NO_COLUMN_FAILED
         });
 
-
       // when is in any other mode        
       } else {
         finished();
-        
+                
       }
       
     });

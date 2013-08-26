@@ -230,7 +230,11 @@ SharedKrakeHelper.prototype.setNextPager = function(xpath) {
 
 
 
-SharedKrakeHelper.prototype.createScrapeDefinitionJSON = function() {
+// @Description : Creates the actual scrape definition from the current sharedKrake object
+// @param : callback:function
+//    status : String — 'success' || 'error'
+//    krakeJson : Object
+SharedKrakeHelper.prototype.createScrapeDefinitionJSON = function(callback) {
   var self = this;    
   var krakeJson = {};
 
@@ -254,8 +258,15 @@ SharedKrakeHelper.prototype.createScrapeDefinitionJSON = function() {
     }//eo switch
 
   }//eo for
+
+
+  // sets the cookie object to the Krake definition
+  ch = new CookieHelper();
+  ch.setCookie(sharedKrake, function( status, sharedKrake ) {
+    krakeJson.cookies = sharedKrake.cookies;
+    callback( 'success', krakeJson );
+  });
   
-  return krakeJson;
 };//eo createScrapeDefinitionJSON
 
 
