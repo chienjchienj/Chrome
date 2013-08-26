@@ -1,7 +1,12 @@
 Introduction 
 ===
-This is the source code for the Krake browser extension in Google Chrome
+This is the source code for the Krake browser extension in Google Chrome.
 
+To download and test run the currently publish version go to the 
+[Chrome Extension Gallery](https://chrome.google.com/webstore/detail/krakeio/ofncgcgajhgnbkbmkdhbgkoopfbemhfj "Krake Browser Extension")
+
+To check out the online engine go to the site
+[Krake.IO](https://krake.io "Data Harvesting")
 
 
 Usability Testing Results
