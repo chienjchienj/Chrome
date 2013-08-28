@@ -535,7 +535,11 @@ var executeMixpanelEvent = function(eventNumber, callback) {
 };
 
 
-
+// Backwards compatibility hack for Chrome 20 - 25, ensures the plugin works for Chromium as well
+if(chrome.runtime && !chrome.runtime.onMessage) {
+  chrome.runtime.onMessage = chrome.extension.onMessage
+} 
+  
 // @Description : Listens for message calls from the front end
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
