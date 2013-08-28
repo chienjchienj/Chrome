@@ -207,6 +207,10 @@ var Panel = {
   attachEnterKeyEventToColumnTitle : function(columnId) {
     var identifier = "#krake-column-title-" + columnId;
     $(identifier).keydown(function(e) {
+
+      //e.preventDefault();
+      e.stopPropagation(); // Ensures in page script does not hijack the keydown event
+      
       if(e.which == 13) {
 
         // TODO : automatically remove \n\r characters when they are entered
@@ -241,7 +245,9 @@ var Panel = {
         });
         
       }
-    }); 
+    });
+    
+
   },
 
 

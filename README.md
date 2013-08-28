@@ -24,6 +24,23 @@ To check out the online engine go to
 
 ## Usability Testing Results
 
+### 27th Aug 2013
+- Subjects
+  - Justin & Joelle
+     - Might want to go into area of Data Exploration instead of Data Analytics
+     - Data miners and analyst have their own tools anyways - might not want to build on top of Krake
+        - reluctant to move away to tools they are already comfortable with already
+          - python 
+          - R
+          - Java implementations
+          
+     - Add more items to column is not intuitive as a messaging
+     - Google search bar catches everything
+     - twitter is not showing
+     - syntax 
+     - 12th September Workshop
+     - Feel free to submit article to Dextra Blog
+
 ### 23th August 2013
 - Subjects
   - Darius Cheung
