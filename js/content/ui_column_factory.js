@@ -36,7 +36,6 @@
 
 var UIColumnFactory = {
   
-  
   recreateUIColumn: function(column){
 
     var columnId = column.columnId;
@@ -50,6 +49,9 @@ var UIColumnFactory = {
 
     var $wrapper = $("<div>", { id: divKrakeColumnId, 
                                 class: "krake-column k_panel"});
+    
+
+                            
     var $columnControl = $("<div>", { id: columnControlId,
                                       class: "krake-column-control k_panel" });    
                                       
@@ -69,14 +71,15 @@ var UIColumnFactory = {
                                    class: "krake-breadcrumb k_panel" });
 
 
+    var color_palette_id = "k_column-color-palette-" + columnId;
+    var color_code = column.colorCode;
+    column.is_alien && (color_code = '')
+    var $color_palette = $("<div>", { 
+        id: color_palette_id,
+        class: "krake-column-color-palette k_panel " + color_code,
+      });
 
-     var color_palette_id = "k_column-color-palette-" + columnId;
-     var $color_palette = $("<div>", { 
-         id: color_palette_id,
-         class: "krake-column-color-palette k_panel " + column.colorCode,
-       });
-
-
+    column.is_alien && $wrapper.addClass('krake_is_alien');
 
     var $columnName = $("<div>", { id: columnNameId, 
                                     class: "krake-column-row krake-column-title k_panel",
@@ -96,18 +99,25 @@ var UIColumnFactory = {
       NotificationManager.hideAllMessages();
 
       var columnIdentifier = "#krake-column-" + columnId; 
-      chrome.extension.sendMessage({ action: "delete_column", params: { columnId: columnId } }, function(response){
-        if(response.status == 'success'){
-          $(columnIdentifier).remove();
-          //remove highlights
-          UIElementSelector.unHighLightElements(response.deletedColumn);
+      chrome.extension.sendMessage({ 
+          action: "delete_column", 
+          params: { 
+            columnId : columnId,
+            url : column.url
+          } 
+        }, 
+        function(response){
+          
+          if(response.status == 'success'){
+            $(columnIdentifier).remove();
+            //remove highlights
+            UIElementSelector.unHighLightElements(response.deletedColumn);
+            
         }   
       });
     });
     $deleteButton.tooltip();    
     $columnControl = $columnControl.append($deleteButton);
-
-
 
     $wrapper.append($color_palette)
       .append($columnName)
@@ -118,7 +128,6 @@ var UIColumnFactory = {
 
 
     return $wrapper;
-
 
   },
 
@@ -155,22 +164,31 @@ var UIColumnFactory = {
       NotificationManager.hideAllMessages();
 
       var columnIdentifier = "#krake-column-" + columnId; 
-      chrome.extension.sendMessage({ action: "delete_column", params: { columnId: columnId } }, function(response){
+      chrome.extension.sendMessage({ 
+          action: "delete_column", 
+          params: { 
+            columnId: columnId ,
+            url : column_obj.url
+          } 
+        }, function(response){
+          
+          console.log('== Line 175 ==');
+          console.log(response);
 
-        if(response.status == 'success'){
+          if(response.status == 'success'){
           
-          $(columnIdentifier).remove();
+            $(columnIdentifier).remove();
           
-          //remove highlights
-          UIElementSelector.unHighLightElements(response.deletedColumn);
+            //remove highlights
+            UIElementSelector.unHighLightElements(response.deletedColumn);
           
-          // disables in-page element highlighting when its the current column that gets deleted
-          if(response.session.currentState == 'idle') {
-            UIElementSelector.setHighLightColor(false);
+            // disables in-page element highlighting when its the current column that gets deleted
+            if(response.session.currentState == 'idle') {
+              UIElementSelector.setHighLightColor(false);
             
-          }
+            }
           
-        }   
+          }   
       });
     });
     $deleteButton.tooltip();

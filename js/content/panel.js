@@ -79,7 +79,7 @@ var Panel = {
           
           Panel.uiPanelWrapper.prepend( UIColumnFactory.createUIColumn( response.session.currentColumn ) );
           Panel.attachEnterKeyEventToColumnTitle(newColumnId);
-          Panel.addBreadCrumbToColumn(newColumnId);
+          Panel.addBreadCrumbToColumn( { columnId : newColumnId } );
 
           $('#krake-column-title-' + response.session.currentColumn.columnId).focus();
           
@@ -252,38 +252,23 @@ var Panel = {
 
 
 
-  addBreadCrumbToColumn : function(columnId) {
+  // View page link
+  addBreadCrumbToColumn : function(column) {
 
-    chrome.extension.sendMessage({action: "get_breadcrumb", params:{columnId: columnId} }, function(response) {
-      if(response.status == 'success') {
-        var breadcrumbArray = response.breadcrumbArray;
+    var selector = "#k_column-breadcrumb-" + column.columnId; 
+    var column_url = column.url || document.location.href;
+    var column_columnName = column.columnName || Params.DEFAULT_BREADCRUMB_NAME;
         
-        var selector = "#k_column-breadcrumb-" + columnId;
+    $link = $("<a>", { class: "k_panel k_breadcrumb_link",  
+                       href: column_url,
+                       text: column_columnName }  );
+                       
+    $link.unbind('click').bind('click', function(e) {
+      e.stopPropagation();
+    });
 
-        for(var i=breadcrumbArray.length-1; i>=0; i--) {
-          console.log("columnId:= " + breadcrumbArray[i].columnId + ", columnName:= " + breadcrumbArray[i].columnName);
-          
-
-          $link = $("<a>", { id: i,
-                             class: "k_panel k_breadcrumb_link",  
-                             href: breadcrumbArray[i].url,
-                             text: breadcrumbArray[i].columnName }  );
-      
-     
-          var id = breadcrumbArray[i].columnId;
-          var href = breadcrumbArray[i].url;
-
-
-          $link.unbind('click').bind('click', function(e) {
-            e.stopPropagation();
-          });
-
-          $(selector).append($link);
-
-          if(i != 0)
-            $(selector).append(" > ");
-        } 
-      }//eo if
-    }); 
+    $(selector).append($link);
+    
   }//eo addBreadCrumbToColumn
+  
 };//eo Panel

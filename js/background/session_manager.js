@@ -27,8 +27,12 @@
  * 'ready_for_pagination_selection' => before pagination is defined
  */
 var SessionManager = function() {
-  this.currentState = 'idle';
-  this.previousColumn = null; //used for setting next_pager
+
+  // TODO : To deprecate
+  // used for setting next_pager
+  // this.previousColumn = null;  
+  
+  this.currentState = 'idle';  
   this.currentColumn = null;
 
   this.states = {

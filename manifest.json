@@ -1,6 +1,7 @@
 {
    "background": {
       "scripts": [ "js/libs/jquery/jquery_1.9.1.min.js", 
+                   "js/libs/async/async.js", 
                    "js/background/params.js",
                    "js/background/cookie_helper.js",                   
                    "js/background/sharedkrake_template.js",

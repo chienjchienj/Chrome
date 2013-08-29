@@ -92,6 +92,7 @@ var newTabFocused = function(action_info) {
   // Gets the current tab
   chrome.tabs.get(action_info.tabId, function(tab) {
     curr_SKH = new SharedKrakeHelper(tab.id, tab.url);
+    sharedKrake = curr_SKH.SharedKrake;
   });
   
   // Sets the tab.id to global for easier reference during debugging
@@ -105,6 +106,8 @@ var newTabFocused = function(action_info) {
 var pageReloaded = function(tabId, changeInfo, tab) {
   //re-render panel using columns objects from storage if any. 
   records[tab.id] = records[tab.id] || {};
+  curr_SKH = new SharedKrakeHelper(tab.id, tab.url);  
+  sharedKrake = curr_SKH.SharedKrake;
   
   if(records[tab.id].isActive) {
     //Remove column that is not done editing from sessionManager
@@ -207,10 +210,8 @@ var getKrakeJson = function(callback) {
 // @Description : Compiles the current sharedKraked to an actual KrakeDefinitionObject
 //    sets the KDO to local variable for latter reference
 var compileKrakeJson = function(callback) {
-  curr_SKH.createScrapeDefinitionJSON(function(status, krakeDefinitionObj) {
-    console.log('Line 191 : Finished compiling the Krake Definition Object');
+  curr_SKH.getFullKrakeDefinition(function(status, krakeDefinitionObj) {
     compiledKDO = krakeDefinitionObj;
-    console.log(compiledKDO);    
     callback && callback();
   });
 }
@@ -267,22 +268,10 @@ var checkKrakeCookies = function(callback) {
 var loadSession = function(params, callback) {
     
   switch(params.attribute) {
-    case 'previous_column':
-    
-      if(params.event == 'detail_link_clicked') {
-        var previousColumn = curr_SKH.findColumnByKey('columnId', params.columnId);
-
-      // When in top level page
-      } else {
-        var column = curr_SKH.findColumnByKey('elementLink', params.values.currentUrl);
-        if(column)
-          sessionManager.previousColumn = curr_SKH.findColumnByKey('parentColumnId', column.parentColumnId);
-      }
-    break;
-
     case 'current_state':
       sessionManager.goToNextState(params.values.state);
     break;
+    
   }//eo switch
 
   if (callback && typeof(callback) === "function")  
@@ -344,7 +333,9 @@ var deleteColumn = function(params, callback) {
   // when some other column is deleted
   }else{
 
-    deletedColumn = curr_SKH.removeColumn(params.columnId);
+    var temp_SKH = new SharedKrakeHelper(curr_tab_id, params.url);
+    deletedColumn = temp_SKH.removeColumn(params.columnId);
+    
   }//eo if-else
 
   if (callback && typeof(callback) === "function")  
@@ -564,8 +555,9 @@ chrome.runtime.onMessage.addListener(
         loadSession(request.params, sendResponse);
       break;
 
-      case 'get_shared_krake':
-        sendResponse({ sharedKrake: sharedKrake });
+      // gets all the shared_krakes belonging to current tab
+      case 'get_all_shared_krakes':
+        sendResponse({ sharedKrakes: records[curr_tab_id].shared_krakes  });
       break;
 
       case 'get_breadcrumb':

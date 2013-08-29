@@ -13,7 +13,7 @@ PageDivingHandler.showLink = function(column) {
     if( $(selector + ' .krake-control-button-link').length > 0 ) return;
 
     $linkButton = PageDivingHandler.getLink(column);
-    $(selector).append($linkButton);
+    $linkButton && $(selector).append($linkButton);
         
   }//eo if    
 }
@@ -33,12 +33,13 @@ PageDivingHandler.getLink = function(column) {
                                       style:  linkButtonImageUrl });
     $linkButton.tooltip();
     
-    chrome.extension.sendMessage({ action:"get_session" }, function(response) {       
-      var results = XpathHelper.evaluateQuery(column.genericXpath);
-      $linkButton.attr('href', results.nodesToHighlight[0].href);
-
-    });//eo sendMessage
-    
-    // return $linkButton;
-  
+    if (column.selections && column.selections.length > 0 && column.selections[0].elementLink) {
+      $linkButton.attr('href', column.selections[0].elementLink);
+      return $linkButton;
+      
+    } else {
+      return false;
+      
+    }
+      
 }

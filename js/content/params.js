@@ -1,6 +1,7 @@
 var Params = {
   IMAGE_TEXT : '{image}',
   DEFAULT_COLUMN_NAME : 'Name this column',
+  DEFAULT_BREADCRUMB_NAME : "New Column",  
 
   NOTIFICATION_TITLE_PREVIOUS_COLUMN_NOT_SAVED : 'Ooops, there is an error!',
   NOTIFICATION_MESSAGE_PREVIOUS_COLUMN_NOT_SAVED : 'Please complete the column selection and click the save button first',

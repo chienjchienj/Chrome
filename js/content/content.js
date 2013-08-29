@@ -62,40 +62,44 @@ var hidePanel = function() {
 //   with data from previously existing column in the Krake definitions of theinjectKrakeJson
 //   current Tab.
 var reloadExistingColumns = function() {
-  chrome.extension.sendMessage({ action: "get_shared_krake" },  function(response) { 
+  chrome.extension.sendMessage({ action: "get_all_shared_krakes" },  function(response) { 
     var wrapper = $("#inner-wrapper");
-    populateColumns(wrapper, response.sharedKrake.columns);
+    
+    var curr_page_shared_krakes = response.sharedKrakes[document.location.href].columns;
+    populateColumns(wrapper, curr_page_shared_krakes);    
+    delete response.sharedKrakes[document.location.href];
+
+    var all_other_pages = Object.keys(response.sharedKrakes);
+    for( var x = 0 ; x < all_other_pages.length ; x++ ) {
+      if( response.sharedKrakes[ all_other_pages[x] ].columns && response.sharedKrakes[ all_other_pages[x] ].columns.length > 0 ) {
+        
+        var other_page_shared_krakes = response.sharedKrakes[ all_other_pages[x] ].columns;
+        populateColumns(wrapper, other_page_shared_krakes, true);
+      }
+    }
+        
   });
 };//eo reloadExistingColumns
 
 
 
 // @Description : Given an array of columns populates the columns wrapper
-var populateColumns = function(wrapper, columns) {
+// @param : wrapper:Object — The object to append this column to
+// @param : columns:Array — The array of column objects to append to the wrapper
+// @param : is_alien:boolean — If true, means the column does not belong to this page
+var populateColumns = function(wrapper, columns, is_alien) {
   for(var i=0; i<columns.length; i++) {
-    var params = {};
-    params.columnId = columns[i].columnId;
-    // params.columnType = columns[i].columnType;    
-    params.columnName = columns[i].columnName==null? Params.DEFAULT_BREADCRUMB_TEXT : columns[i].columnName;
-    params.genericXpath = columns[i].selections[0] && columns[i].genericXpath;
-    params.elementType = columns[i].selections[0] && columns[i].elementType;    
-    params.breadcrumb = "";
-    params.colorCode = columns[i].colorCode;    
-    
+      
     //highlight all elements depicted by genericXpath
-    UIElementSelector.highlightElements(
+    !is_alien && UIElementSelector.highlightElements(
       columns[i].url, 
       columns[i].genericXpath, 
       columns[i].colorCode );    
-
+    
+    columns[i].is_alien = is_alien;
     wrapper.append(UIColumnFactory.recreateUIColumn(columns[i]));
-    Panel.addBreadCrumbToColumn(columns[i].columnId);
+    Panel.addBreadCrumbToColumn(columns[i]);
 
-    // TODO : Refactor this
-    // Recursively populates the nested columns.
-    //populateColumns(wrapper, columns[i].options.columns); //add UI columns to panel
-
-    //elementUIManager.evaluateXpath(columns[i]); //highlight columns
   }
 };
 

@@ -17,6 +17,7 @@ CookieHelper.prototype.setCookie = function(sharedKrake, callback) {
      domain : domain_name
      
   }, function(cookies) {
+
     sharedKrake.cookies = cookies;
     callback && callback( 'success', sharedKrake );
     
