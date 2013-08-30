@@ -103,9 +103,12 @@ var UIElementSelector = {
         xpath : elementPathResult.xpath,
         elementType : elementPathResult.nodeName,
         elementText : elementText,
+        ancestorLinkXpath : elementPathResult.hyperlink_xpath,
         elementLink : elementPathResult.link
-      };      
+      };
       
+      console.log("=== Sending to server ===");
+      console.log(params);
       
       switch(sessionManager.currentState) {
         case 'pre_next_pager_selection' :
@@ -136,7 +139,6 @@ var UIElementSelector = {
                   //highlight all elements depicted by genericXpath
                   UIElementSelector.highlightElements(response.column.url, response.column.genericXpath, response.column.colorCode);
                   
-                  //TODO : refactor this as a separate use case show pagination option
                   NotificationManager.showNotification([{
                       type : 'info',
                       title : Params.NOTIFICATION_TITLE_SAVE_SELECTIONS,
@@ -151,10 +153,7 @@ var UIElementSelector = {
                       title : Params.NOTIFICATION_TITLE_ADD_MORE_SELECTIONS,
                       message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS
                                                             
-                  }]);  
-                  
-                  //display 'link' icon
-                  // PaginationHandler.showPaginationOption(response.column);
+                  }]);
                 
                 }
               });

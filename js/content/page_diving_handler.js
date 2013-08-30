@@ -6,7 +6,7 @@ var PageDivingHandler = {}
 //    elementType:String
 //    genericXpath:String
 PageDivingHandler.showLink = function(column) {
-  if(column.elementType.toLowerCase() == 'a') {
+  if(column.elementType.toLowerCase() == 'a' || column.genericAncestorLinkXpath) {
     var selector = '#krake-column-control-' + column.columnId;    
     
     // ensures link is only added once    
@@ -33,7 +33,7 @@ PageDivingHandler.getLink = function(column) {
                                       style:  linkButtonImageUrl });
     $linkButton.tooltip();
     
-    if (column.selections && column.selections.length > 0 && column.selections[0].elementLink) {
+    if (column.selections && column.selections.length > 0 && (column.selections[0].elementLink )) {
       $linkButton.attr('href', column.selections[0].elementLink);
       return $linkButton;
       

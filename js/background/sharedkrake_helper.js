@@ -69,8 +69,8 @@ SharedKrakeHelper.prototype.saveColumn = function(column) {
   self.SharedKrake.columns.push(column);
   
   // If is a hyperlink then set a placeholder sharedKrake in the records array first
-  if(column.elementType == 'a' && column.selections && column.selections.length > 0
-  && column.selections[0] && column.selections[0].elementLink ) {
+  if( (column.elementType == 'a' || column.selections[0].ancestorLinkXpath) && column.selections && 
+  column.selections.length > 0 && column.selections[0] && column.selections[0].elementLink ) {
     
     self.addSharedKrake(
       self.tab_id, 
@@ -399,7 +399,7 @@ SharedKrakeHelper.prototype.getTentacle = function(nested_definition_holder) {
   for( var x = 0; x < self.SharedKrake.columns.length; x++ ) {
     if(self.SharedKrake.columns[x].columnId == nested_definition_holder.parent_column_id) {
       
-      current_tentacle.xpath = self.SharedKrake.columns[x].genericXpath;
+      current_tentacle.xpath = self.SharedKrake.columns[x].genericAncestorLinkXpath;
       current_tentacle.col_name = self.SharedKrake.columns[x].columnName + '_link';
       current_tentacle.required_attribute = 'href';
       current_tentacle.options = JSON.parse(JSON.stringify(nested_definition_holder.krake));

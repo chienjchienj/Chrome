@@ -137,18 +137,22 @@ This is how a single Shared Kraked data object for a page will look like
                   "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]/span[2]",
                   "elementType": "SPAN",
                   "elementText": "Messenger",
-                  "elementLink": null
+                  "elementLink": null,
+                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
               },{
                   "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[3]/a[1]/span[2]",
                   "elementType": "SPAN",
                   "elementText": "News",
-                  "elementLink": null
+                  "elementLink": null,
+                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
               },{
                   "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[3]/a[1]/span[2]",
                   "elementType": "SPAN",
                   "elementText": "News",
-                  "elementLink": null
+                  "elementLink": null,
+                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
               }],              
+              "genericAncestorLinkXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]",
               "genericXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]/span[2]",
               "requiredAttribute": null
           },
@@ -162,18 +166,22 @@ This is how a single Shared Kraked data object for a page will look like
                   "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]/span[2]",
                   "elementType": "SPAN",
                   "elementText": "Messenger",
-                  "elementLink": null
+                  "elementLink": null,
+                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
               },{
                   "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[3]/a[1]/span[2]",
                   "elementType": "SPAN",
                   "elementText": "News",
-                  "elementLink": null
+                  "elementLink": null,
+                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
               },{
                   "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[3]/a[1]/span[2]",
                   "elementType": "SPAN",
                   "elementText": "News",
-                  "elementLink": null
+                  "elementLink": null,
+                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
               }],              
+              "genericAncestorLinkXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]",              
               "genericXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]/span[1]/img[1]",
               "requiredAttribute": "src"
           },
@@ -187,18 +195,22 @@ This is how a single Shared Kraked data object for a page will look like
                   "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]/span[2]",
                   "elementType": "SPAN",
                   "elementText": "Messenger",
-                  "elementLink": null
+                  "elementLink": null,
+                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
               },{
                   "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[3]/a[1]/span[2]",
                   "elementType": "SPAN",
                   "elementText": "News",
-                  "elementLink": null
+                  "elementLink": null,
+                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
               },{
                   "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[3]/a[1]/span[2]",
                   "elementType": "SPAN",
                   "elementText": "News",
-                  "elementLink": null
+                  "elementLink": null,
+                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
               }],
+              "genericAncestorLinkXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]",              
               "genericXpath": "/html[1]/body[1]/div/div[4]/div[3]/div[5]/div[1]/div[1]/div[1]/div[1]/ul[1]/li[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h2[1]",
               "requiredAttribute": null
           }

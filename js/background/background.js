@@ -408,6 +408,7 @@ var matchPattern = function(callback) {
   var result ={};
   sessionManager.currentColumn.genericXpath = sessionManager.currentColumn.selections[0].xpath;
   sessionManager.currentColumn.genericXpath = sessionManager.currentColumn.computeGenericXpath();
+  sessionManager.currentColumn.genericAncestorLinkXpath = sessionManager.currentColumn.computeGenericAncestorLinkXpath();  
   result.status = 'matched';  
   
   var response = {

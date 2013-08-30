@@ -81,12 +81,30 @@ var XpathHelper =
     try
     {
       var nodename = element.nodeName.toLowerCase();
+      
       var link = nodename=="a"? element.href : nodename=="img"? element.src : null;
-      //return [element.nodeName, XpathHelper.getElementTreeXPath(element), link];
       var xpath = XpathHelper.getElementTreeXPath(element);
+      
+      // In case its ancestor is a hyperlink
+      if(!link) {
+        var ancestor_link_ele = XpathHelper.findUpTag(element, 'A');
+        if(ancestor_link_ele) {
+          var hyperlink_xpath = XpathHelper.getElementTreeXPath(ancestor_link_ele);
+          link = ancestor_link_ele.href
+        }
+      
+      // In case it itself is a hyperlink
+      } else if(link && nodename == "a") {
+        var hyperlink_xpath = xpath;
+        
+      } else {
+        var hyperlink_xpath = null;
+      }
+      
       return {
                nodeName : element.nodeName,
                xpath : xpath,
+               hyperlink_xpath : hyperlink_xpath,
                link : link
              }
     }
