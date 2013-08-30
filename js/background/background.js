@@ -171,9 +171,10 @@ var clearCache = function() {
 // @Description : Loads the indicated javascript file to the front end
 var loadScript = function(filename, sender) {
     chrome.tabs.executeScript(sender.tab.id, {file: filename}, function() {
-      chrome.tabs.sendMessage(sender.tab.id, { action: "load_script_done", params: { filename: filename } }, function(response) {
-        
-      });
+      chrome.tabs.sendMessage(sender.tab.id, 
+          { action: "load_script_done", params: { filename: filename } }, 
+          function(response) {});
+      
     });
 };//eo loadScript
 
