@@ -69,7 +69,7 @@ var UIColumnFactory = {
     var breadcrumbId = "k_column-breadcrumb-" + columnId;
     var $breadcrumb = $("<div>", { id: breadcrumbId,
                                    class: "krake-breadcrumb k_panel" });
-
+    column.is_alien && $breadcrumb.attr('title', 'go to page items were added').tooltip();
 
     var color_palette_id = "k_column-color-palette-" + columnId;
     var color_code = column.colorCode;
