@@ -56,7 +56,8 @@ var NotificationManager = {
   
   /*
    * @Description : Shows the notifications in the notifications bar. They are only shown when in tutorial mode
-   * @Param: params:obj
+   * @Param: notice_info:Array || params:obj
+   *            notice_obj:obj
    *                type:string message type 'warning','error','success', 'info'
    *                title:string
    *                message:string
@@ -66,56 +67,61 @@ var NotificationManager = {
    *                ],
    *                anchor_element : css_selector:String
    */
-  showNotification : function(params) {
-    
-    // set the elements to highlight
-    NotificationManager.clearHints();    
-    if(params.elements_to_highlight) NotificationManager.showHints(params.elements_to_highlight);
-    
-    if( NotificationManager.behavioral_mode == DEFAULT_MODE ) {
-      console.log('Showing notifications');
-      //return;
-      
-    } else {
-      console.log('Not notifications');
-      return;      
-    }
-    
-    NotificationManager.hideAllMessages();
-
-    var notification = "";
-
-
-    notification = notification + "<a id=\"k_message_close_button\">x</a>";
-    
-    if(params.title)
-      notification = notification + "<span class=\"k_panel\">" + params.title + "</span>";
-
-    $('.k_'+params.type).html(notification);
-
-    $('#k_message_close_button').bind('click', function(e) {
-      //trigger parent <div> click action
-      $('.k_message').fadeOut(100)
-        .css({
-          top: -$('.k_message').outerHeight()
-        });
-      
-    });
-
-
-    if(params.anchor_element) {
-      var anchor_item_position = NotificationManager.getRelativeAttributes(params.anchor_element);
-      
-      $('.k_'+params.type).hide()
-        .css({
-          left : anchor_item_position.left ,
-          top : anchor_item_position.top - 75
-        }).fadeIn({
-          duration : 100
-        });
+  showNotification : function(notice_info) {
         
+    if( NotificationManager.behavioral_mode != DEFAULT_MODE ) return;
+
+    // resets bubble and glowing element
+    NotificationManager.clearGlowingHints();
+    NotificationManager.hideAllMessages();
+    
+    // Shows the relevant notifications bubble as well as the glowing elements
+    var showAll = function(params) {
+
+      params.title = params.title || "";      
+      if(params.elements_to_highlight) NotificationManager.showHints(params.elements_to_highlight);
+      
+      $close_button = $("<a>" , { id : "k_message_close_button", html : "x" });
+      $notification_box = $("<span>" , { class : "k_panel", html : params.title });
+      $bubble = $("<div>", {  class : "k_testing k_message k_panel k_alert_boxes" });
+      $bubble.addClass('k_'+params.type);
+      $bubble.append($close_button).append($notification_box);
+      $('body').append($bubble);
+
+      var hideBubble = function(e) {
+        
+        $($bubble).fadeOut(100)
+                  .css({ top: -$($bubble).outerHeight() })
+                  .remove();
+                  
+      }
+      $($close_button).bind('click', hideBubble);
+
+
+      if(params.anchor_element) {
+        var anchor_item_position = NotificationManager.getRelativeAttributes(params.anchor_element);
+        $($bubble).hide()
+                  .css({ left : anchor_item_position.left , top : anchor_item_position.top - 75 })
+                  .fadeIn({ duration : 100 });
+
+      } else {
+        $($bubble).css({ top : '10px', left : "", right : '10px' }).fadeIn(100);
+
+      }      
+    } // eo showAll
+
+    
+    // if an array of notice_objs are given
+    if (Object.prototype.toString.call( notice_info ) === '[object Array]' ) {
+      for( var x = 0; x < notice_info.length ; x++ ) {
+        var notice_obj = notice_info[x];
+        showAll(notice_obj);
+      }
+      
+    // when is single notification object
     } else {
-      $('.k_'+params.type).css({ top : '10px', left : "", right : '10px' }).fadeIn(100);
+      var notice_obj = notice_info;
+      showAll(notice_obj);
       
     }
 
@@ -136,7 +142,7 @@ var NotificationManager = {
   
   
   // @Description : clear hints
-  clearHints : function()  {
+  clearGlowingHints : function()  {
     $('.k_tutorial_hint').removeClass('k_tutorial_hint');
     $('.k_focus').removeClass('k_focus');
     

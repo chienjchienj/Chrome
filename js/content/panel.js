@@ -170,6 +170,10 @@ var Panel = {
             var selector = columnIdentifier + ' .krake-control-button-save';
             $(selector).remove();   // removes the save button
             $('.tooltip').remove(); // remove visible tool tip just in case
+            
+            // shows the page link if current selected set of elements are hyperlink
+            var $detailPageLink = PageDivingHandler.showLink(sessionManager.currentColumn);            
+            
             finished();
             
           });
@@ -186,10 +190,20 @@ var Panel = {
       
       // when not columns have been defined in this Krake yet
       } else if ( sessionManager.currentColumn == null && sharedKrake.columns.length == 0 ) {
-        NotificationManager.showNotification({
-          type : 'error',
-          title : Params.NOTIFICATION_TITLE_NO_COLUMN_FAILED,
-          message : Params.NOTIFICATION_MESSAGE_NO_COLUMN_FAILED
+        
+        chrome.extension.sendMessage({ action: "has_columns"}, function(response) {        
+          if(response.has_columns) {
+            finished();
+            
+          } else {
+            NotificationManager.showNotification({
+              type : 'error',
+              title : Params.NOTIFICATION_TITLE_NO_COLUMN_FAILED,
+              message : Params.NOTIFICATION_MESSAGE_NO_COLUMN_FAILED
+            });
+                        
+          }
+          
         });
 
       // when is in any other mode        
@@ -224,7 +238,7 @@ var Panel = {
         NotificationManager.showNotification({
           type : 'info',
           title : Params.NOTIFICATION_TITLE_ADD_SELECTIONS,
-          message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS,
+          message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS
         });        
         
         //self.updateBreadcrumbSegmentTitle(columnId, $.trim(newColumnTitle)); 

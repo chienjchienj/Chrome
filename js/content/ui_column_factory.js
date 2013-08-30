@@ -171,12 +171,7 @@ var UIColumnFactory = {
             url : column_obj.url
           } 
         }, function(response){
-          
-          console.log('== Line 175 ==');
-          console.log(response);
-
           if(response.status == 'success'){
-          
             $(columnIdentifier).remove();
           
             //remove highlights

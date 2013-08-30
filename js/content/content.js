@@ -65,16 +65,18 @@ var reloadExistingColumns = function() {
   chrome.extension.sendMessage({ action: "get_all_shared_krakes" },  function(response) { 
     var wrapper = $("#inner-wrapper");
     
+    // Populates the current pages columns first
     var curr_page_shared_krakes = response.sharedKrakes[document.location.href].columns;
     populateColumns(wrapper, curr_page_shared_krakes);    
     delete response.sharedKrakes[document.location.href];
 
+    // Populates other pages columns later
     var all_other_pages = Object.keys(response.sharedKrakes);
     for( var x = 0 ; x < all_other_pages.length ; x++ ) {
       if( response.sharedKrakes[ all_other_pages[x] ].columns && response.sharedKrakes[ all_other_pages[x] ].columns.length > 0 ) {
-        
         var other_page_shared_krakes = response.sharedKrakes[ all_other_pages[x] ].columns;
         populateColumns(wrapper, other_page_shared_krakes, true);
+        
       }
     }
         

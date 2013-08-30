@@ -406,24 +406,6 @@ var saveColumn = function(params, callback) {
 var matchPattern = function(callback) {
 
   var result ={};
-  
-  /* 
-  // In the event generic xpath generation is called on a list of items
-  if(sessionManager.currentColumn.columnType == 'list') {
-    result = PatternMatcher.findGenericXpath(sessionManager.currentColumn.selections[0].xpath, 
-      sessionManager.currentColumn.selections[1].xpath);
-      
-    sessionManager.currentColumn.genericXpath = result.genericXpath;
-
-  // In the event generic xpath generation is called on a single item
-  }else{
-    sessionManager.currentColumn.genericXpath = sessionManager.currentColumn.selections[0].xpath;
-    result.status = 'matched';
-    
-  }
-  */
-  
-  // To refactor later on
   sessionManager.currentColumn.genericXpath = sessionManager.currentColumn.selections[0].xpath;
   sessionManager.currentColumn.genericXpath = sessionManager.currentColumn.computeGenericXpath();
   result.status = 'matched';  
@@ -442,13 +424,6 @@ var matchPattern = function(callback) {
 
 var getColumnById = function(params, callback) {
   try{
-    //console.log("getColumnById");
-    //console.log(JSON.stringify(params));
-    //console.log("-- sessionManager");
-    //console.log(JSON.stringify(sessionManager));
-    //console.log('-- SharedKrake');
-    //console.log(JSON.stringify(SharedKrake));
-
     if(sessionManager.currentColumn && sessionManager.currentColumn.columnId == params.columnId) {
       if (callback && typeof(callback) === "function") 
         callback({ status : 'success', column : sessionManager.currentColumn }); 
@@ -464,6 +439,7 @@ var getColumnById = function(params, callback) {
           callback({ status : 'error' }); 
       }    
     }//eo if-else
+    
   }catch(err) {
     console.log(err);
   }
@@ -483,6 +459,22 @@ var getBreadcrumb = function(params, callback) {
       callback({ status: 'error' });
   } 
 };//eo getBreadcrumb
+
+
+// @Description : checks if the current tab has already any columns defined already
+var hasColumns = function(params, callback) {
+  var has_columns = false;
+  var krake_pages = Object.keys(records[curr_tab_id].shared_krakes);
+  for( var x = 0; x < krake_pages.length; x++ ) {
+    var curr_sk = records[curr_tab_id].shared_krakes[ krake_pages[x] ];
+    if( curr_sk.columns && curr_sk.columns.length > 0 ) {
+      has_columns = true;
+      break;
+      
+    }
+  }
+  callback({ has_columns: has_columns });  
+}; //eo hasColumns
 
 
 
@@ -568,6 +560,10 @@ chrome.runtime.onMessage.addListener(
       case "add_column":
         newColumn(request.params, sendResponse);
       break;
+      
+      case "has_columns":
+        hasColumns(request.params, sendResponse);
+      break;      
       
       // transits into state for handling pagination selection event
       case "add_pagination":

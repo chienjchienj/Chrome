@@ -133,42 +133,9 @@ SharedKrakeHelper.prototype.searchColumnByKey = function(columns, key, value) {
       return columns[i];
       
     }
-    /* 
-    else{
-      var result = self.searchColumn(columns[i].options.columns, key, value);
-      if(result) return result;
-    } */
   }
   return null;
 };//eo searchColumn
-  
-
-/*
-  findColumnByKey : function(key, value) {
-    return SharedKrakeHelper.searchColumnByKey(SharedKrake.columns, key, value);
-  },
-
-  searchColumnByKey : function(columns, key, value) {
-  	//console.log('key := ' + key);
-    for(var i=0; i<columns.length; i++) {
-    	//console.log('columns[i][key] := ' + columns[i][key] + ', value := ' + value);
-      if(columns[i][key] == value) {
-
-        return columns[i];
-      }else{
-        var result = SharedKrakeHelper.searchColumn(columns[i].options.columns, key, value);
-        if(result) return result;
-      }
-    }
-    return null;
-  },//eo searchColumn
-*/
-  //search column
-SharedKrakeHelper.prototype.findColumnById = function(columnId) {
-  var self = this;    
-  return self.searchColumn(SharedKrake.columns, columnId);
-};//eo findColumnById
-  
   
   
 SharedKrakeHelper.prototype.searchColumn = function(columns, columnId) {
@@ -268,6 +235,13 @@ SharedKrakeHelper.prototype.setNextPager = function(xpath) {
 //    krake_json : Object
 SharedKrakeHelper.prototype.createScrapeDefinitionJSON = function(callback) {
   var self = this;
+  
+  if(!self.SharedKrake.columns || self.SharedKrake.columns.length == 0) {
+    callback && callback( 'empty', false); 
+    return;
+   
+  }
+  
   var krake_json = {};
 
   for(var key in self.SharedKrake) {
@@ -315,7 +289,14 @@ SharedKrakeHelper.prototype.getFullKrakeDefinition = function(callback) {
   
   // getKrakedefinition
   root_SKH.getKrakeDefinition(function(status, krake_definition) {
-    callback('success', krake_definition);
+    if(status == 'success') {
+      callback('success', krake_definition);
+      
+    } else {
+      callback('empty', krake_definition);
+      
+    }
+    
   });
 }
 
@@ -344,11 +325,12 @@ SharedKrakeHelper.prototype.getRootAncestorHelper = function() {
 //    status:String
 //    krake_definition:Object
 SharedKrakeHelper.prototype.getKrakeDefinition = function(callback) {
-  var self = this;  
-    
-  // createScrapeDefinitionJSON   
+  var self = this;
+
+  // createScrapeDefinitionJSON
   self.createScrapeDefinitionJSON(function(status, krake_json, parent_column_id) {
     
+    if(status == 'success') {
       // attaching new legs to the current krake to link to sub krakes
       var attachTentacles = function(status, krake_definition_holders) {
            
@@ -356,17 +338,20 @@ SharedKrakeHelper.prototype.getKrakeDefinition = function(callback) {
           
           // foreach column tentable
           for( var x = 0; x < krake_definition_holders.length; x++ ) {
-              //append nested krake to current krake definition 
+              //append nested krake to current krake definition
               var new_krake_column = self.getTentacle(krake_definition_holders[x]);
               krake_json.columns.push(new_krake_column);
-          } 
-        } 
-        // return fully formed Krake Definition        
+          }
+        }
+        // return fully formed Krake Definition
         callback && callback( 'success', krake_json, self.getParentColumnId() );   
-
       }    
       // get nested krakes
       self.getNestedKrakes(attachTentacles)
+      
+    } else {
+        callback && callback( 'empty', krake_json, self.getParentColumnId() );         
+    }
 
   });
   

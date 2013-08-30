@@ -11,11 +11,14 @@ var Params = {
     '<button class="k_panel" disabled="disabled">Select a list of items</button>, ' + 
     '<button class="k_panel" disabled="disabled">Select a single item</button>',
   
-  NOTIFICATION_TITLE_ADD_SELECTIONS : 'Mouseover & click to add items to this column.',
+  NOTIFICATION_TITLE_ADD_SELECTIONS : 'Mouseover & <b>click</b> to add item to this column.',
   NOTIFICATION_MESSAGE_ADD_SELECTIONS : '',
   
-  NOTIFICATION_TITLE_ADD_MORE_SELECTIONS : 'Click <b>Save</b> or add more items to column',
+  NOTIFICATION_TITLE_ADD_MORE_SELECTIONS : 'Mouseover & <b>click</b> to add more items',
   NOTIFICATION_MESSAGE_ADD_MORE_SELECTIONS : '',
+  
+  NOTIFICATION_TITLE_SAVE_SELECTIONS : 'Click <b>Save</b> after when finished',
+  NOTIFICATION_MESSAGE_SAVE_SELECTIONS : '',  
   
   NOTIFICATION_TITLE_SAVED_SELECTIONS : 'Click <b>Done</b> or <b>Add New Column</b>',
   NOTIFICATION_MESSAGE_SAVED_SELECTIONS : '',  

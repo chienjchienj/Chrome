@@ -137,15 +137,21 @@ var UIElementSelector = {
                   UIElementSelector.highlightElements(response.column.url, response.column.genericXpath, response.column.colorCode);
                   
                   //TODO : refactor this as a separate use case show pagination option
-                  NotificationManager.showNotification({
-                    type : 'info',
-                    title : Params.NOTIFICATION_TITLE_ADD_MORE_SELECTIONS,
-                    message : Params.NOTIFICATION_MESSAGE_ADD_MORE_SELECTIONS,
-                    elements_to_highlight : [
-                      '#krake-column-control-' + response.column.columnId + ' .krake-control-button-save'
-                    ],
-                    anchor_element : '#krake-column-control-' + response.column.columnId + ' .krake-control-button-save'
-                  });  
+                  NotificationManager.showNotification([{
+                      type : 'info',
+                      title : Params.NOTIFICATION_TITLE_SAVE_SELECTIONS,
+                      message : Params.NOTIFICATION_MESSAGE_ADD_MORE_SELECTIONS,
+                      elements_to_highlight : [
+                        '#krake-column-control-' + response.column.columnId + ' .krake-control-button-save'
+                      ],
+                      anchor_element : '#krake-column-control-' + response.column.columnId + ' .krake-control-button-save'
+                      
+                    },{
+                      type : 'info',
+                      title : Params.NOTIFICATION_TITLE_ADD_MORE_SELECTIONS,
+                      message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS
+                                                            
+                  }]);  
                   
                   //display 'link' icon
                   // PaginationHandler.showPaginationOption(response.column);
