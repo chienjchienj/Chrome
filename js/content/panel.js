@@ -172,8 +172,7 @@ var Panel = {
             $('.tooltip').remove(); // remove visible tool tip just in case
             
             // shows the page link if current selected set of elements are hyperlink
-            var $detailPageLink = PageDivingHandler.showLink(sessionManager.currentColumn);            
-            
+            var $detailPageLink = PageDivingHandler.showLink(sessionManager.currentColumn);
             finished();
             
           });
