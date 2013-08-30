@@ -10,17 +10,11 @@ To check out the online engine go to
 
 # Backlog
 ## To Do list
+  - TODO : Clean up the nested COOKIES none-sense
+  - TODO : To consider how to visually represent the top level page as well as nested pages in panel-right breadcrumb
   - TODO : Ability to toggle bar at the bottom between visibility and non-visibility
   - TODO : Column Name focused when [enter] is do nothing
   - TODO : Ensure not records are created for pages with no URLs
-  - TODO : Ensure when sub link is clicked
-      create a sharedKrake with the following
-        parentColumnId
-        parentURL
-
-  - TODO : have the array of separate Krake definitions compiled for a specific Tab on the fly when the done button is clicked
-
-
 
 ## Usability Testing Results
 

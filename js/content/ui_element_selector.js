@@ -148,7 +148,6 @@ var UIElementSelector = {
                   });  
                   
                   //display 'link' icon
-                  PageDivingHandler.showLink(response.column);
                   // PaginationHandler.showPaginationOption(response.column);
                 
                 }

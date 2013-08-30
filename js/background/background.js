@@ -382,11 +382,12 @@ var saveColumn = function(params, callback) {
   if(sessionManager.currentColumn && sessionManager.currentColumn.validate()) {
     sessionManager.previousColumn = sessionManager.currentColumn;
     curr_SKH.saveColumn(sessionManager.currentColumn);
+    var curr_column_obj = sessionManager.currentColumn;
     sessionManager.currentColumn = null;
     sessionManager.goToNextState('idle');
 
     if (callback && typeof(callback) === "function")
-      callback({status: 'success', session: sessionManager, sharedKrake: sharedKrake});
+      callback({status: 'success', session: sessionManager, sharedKrake: sharedKrake, column: curr_column_obj });
       
   // when the current column does not exist
   } else {

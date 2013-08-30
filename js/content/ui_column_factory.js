@@ -229,7 +229,6 @@ var UIColumnFactory = {
             anchor_element : '#panel-left button'
           });
           
-          
         } else {
           NotificationManager.showNotification({
             type : 'error',
@@ -237,7 +236,12 @@ var UIColumnFactory = {
             message : Params.NOTIFICATION_MESSAGE_SAVE_COLUMN_FAILED
           });
           
-        }   
+        }
+        
+        // Shows the pagingation link only when the column has been saved
+        response.column && PageDivingHandler.showLink(response.column);        
+        
+        
       });
     });
     
