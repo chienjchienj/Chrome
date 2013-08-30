@@ -107,9 +107,6 @@ var UIElementSelector = {
         elementLink : elementPathResult.link
       };
       
-      console.log("=== Sending to server ===");
-      console.log(params);
-      
       switch(sessionManager.currentState) {
         case 'pre_next_pager_selection' :
           

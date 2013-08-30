@@ -219,45 +219,58 @@ var Panel = {
 
   attachEnterKeyEventToColumnTitle : function(columnId) {
     var identifier = "#krake-column-title-" + columnId;
-    $(identifier).keydown(function(e) {
 
+    var saveTitle = function(element, callback) {      
+      $(identifier).text($(identifier).text());
+      var newColumnTitle = $(identifier).text();
+      //self.updateBreadcrumbSegmentTitle(columnId, $.trim(newColumnTitle)); 
+      var params = { columnName : newColumnTitle }
+      chrome.extension.sendMessage({ action:"edit_current_column", params: { attribute:"column_name", values:params }}, 
+        function(response) {
+          if(response.status == 'success') {
+            var selector = '#k_column-breadcrumb-' + columnId + ' a';
+            var uriSelector = '#k_column-breadcrumb-' + columnId + ' a:nth-child(' + $(selector).length + ')' ;
+            $(uriSelector).html( newColumnTitle );
+            $(element).blur().next().focus();  return false;          
+        }
+      });
+      callback && callback();    
+      
+    }
+    
+    // If user click on items on page without first having pressed enter
+    $(identifier).blur(function(e) {
+      
+      var self = this;
+      // when title has been already added to column title bar yet
+      if( $(identifier).text().length > 0 ) {
+        saveTitle( self, function() {} );
+      
+      // To think about how best to handle this situation
+      } else {
+        
+      }
+      
+    });
+    
+    
+    $(identifier).keydown(function(e) {
+      var self = this;
       //e.preventDefault();
       e.stopPropagation(); // Ensures in page script does not hijack the keydown event
       
+      // when the ENTER key was pressed
       if(e.which == 13) {
-
-        // TODO : automatically remove \n\r characters when they are entered
-        $(identifier).text($(identifier).text());
-        
-        //update breadcrumb segment title        
-        var newColumnTitle = $(identifier).text();
-        
-        
-        // Sends notification to click on elements on page
-        NotificationManager.showNotification({
-          type : 'info',
-          title : Params.NOTIFICATION_TITLE_ADD_SELECTIONS,
-          message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS
-        });        
-        
-        //self.updateBreadcrumbSegmentTitle(columnId, $.trim(newColumnTitle)); 
-        var params = {
-          columnName : newColumnTitle
-        }
-        chrome.extension.sendMessage({ action:"edit_current_column", params: { attribute:"column_name", values:params }}, 
-        function(response) {
-          if(response.status == 'success') {
-            //update breadcrumb uri
-            var selector = '#k_column-breadcrumb-' + columnId + ' a';
-            var uriSelector = '#k_column-breadcrumb-' + columnId + ' a:nth-child(' + $(selector).length + ')' ;
-
-            $(uriSelector).html( newColumnTitle );
-            $(this).blur().next().focus();  return false;
-          }
-            
-        });
-        
+        saveTitle(self, function() {
+          // Sends notification to click on elements on page
+          NotificationManager.showNotification({
+            type : 'info',
+            title : Params.NOTIFICATION_TITLE_ADD_SELECTIONS,
+            message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS
+          });         
+        });   
       }
+      
     });
     
 
