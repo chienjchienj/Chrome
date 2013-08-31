@@ -10,11 +10,12 @@ To check out the online engine go to
 
 # Backlog
 ## To Do list
+  - TODO : To have color representation of pagination
+  - TODO : Visual indicator in the panel that pagination is already declared
+  - TODO : To capture meta description content and use as description for Krake
   - TODO : Clean up the nested COOKIES none-sense
-  - TODO : To consider how to visually represent the top level page as well as nested pages in panel-right breadcrumb
   - TODO : Ability to toggle bar at the bottom between visibility and non-visibility
   - TODO : Column Name focused when [enter] is do nothing
-  - TODO : Ensure not records are created for pages with no URLs
 
 ## Usability Testing Results
 
