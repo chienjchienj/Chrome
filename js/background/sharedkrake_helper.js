@@ -360,16 +360,16 @@ SharedKrakeHelper.prototype.getKrakeDefinition = function(callback) {
     if(status == 'success') {
       // attaching new legs to the current krake to link to sub krakes
       var attachTentacles = function(status, krake_definition_holders) {
-           
         if(status == 'success' && krake_definition_holders && krake_definition_holders.length > 0) {
           
           // foreach column tentable
           for( var x = 0; x < krake_definition_holders.length; x++ ) {
               //append nested krake to current krake definition
               var new_krake_column = self.getTentacle(krake_definition_holders[x]);
-              krake_json.columns.push(new_krake_column);
+              new_krake_column && krake_json.columns.push(new_krake_column);
           }
         }
+                
         // return fully formed Krake Definition
         callback && callback( 'success', krake_json, self.getParentColumnId() );   
       }    
@@ -422,6 +422,7 @@ SharedKrakeHelper.prototype.getTentacle = function(nested_definition_holder) {
   var self = this;
     
   var current_tentacle = {};
+  var attachment_found = false;
     
   for( var x = 0; x < self.SharedKrake.columns.length; x++ ) {
     if(self.SharedKrake.columns[x].columnId == nested_definition_holder.parent_column_id) {
@@ -431,10 +432,17 @@ SharedKrakeHelper.prototype.getTentacle = function(nested_definition_holder) {
       current_tentacle.required_attribute = 'href';
       current_tentacle.options = JSON.parse(JSON.stringify(nested_definition_holder.krake));
       delete current_tentacle.options.origin_url;
+      attachment_found = true;
     }
   }
   
-  return current_tentacle;
+  if(attachment_found) {
+    return current_tentacle;
+    
+  } else {
+    return false;
+        
+  }
   
 }
 
