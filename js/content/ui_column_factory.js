@@ -219,19 +219,18 @@ var UIColumnFactory = {
             title : Params.NOTIFICATION_TITLE_SAVED_SELECTIONS,
             message : Params.NOTIFICATION_MESSAGE_SAVED_SELECTIONS,
             elements_to_highlight : [
-              '#panel-left button'
+              '#panel-left button#btn-create-list, #panel-left button#btn-done'
             ],
-            anchor_element : '#panel-left button'
+            anchor_element : '#panel-left button#btn-create-list, #panel-left button#btn-done'
           });
           
         } else {
+          var columnIdentifier = "#krake-column-" + columnId;          
           NotificationManager.showNotification({
             type : 'error',
             title : Params.NOTIFICATION_TITLE_SAVE_COLUMN_FAILED,
             message : Params.NOTIFICATION_MESSAGE_SAVE_COLUMN_FAILED,
-            position : {
-              center : true
-            }
+            anchor_element : columnIdentifier
           });
           
         }

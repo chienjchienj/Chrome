@@ -55,7 +55,7 @@ var NotificationManager = {
   
   
   // @Description : Shows the notifications in the notifications bar. They are only shown when in tutorial mode
-  // @Param: notice_info:Array || params:obj
+  // @Param: notice_info:Array || notice_obj:obj
   //            notice_obj:obj
   //                type:string message type 'warning','error','success', 'info'
   //                title:string
@@ -173,6 +173,7 @@ var NotificationManager = {
   showOptionsYesNo : function(params) {
     
     NotificationManager.hideAllMessages();
+    NotificationManager.clearGlowingHints();    
 
     if(params.title)
       $('#k_option_title').html(params.title);
@@ -187,7 +188,6 @@ var NotificationManager = {
       $('#k_option_no').unbind('click').bind('click', params.noFunction);
 
     //$('#k_message_close_button').attr("src", chrome.extension.getURL("images/close.png"));
-    
     $('.k_option').hide().css({top:"10", right : "10", left : ""}).fadeIn();
   },
   

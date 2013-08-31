@@ -29,8 +29,8 @@ var Params = {
   NOTIFICATION_TITLE_ACTIVATE_NEXT_PAGER : 'Has more pages?',
   NOTIFICATION_MESSAGE_ACTIVATE_NEXT_PAGER : 'Usually a > or next button',  
   
-  NOTIFICATION_TITLE_SELECT_NEXT_PAGER : 'Click on link to next page',
-  NOTIFICATION_MESSAGE_SELECT_NEXT_PAGER : 'Usually a > or next button',
+  NOTIFICATION_TITLE_SELECT_NEXT_PAGER : '<b>Click</b> on link to next page. It is usually a button that says <b>next</b> or <b>></b>',
+  NOTIFICATION_MESSAGE_SELECT_NEXT_PAGER : '',
 
   NOTIFICATION_TITLE_ENTER_COLUMN_NAME : 'Give this column a name and press <b>ENTER</b>',
   NOTIFICATION_MESSAGE_ENTER_COLUMN_NAME : '',

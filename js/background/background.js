@@ -363,7 +363,9 @@ var editCurrentColumn = function(params, callback) {
     break;
 
     case 'column_name':
-     sessionManager.currentColumn.columnName = params.values.columnName;
+      console.log('=== 366 ===');
+      sessionManager.currentColumn.columnName = params.values.columnName;
+      console.log('=== 368 ===');
     break;
 
   }//eo switch
