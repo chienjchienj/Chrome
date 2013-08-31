@@ -54,19 +54,20 @@ var NotificationManager = {
   
   
   
-  /*
-   * @Description : Shows the notifications in the notifications bar. They are only shown when in tutorial mode
-   * @Param: notice_info:Array || params:obj
-   *            notice_obj:obj
-   *                type:string message type 'warning','error','success', 'info'
-   *                title:string
-   *                message:string
-   *                elements_to_highlight : [
-   *                    css_selector1:String, 
-   *                    css_selector2:String
-   *                ],
-   *                anchor_element : css_selector:String
-   */
+  // @Description : Shows the notifications in the notifications bar. They are only shown when in tutorial mode
+  // @Param: notice_info:Array || params:obj
+  //            notice_obj:obj
+  //                type:string message type 'warning','error','success', 'info'
+  //                title:string
+  //                message:string
+  //                elements_to_highlight:array
+  //                    css_selector1:String, 
+  //                    css_selector2:String
+  //                anchor_element : css_selector:String
+  //                position:object
+  //                    center:boolean
+  //                    top:int
+  //                    left:int
   showNotification : function(notice_info) {
         
     if( NotificationManager.behavioral_mode != DEFAULT_MODE ) return;
@@ -81,33 +82,45 @@ var NotificationManager = {
       params.title = params.title || "";      
       if(params.elements_to_highlight) NotificationManager.showHints(params.elements_to_highlight);
       
-      $close_button = $("<a>" , { id : "k_message_close_button", html : "x" });
-      $notification_box = $("<span>" , { class : "k_panel", html : params.title });
-      $bubble = $("<div>", {  class : "k_testing k_message k_panel k_alert_boxes" });
-      $bubble.addClass('k_'+params.type);
-      $bubble.append($close_button).append($notification_box);
-      $('body').append($bubble);
+      var close_button = $("<a>" , { id : "k_message_close_button", html : "x" });
+      var notification_box = $("<span>" , { class : "k_panel", html : params.title });
+      var bubble = $("<div>", {  class : "k_testing k_message k_panel k_alert_boxes" });
+      bubble.addClass('k_'+params.type);
+      bubble.append(close_button).append(notification_box);
+      $('body').append(bubble);
 
       var hideBubble = function(e) {
-        
-        $($bubble).fadeOut(100)
-                  .css({ top: -$($bubble).outerHeight() })
-                  .remove();
-                  
+        $(bubble).fadeOut(100).remove();
       }
-      $($close_button).bind('click', hideBubble);
+      $(close_button).bind('click', hideBubble);
 
-
-      if(params.anchor_element) {
+      var top_position = 10;
+      var right_position = 10;
+      var left_position = "";
+      
+      var bubble_dimensions = NotificationManager.getRelativeAttributes(bubble);  
+      var k_panel_dimensions = NotificationManager.getRelativeAttributes("#panel.k_panel");
+      
+      // positioning of notification box
+      if(params.position && params.position.center) {
+        left_position = ( $(window).width() - bubble_dimensions.width ) / 2;
+        top_position = ( $(window).height() - bubble_dimensions.height - k_panel_dimensions.height ) / 2;
+      
+      } else if(params.position) {
+        left_position = params.position.left;
+        top_position = params.position.top;        
+                
+      } else if(params.anchor_element) {
         var anchor_item_position = NotificationManager.getRelativeAttributes(params.anchor_element);
-        $($bubble).hide()
-                  .css({ left : anchor_item_position.left , top : anchor_item_position.top - 75 })
-                  .fadeIn({ duration : 100 });
-
-      } else {
-        $($bubble).css({ top : '10px', left : "", right : '10px' }).fadeIn(100);
-
-      }      
+        left_position = anchor_item_position.left;
+        top_position = anchor_item_position.top - bubble_dimensions.height - 30;
+        
+      } 
+      
+      $(bubble).hide()
+                .css({ left : left_position , top : top_position, position : "fixed" })
+                .fadeIn({ duration : 100 });
+                      
     } // eo showAll
 
     
@@ -189,22 +202,21 @@ var NotificationManager = {
   //    height
   getRelativeAttributes : function(css_selector) {
     var result = {}
-    console.log(jQuery(css_selector));
     result.top = jQuery(css_selector).offset().top - $(window).scrollTop();
     result.left = jQuery(css_selector).offset().left - $(window).scrollLeft();
     result.width = 
       jQuery(css_selector).width() +
-      parseInt( jQuery(css_selector).css("borderLeftWidth"), 10) +
-      parseInt( jQuery(css_selector).css("borderRightWidth"), 10) +
+      parseInt( jQuery(css_selector).css("border-left-width"), 10) +
+      parseInt( jQuery(css_selector).css("border-right-width"), 10) +
       parseInt( jQuery(css_selector).css("padding-left"), 10) +
       parseInt( jQuery(css_selector).css("padding-right"), 10) +
       parseInt( jQuery(css_selector).css("margin-left"), 10) +
       parseInt( jQuery(css_selector).css("margin-right"), 10);
 
     result.height = 
-      jQuery(css_selector).width() +
-      parseInt( jQuery(css_selector).css("borderTopWidth"), 10) +
-      parseInt( jQuery(css_selector).css("borderBottomWidth"), 10) +
+      jQuery(css_selector).height() +
+      parseInt( jQuery(css_selector).css("border-top-width"), 10) +
+      parseInt( jQuery(css_selector).css("border-bottom-width"), 10) +
       parseInt( jQuery(css_selector).css("padding-top"), 10) +
       parseInt( jQuery(css_selector).css("padding-bottom"), 10) +
       parseInt( jQuery(css_selector).css("margin-top"), 10) +

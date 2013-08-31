@@ -145,10 +145,10 @@
 
 #panel-right
 {
-
   width: calc(100% - 200px);
-  height: 185px;
-  overflow: auto;
+  height: 117px;
+  overflow-x: scroll;
+  overflow-y: hidden;  
   white-space: nowrap;
   z-index: 9999;
   background-color: #333;
@@ -162,10 +162,9 @@
   padding-left:2px;
 }
 
-
 .krake-column
 {
-  height: 165px;
+  height: 100px;
   width: 200px;
   border: 1px solid #000000;
   background-color: white;
@@ -208,8 +207,6 @@
   outline-width: 0;
 }
 
-
-
 .krake-breadcrumb
 {
   font-size: 9px;
@@ -220,6 +217,38 @@
   padding-left: 5px;
   padding-right: 5px;
   padding-top: 3px;
+  color : #4a6b82;
+  text-align : left;  
+}
+
+.krake-breadcrumb a {
+  color : #4a6b82;  
+}
+
+#krake-nav
+{
+  padding : 2px 0px 2px 5px;
+  height : 12px;
+  background-color : #E5E4E2;
+  line-height : 12px;
+  font-size : 10px;
+  color : #000000;
+  font-weight : normal;  
+  position: fixed;
+  margin-top: -16px;  
+}
+
+#krake-nav a, #krake-nav span
+{
+  font-size : 10px;
+  color : #413839;
+  font-weight : normal;  
+  margin-right : 5px;
+}
+
+#krake-nav a.current {
+  color : #25383C;
+  font-weight : bold;
 }
 
 .krake-column-title
@@ -231,7 +260,7 @@
 
 .krake-column-color-palette
 {
-  height : 10px;
+  height : 5px;
 }
 
 
@@ -306,6 +335,11 @@
   </div>
 
   <div id="panel-right" class="k_panel">
+    <div id="krake-nav" class="k_panel">
+      <span class="k_panel">Breadcrumb</span> 
+      <span id="krake-nav-start" class="k_panel"> >> </span>
+      <span id="krake-nav-link-holder" class="k_panel"></span>
+    </div>
   	<div id="inner-wrapper" class="k_panel"></div>
   </div>
   

@@ -129,7 +129,8 @@ var Panel = {
           NotificationManager.showNotification({
             type : 'error',
             title : Params.NOTIFICATION_TITLE_SAVE_COLUMN_FAILED,
-            message : Params.NOTIFICATION_MESSAGE_SAVE_COLUMN_FAILED
+            message : Params.NOTIFICATION_MESSAGE_SAVE_COLUMN_FAILED,
+            anchor_element : "#krake-column-" + sessionManager.currentColumn.columnId
           });
           
         }
@@ -182,7 +183,8 @@ var Panel = {
           NotificationManager.showNotification({
             type : 'error',
             title : Params.NOTIFICATION_TITLE_SAVE_COLUMN_FAILED,
-            message : Params.NOTIFICATION_MESSAGE_SAVE_COLUMN_FAILED
+            message : Params.NOTIFICATION_MESSAGE_SAVE_COLUMN_FAILED,
+            anchor_element : "#krake-column-" + sessionManager.currentColumn.columnId
           });
           
         }
@@ -266,7 +268,10 @@ var Panel = {
           NotificationManager.showNotification({
             type : 'info',
             title : Params.NOTIFICATION_TITLE_ADD_SELECTIONS,
-            message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS
+            message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS,
+            position : {
+              center : true
+            }
           });         
         });   
       }

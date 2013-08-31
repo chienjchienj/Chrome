@@ -228,7 +228,10 @@ var UIColumnFactory = {
           NotificationManager.showNotification({
             type : 'error',
             title : Params.NOTIFICATION_TITLE_SAVE_COLUMN_FAILED,
-            message : Params.NOTIFICATION_MESSAGE_SAVE_COLUMN_FAILED
+            message : Params.NOTIFICATION_MESSAGE_SAVE_COLUMN_FAILED,
+            position : {
+              center : true
+            }
           });
           
         }

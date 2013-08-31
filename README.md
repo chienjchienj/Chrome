@@ -100,6 +100,9 @@ This is how a single Shared Kraked data object for a page will look like
         "xpath" : "arbiturary_string"
       },
       
+      // Page title
+      page_title : "arbiturary_string",
+      
       // cookies
       "cookies" : [{
           "domain": ".imdb.com",

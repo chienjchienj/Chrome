@@ -148,7 +148,10 @@ var UIElementSelector = {
                     },{
                       type : 'info',
                       title : Params.NOTIFICATION_TITLE_ADD_MORE_SELECTIONS,
-                      message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS
+                      message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS,
+                      position : {
+                        center : true
+                      }
                                                             
                   }]);
                 

@@ -33,6 +33,7 @@ var sharedKrake = null;
 
 // The actual krake definition object to be used for populating the edit field on https://krake.io/krakes/new
 var compiledKDO = null;
+var krake_title = null;
 
 // Color generator object that corresponds to the current URL in the current tab
 var colorGenerator = null;
@@ -68,7 +69,7 @@ var handleIconClick = function(tab) {
     records[tab.id].isActive = true;
     sessionManager = records[tab.id].sessionManager = records[tab.id].sessionManager || new SessionManager();    
     colorGenerator = records[tab.id].colorGenerator = records[tab.id].colorGenerator || new ColorGenerator();   
-    curr_SKH = new SharedKrakeHelper(tab.id, tab.url);
+    curr_SKH = new SharedKrakeHelper(tab.id, tab.url, tab.title);
     sharedKrake = curr_SKH.SharedKrake;
     
     updateBrowserActionIcon(tab.id);
@@ -91,7 +92,7 @@ var newTabFocused = function(action_info) {
   
   // Gets the current tab
   chrome.tabs.get(action_info.tabId, function(tab) {
-    curr_SKH = new SharedKrakeHelper(tab.id, tab.url);
+    curr_SKH = new SharedKrakeHelper(tab.id, tab.url, tab.title);
     sharedKrake = curr_SKH.SharedKrake;
   });
   
@@ -106,7 +107,7 @@ var newTabFocused = function(action_info) {
 var pageReloaded = function(tabId, changeInfo, tab) {
   //re-render panel using columns objects from storage if any. 
   records[tab.id] = records[tab.id] || {};
-  curr_SKH = new SharedKrakeHelper(tab.id, tab.url);  
+  curr_SKH = new SharedKrakeHelper(tab.id, tab.url, tab.title);
   sharedKrake = curr_SKH.SharedKrake;
   
   if(records[tab.id].isActive) {
@@ -197,10 +198,10 @@ var insertCss = function(filename, sender) {
 //    krakeDefinition:Object
 var getKrakeJson = function(callback) {
   if(compiledKDO) {
-    callback({status: 'success', krakeDefinition: compiledKDO });
+    callback({status: 'success', krakeDefinition: compiledKDO, krakeTitle : krake_title });
     
   } else {
-    callback({status: 'error', krakeDefinition: compiledKDO });
+    callback({status: 'error', krakeDefinition: compiledKDO, krakeTitle : krake_title });
     
   }
   
@@ -544,6 +545,12 @@ chrome.runtime.onMessage.addListener(
           session: sessionManager,
           sharedKrake : sharedKrake
         });
+      break;
+      
+      case "get_ancestry":
+        sendResponse({ 
+          ancestry: curr_SKH.getAncestry()
+        });        
       break;
 
       case 'load_session':

@@ -2,12 +2,12 @@
 //  that corresponds to the current URL
 // @param tab_id:String
 // @param url:String
-var SharedKrakeHelper = function(tab_id, url) {
+// @param title:String
+var SharedKrakeHelper = function(tab_id, url, title) {
   var self = this;
   self.tab_id = tab_id;
   self.url = url;
-    
-  self.setSharedKrake(tab_id, url);
+  self.setSharedKrake(tab_id, url, title);
   
 };
 
@@ -16,11 +16,12 @@ var SharedKrakeHelper = function(tab_id, url) {
 // @Description : sets the current sharedKrake for helper to the one indicated, if not exist create a new one and set it
 // @param tab_id:String
 // @param url:String
-SharedKrakeHelper.prototype.setSharedKrake = function(tab_id, url) {
+SharedKrakeHelper.prototype.setSharedKrake = function(tab_id, url, title) {
   var self = this;  
   records[tab_id] = records[tab_id] || {};
   records[tab_id].shared_krakes = records[tab_id].shared_krakes || {}
   self.SharedKrake = records[tab_id].shared_krakes[url] = records[tab_id].shared_krakes[url] || self.spawnSharedKrake(url);
+  self.SharedKrake.title = title || self.SharedKrake.title;
 }
 
 
@@ -298,6 +299,8 @@ SharedKrakeHelper.prototype.getFullKrakeDefinition = function(callback) {
     }
     
   });
+  
+  krake_title = root_SKH.SharedKrake.title;
 }
 
 
@@ -318,6 +321,30 @@ SharedKrakeHelper.prototype.getRootAncestorHelper = function() {
   return root_SKH;
 }
 
+
+// @Description : gets an array of ancestry_objects that describes how this page is related to the root
+//    starts from most recent to most ancient
+// @return :  ancestry:array
+//              ancestry_obj:Object
+//                title:String
+//                origin_url:String
+SharedKrakeHelper.prototype.getAncestry = function() {
+  var self = this;  
+  var ancestry = [];
+  
+  var curr_SK = self.SharedKrake;
+  do {
+    var ancestry_obj = {}
+    ancestry_obj.origin_url = curr_SK.origin_url;
+    ancestry_obj.title = curr_SK.title;
+    curr_SK = records[self.tab_id].shared_krakes[curr_SK.parent_url];
+    ancestry.push(ancestry_obj);
+    
+  } while(curr_SK)
+  
+  // converts it into a sharedKrakeHelper
+  return ancestry;  
+}
 
 
 // @Description : get the compiled Krake definition of it and its children

@@ -58,6 +58,24 @@ var hidePanel = function() {
 
 
 
+var reloadKrakeNavigation = function() {
+  chrome.extension.sendMessage({ action: "get_ancestry" },  function(response) { 
+    if(response.ancestry) {
+      for(var x = 0; x < response.ancestry.length ; x++) {
+
+        var link = $("<a>", { attr : { href : response.ancestry[x].origin_url },
+                              html : response.ancestry[x].title });
+        
+        if(x > 0) $('#krake-nav-link-holder').prepend("<span> > </span>");
+        if(x== 0) $(link).addClass("current k_panel");
+        $('#krake-nav-link-holder').prepend(link);
+
+      }
+    }
+  });  
+}
+
+
 // @Description : In case there was a page reload, populates the panel 
 //   with data from previously existing column in the Krake definitions of theinjectKrakeJson
 //   current Tab.
@@ -220,6 +238,7 @@ chrome.extension.onMessage.addListener(
           NotificationManager.init(behavioral_mode);          
           Panel.init();
           reloadExistingColumns();
+          reloadKrakeNavigation();
 
         }//eo if
 
@@ -240,9 +259,7 @@ var param = {
 if( !isKrakeDomain() ) { 
   behavioral_mode = DEFAULT_MODE;
   chrome.extension.sendMessage({ action:'load_session', params: { attribute:'previous_column', values:param }}, function(response) {
-    if(response.status == 'success') {
-      console.log('-- load_session');
-    }
+    if(response.status == 'success') {}
   });
 
 // A tutorial on how to use browser ext
@@ -250,9 +267,7 @@ if( !isKrakeDomain() ) {
 
   behavioral_mode = TUTORIAL_MODE;
   chrome.extension.sendMessage({ action:'load_session', params: { attribute:'previous_column', values:param }}, function(response) {
-    if(response.status == 'success') {
-      console.log('-- load_session');
-    }
+    if(response.status == 'success') {}
   });
 
 // injects Krake Def
@@ -261,8 +276,9 @@ if( !isKrakeDomain() ) {
   behavioral_mode = CREATION_MODE;
   chrome.extension.sendMessage({ action:'inject_krake' }, function(response) {
     if(response.status == 'success') {
+      response.krakeDefinition.client_version = chrome.runtime.getManifest().version;
       $('#krake_content').html(JSON.format(response.krakeDefinition));        
-
+      $('#krake_name').val(response.krakeTitle);
     }
   });
 
