@@ -14,7 +14,6 @@
   this program. If not, see <http://www.gnu.org/licenses/>.
 
   Author:
-  Joseph Yang <sirjosephyang@krake.io>
   Gary Teh <garyjob@krake.io>  
 */
 

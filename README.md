@@ -10,12 +10,10 @@ To check out the online engine go to
 
 # Backlog
 ## To Do list
-  - TODO : To have color representation of pagination
-  - TODO : Visual indicator in the panel that pagination is already declared
+  - TODO : Column Name focused when [enter] is do nothing
   - TODO : To capture meta description content and use as description for Krake
   - TODO : Clean up the nested COOKIES none-sense
   - TODO : Ability to toggle bar at the bottom between visibility and non-visibility
-  - TODO : Column Name focused when [enter] is do nothing
 
 # Documentation
 This is how a single Shared Kraked data object for a page will look like

@@ -15,7 +15,6 @@
 
   Author:
   Gary Teh <garyjob@krake.io>   
-  Joseph Yang <sirjosephyang@krake.io>
 
 */
 
