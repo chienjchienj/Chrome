@@ -6,6 +6,11 @@
     color: #b3b3b3;
 }
 
+.k_highlight_next_page, .k_highlight_next_page *{
+  background-color: #666666 !important;
+  color : #000000;
+}
+
 /*  column highlight colours  */
 .k_highlight_FFCC00 {
   background-color: #FFCC00 !important;

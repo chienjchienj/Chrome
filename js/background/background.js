@@ -312,7 +312,7 @@ var setPagination = function(params, callback) {
     sessionManager.goToNextState(); //current state := 'idle'
     
     if (callback && typeof(callback) === "function")  
-      callback({status: 'success', session: sessionManager, sharedKrake: SharedKrake }); 
+      callback({status: 'success', session: sessionManager, sharedKrake: sharedKrake }); 
       
   }catch(err) {
     console.log(err);

@@ -26,14 +26,16 @@ PaginationHandler.showPaginationOption = function() {
         ],
         anchor_element : '#panel-left button#btn-create-list, #panel-left button#btn-done'
       });      
-    }
-    
+    } 
   });
-   
+
 }
 
 // @Description : Handles the event whereby user goes into the mode for selecting pagination
 PaginationHandler.selectNextPager = function() {
+
+  // Temporary hard coding of pagination color 
+  UIElementSelector.setHighLightColor("#666666");
 
   var params = {
     attribute : 'current_state',
@@ -59,3 +61,11 @@ PaginationHandler.selectNextPager = function() {
   });
       
 }//eo if
+
+
+// @Description : Set the next page 
+PaginationHandler.setNextPager = function(xpath) {
+  UIElementSelector.highlightElements(document.URL, xpath, " k_highlight_next_page");
+  UIElementSelector.setHighLightColor(false);
+
+}

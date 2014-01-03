@@ -57,7 +57,7 @@ var hidePanel = function() {
 };
 
 
-
+// @Description : Loads the hyperlinks found within the Krake panel for linking to other mapped pages from this one
 var reloadKrakeNavigation = function() {
   chrome.extension.sendMessage({ action: "get_ancestry" },  function(response) { 
     if(response.ancestry) {
@@ -72,20 +72,20 @@ var reloadKrakeNavigation = function() {
 
       }
     }
-  });  
+  });
 }
 
 
-// @Description : In case there was a page reload, populates the panel 
-//   with data from previously existing column in the Krake definitions of theinjectKrakeJson
-//   current Tab.
-var reloadExistingColumns = function() {
+// @Description : In case there was a page reload, populates the panel and the current page
+//   with data from previously defined Krake definitions for this
+//   current Tab if it exist
+var reloadExistingKrake = function() {
   chrome.extension.sendMessage({ action: "get_all_shared_krakes" },  function(response) { 
     var wrapper = $("#inner-wrapper");
     
     // Populates the current pages columns first
-    var curr_page_shared_krakes = response.sharedKrakes[document.location.href].columns;
-    populateColumns(wrapper, curr_page_shared_krakes);    
+    var curr_page_krake = response.sharedKrakes[document.location.href].columns;
+    populateColumns(wrapper, curr_page_krake);
     delete response.sharedKrakes[document.location.href];
 
     // Populates other pages columns later
@@ -99,7 +99,7 @@ var reloadExistingColumns = function() {
     }
         
   });
-};//eo reloadExistingColumns
+};//eo reloadExistingKrake
 
 
 
@@ -237,7 +237,7 @@ chrome.extension.onMessage.addListener(
           UIElementSelector.init();
           NotificationManager.init(behavioral_mode);          
           Panel.init();
-          reloadExistingColumns();
+          reloadExistingKrake();
           reloadKrakeNavigation();
 
         }//eo if
@@ -277,7 +277,7 @@ if( !isKrakeDomain() ) {
   chrome.extension.sendMessage({ action:'inject_krake' }, function(response) {
     if(response.status == 'success') {
       response.krakeDefinition.client_version = chrome.runtime.getManifest().version;
-      $('#krake_content').html(JSON.format(response.krakeDefinition));        
+      $('#krake_content').html(JSON.format(response.krakeDefinition));
       $('#krake_name').val(response.krakeTitle);
     }
   });
