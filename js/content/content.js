@@ -83,10 +83,17 @@ var reloadExistingKrake = function() {
   chrome.extension.sendMessage({ action: "get_all_shared_krakes" },  function(response) { 
     var wrapper = $("#inner-wrapper");
     
-    // Populates the current pages columns first
-    var curr_page_krake = response.sharedKrakes[document.location.href].columns;
-    populateColumns(wrapper, curr_page_krake);
-    delete response.sharedKrakes[document.location.href];
+    if(response.sharedKrakes[document.location.href]) {
+      var curr_page_krake = response.sharedKrakes[document.location.href];
+
+      // Populates the next page 
+      curr_page_krake.next_page && curr_page_krake.next_page.xpath && PaginationHandler.setNextPager(curr_page_krake.next_page.xpath);
+
+      // Populates the current pages columns first      
+      populateColumns(wrapper, curr_page_krake.columns);
+      delete response.sharedKrakes[document.location.href];
+
+    }
 
     // Populates other pages columns later
     var all_other_pages = Object.keys(response.sharedKrakes);

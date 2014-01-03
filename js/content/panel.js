@@ -214,75 +214,11 @@ var Panel = {
 
   },
   
-  
+
   
   // @Description : Handles pagination button clicked event
   uiBtnEditPaginationClick : function() {
-    // if is still editing current column
-      // check if has already selected any stuff
-        // if has already selected stuff 
-        //    save
-        //    remove save button
-        //    show link if necessary
-        // if not
-        //    show error
-    // else if is idle at the moment
-    // show pager
-
-    /*
-    //remove save column button    
-    var columnIdentifier = "#krake-column-" + column.columnId; 
-    var selector = columnIdentifier + ' .krake-control-button-save';
-    $(selector).remove();    
-    */
-    
-    var showIt = function() {
-      PaginationHandler.selectNextPager(); // eo showPagination
-    }    
-    
-    // checks the status first
-    chrome.extension.sendMessage({ action: "get_session"}, function(response) {
-      
-      var sessionManager = response.session;
-      var sharedKrake = response.sharedKrake;
-      
-      // when is in selection mode
-      if(sessionManager.currentState == 'selection_addition') {
-        
-        // When there is at least 1 selection for current column suffice
-        if (sessionManager.currentColumn.selections.length > 0) {
-          
-          chrome.extension.sendMessage({ action: "save_column" }, function(response) {
-            var columnIdentifier = "#krake-column-" + sessionManager.currentColumn.columnId;
-            var selector = columnIdentifier + ' .krake-control-button-save';
-            $(selector).remove();   // removes the save button
-            $('.tooltip').remove(); // remove visible tool tip just in case
-            
-            // shows the page link if current selected set of elements are hyperlink
-            var $detailPageLink = PageDivingHandler.showLink(sessionManager.currentColumn);
-            showIt();
-            
-          });
-        
-        // When no selections have been made for this column yet.
-        } else {
-          NotificationManager.showNotification({
-            type : 'error',
-            title : Params.NOTIFICATION_TITLE_SAVE_COLUMN_FAILED,
-            message : Params.NOTIFICATION_MESSAGE_SAVE_COLUMN_FAILED,
-            anchor_element : "#krake-column-" + sessionManager.currentColumn.columnId
-          });
-          
-        }
-      
-      // when is currently idle
-      } else {
-        showIt();
-                
-      }
-      
-    });    
-    
+    PaginationHandler.processEvent();
     
   },
 

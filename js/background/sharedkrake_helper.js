@@ -229,6 +229,18 @@ SharedKrakeHelper.prototype.setNextPager = function(xpath) {
 
 
 
+
+// @Description : removes the next_page attribute for this current Shared_Krake
+// @param : xpath:String
+SharedKrakeHelper.prototype.unsetNextPager = function() { 
+  var self = this;    
+  if(sharedKrake) {
+    delete sharedKrake.next_page;
+  }
+};
+
+
+
 // @Description : Creates the actual scrape definition from the current sharedKrake object 
 //    at current level only
 // @param : callback:function

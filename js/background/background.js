@@ -321,6 +321,8 @@ var setPagination = function(params, callback) {
   
 }
 
+
+
 // @Description : deletes this column from the records
 var deleteColumn = function(params, callback) {
 
@@ -580,12 +582,16 @@ chrome.runtime.onMessage.addListener(
       case "add_pagination":
         sessionManager.goToNextState(request.params.values.state);
         sendResponse({status: 'success', session: sessionManager, sharedKrake: sharedKrake});
-      break;      
+      break;
       
       case "set_pagination":
         setPagination(request.params, sendResponse);
       break;
       
+      case "remove_pagination":
+        curr_SKH.unsetNextPager();
+      break;
+
       case "add_nested_krake":
         // TODO : To Extend      
       break;      
