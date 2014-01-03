@@ -132,45 +132,51 @@ var UIElementSelector = {
         break;
 
         case 'selection_addition' :
-          chrome.extension.sendMessage({ action:"edit_current_column", params: { attribute:"xpath", values:params }}, function(response) {
-            if(response.status == 'success') {
-              var sessionManager = response.session;
-              UIElementSelector.updateColumnText(sessionManager.currentColumn.columnId, 1, elementText, elementPathResult.nodeName);
-              //console.log( JSON.stringify(sessionManager) ); 
+          chrome.extension.sendMessage({ 
+              action:"edit_column_xpath", 
+              params: { 
+                values:params
+              }
+            }, 
+            function(response) {
+              if(response.status == 'success') {
+                var sessionManager = response.session;
+                UIElementSelector.updateColumnText(sessionManager.currentColumn.columnId, 1, elementText, elementPathResult.nodeName);
+                //console.log( JSON.stringify(sessionManager) ); 
 
-              //send mixpanel request
-              MixPanelHelper.triggerMixpanelEvent(null, 'event_8');
+                //send mixpanel request
+                MixPanelHelper.triggerMixpanelEvent(null, 'event_8');
 
-              chrome.extension.sendMessage({ action:"match_pattern" }, function(response) {
+                chrome.extension.sendMessage({ action:"match_pattern" }, function(response) {
 
-                if(response.status == 'success') { 
+                  if(response.status == 'success') { 
+                    
+                    NotificationManager.showNotification([{
+                        type : 'info',
+                        title : Params.NOTIFICATION_TITLE_SAVE_SELECTIONS,
+                        message : Params.NOTIFICATION_MESSAGE_ADD_MORE_SELECTIONS,
+                        elements_to_highlight : [
+                          '#krake-column-control-' + response.column.columnId + ' .krake-control-button-save'
+                        ],
+                        anchor_element : '#krake-column-control-' + response.column.columnId + ' .krake-control-button-save'
+                        
+                      },{
+                        type : 'info',
+                        title : Params.NOTIFICATION_TITLE_ADD_MORE_SELECTIONS,
+                        message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS,
+                        position : {
+                          center : true
+                        }
+                                                              
+                    }]);
+
+                    //highlight all elements depicted by genericXpath
+                    UIElementSelector.highlightElements(response.column.url, response.column.genericXpath, response.column.colorCode);                  
                   
-                  NotificationManager.showNotification([{
-                      type : 'info',
-                      title : Params.NOTIFICATION_TITLE_SAVE_SELECTIONS,
-                      message : Params.NOTIFICATION_MESSAGE_ADD_MORE_SELECTIONS,
-                      elements_to_highlight : [
-                        '#krake-column-control-' + response.column.columnId + ' .krake-control-button-save'
-                      ],
-                      anchor_element : '#krake-column-control-' + response.column.columnId + ' .krake-control-button-save'
-                      
-                    },{
-                      type : 'info',
-                      title : Params.NOTIFICATION_TITLE_ADD_MORE_SELECTIONS,
-                      message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS,
-                      position : {
-                        center : true
-                      }
-                                                            
-                  }]);
-
-                  //highlight all elements depicted by genericXpath
-                  UIElementSelector.highlightElements(response.column.url, response.column.genericXpath, response.column.colorCode);                  
+                  }
+                });
                 
-                }
-              });
-              
-            }
+              }
           });
         break;
         

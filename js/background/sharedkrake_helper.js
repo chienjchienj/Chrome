@@ -114,47 +114,23 @@ SharedKrakeHelper.prototype.removeColumnFromSharedKrake = function(columns, colu
 /*
  * @Return: column:obj
  */
-SharedKrakeHelper.prototype.findColumnByKey = function(key, value) {
+SharedKrakeHelper.prototype.findColumnById = function(col_id) {
   var self = this;
-  return self.searchColumnByKey(self.SharedKrake.columns, key, value);
+  found_col = false;  
+  all_krakes_for_tab = records[self.tab_id].shared_krakes;
+  all_urls = Object.keys(all_krakes_for_tab);
+  for(var x = 0; x < all_urls.length; x++ ) {
+    curr_cols = all_krakes_for_tab[all_urls[x]].columns;
+    for(var y = 0; y < curr_cols.length ; y ++ ) {
+      curr_col = curr_cols[y];
+      if(col_id == curr_col.columnId) {
+        found_col = curr_col;
+      }      
+    }
+  }
+  return found_col;
 };
-
-
-
-SharedKrakeHelper.prototype.searchColumnByKey = function(columns, key, value) {
-  var self = this;    
-  //console.log('key := ' + key);
-  for(var i=0; i<columns.length; i++) {
-    //dirty hack, address this properly later
-    if(key == 'elementLink' && columns[i].selection[0] && columns[i].selection[0].elementLink == value) {
-      return columns[i];
-      
-    }else if(columns[i][key] == value) {
-      console.log('columns[i].selection[0].elementLink := ' + columns[i].selection[0].elementLink)
-      return columns[i];
-      
-    }
-  }
-  return null;
-};//eo searchColumn
   
-  
-SharedKrakeHelper.prototype.searchColumn = function(columns, columnId) {
-  var self = this;    
-  for(var i=0; i<columns.length; i++) {
-    if(columns[i].columnId==columnId) {
-      return columns[i];
-    }
-    /*
-    else{
-      var result = self.searchColumn(columns[i].options.columns, columnId);
-      if(result) return result;
-    }*/
-  }
-  return null;
-};//eo searchColumn
-  ///////////////////////////////////////////////
-
 
 
   /*

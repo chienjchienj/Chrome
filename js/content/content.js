@@ -122,9 +122,10 @@ var populateColumns = function(wrapper, columns, is_alien) {
       columns[i].url, 
       columns[i].genericXpath, 
       columns[i].colorCode );    
-    
+
     columns[i].is_alien = is_alien;
     wrapper.append(UIColumnFactory.recreateUIColumn(columns[i]));
+    Panel.attachEnterKeyEventToColumnTitle(columns[i].columnId);
     Panel.addBreadCrumbToColumn(columns[i]);
 
   }

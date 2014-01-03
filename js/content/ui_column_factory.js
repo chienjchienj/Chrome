@@ -68,6 +68,7 @@ var UIColumnFactory = {
     var breadcrumbId = "k_column-breadcrumb-" + columnId;
     var $breadcrumb = $("<div>", { id: breadcrumbId,
                                    class: "krake-breadcrumb k_panel" });
+
     column.is_alien && $breadcrumb.attr('title', 'go to page items were added').tooltip();
 
     var color_palette_id = "k_column-color-palette-" + columnId;
@@ -80,7 +81,9 @@ var UIColumnFactory = {
 
     column.is_alien && $wrapper.addClass('krake_is_alien');
 
-    var $columnName = $("<div>", { id: columnNameId, 
+    var $columnName = $("<div>", {  id: columnNameId, 
+                                    column_id: columnId,
+                                    contenteditable: "true",
                                     class: "krake-column-row krake-column-title k_panel",
                                     text: columnTitle });
 
@@ -124,7 +127,6 @@ var UIColumnFactory = {
       .append(
         $columnControl.append($detailPageLink).append($deleteButton)
       )
-
 
     return $wrapper;
 
@@ -248,8 +250,9 @@ var UIColumnFactory = {
                                    class: "krake-breadcrumb k_panel" });
 
     var $columnTitle = $("<div>", { id: columnTitleId, 
+                                    column_id: columnId,
                                     class: "krake-column-row krake-column-title k_panel",
-                                    contenteditable: "true", 
+                                    contenteditable: "true",
                                     "data-placeholder": Params.DEFAULT_COLUMN_NAME });
     
     var color_palette_id = "k_column-color-palette-" + column_obj.columnId;

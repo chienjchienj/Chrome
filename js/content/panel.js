@@ -226,29 +226,33 @@ var Panel = {
   attachEnterKeyEventToColumnTitle : function(columnId) {
     var identifier = "#krake-column-title-" + columnId;
 
-    var saveTitle = function(element, callback) {      
+    var saveTitle = function(element, callback) {    
       $(identifier).unbind('blur');
       $(identifier).text($(identifier).text());
       var newColumnTitle = $(identifier).text();
-      //self.updateBreadcrumbSegmentTitle(columnId, $.trim(newColumnTitle)); 
-      var params = { columnName : newColumnTitle }
-      chrome.extension.sendMessage({ action:"edit_current_column", params: { attribute:"column_name", values:params }}, 
+      chrome.extension.sendMessage({ 
+          action:"edit_column_title", 
+          params: { 
+            column_name: newColumnTitle,
+            column_id: $(identifier).attr("column_id")
+          }
+        },
         function(response) {
           if(response.status == 'success') {
             var selector = '#k_column-breadcrumb-' + columnId + ' a';
             var uriSelector = '#k_column-breadcrumb-' + columnId + ' a:nth-child(' + $(selector).length + ')' ;
             $(uriSelector).html( newColumnTitle );
             $(element).blur().next().focus();  return false;          
+          }
+          callback && callback(response.isCurrentColumn);
         }
-      });
-      callback && callback();    
+      );
       
     }
     
     var whenFocused = function() {
       // If user click on items on page without first having pressed enter
       $(identifier).blur(function(e) {
-        console.log('Blurring effect 314');
         var self = this;
         // when title has been already added to column title bar yet
         if( $(identifier).text().length > 0 ) {
@@ -268,21 +272,21 @@ var Panel = {
     
     $(identifier).keydown(function(e) {
       var self = this;
-      //e.preventDefault();
       e.stopPropagation(); // Ensures in page script does not hijack the keydown event
       
       // when the ENTER key was pressed
       if(e.which == 13) {
-        saveTitle(self, function() {
+        e.preventDefault();
+        saveTitle(self, function(toShow) {
+
           // Sends notification to click on elements on page
-          NotificationManager.showNotification({
+          toShow && NotificationManager.showNotification({
             type : 'info',
             title : Params.NOTIFICATION_TITLE_ADD_SELECTIONS,
             message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS,
-            position : {
-              center : true
-            }
+            position : { center : true }
           });         
+
         });   
       }
       
