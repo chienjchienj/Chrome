@@ -14,7 +14,6 @@
   this program. If not, see <http://www.gnu.org/licenses/>.
 
   Author:
-  Joseph Yang <sirjosephyang@krake.io>
   Gary Teh <garyjob@krake.io>  
 */
 
@@ -78,7 +77,6 @@ var NotificationManager = {
     
     // Shows the relevant notifications bubble as well as the glowing elements
     var showAll = function(params) {
-
       params.title = params.title || "";      
       if(params.elements_to_highlight) NotificationManager.showHints(params.elements_to_highlight);
       
@@ -103,38 +101,41 @@ var NotificationManager = {
       
       // positioning of notification box
       if(params.position && params.position.center) {
-        left_position = ( $(window).width() - bubble_dimensions.width ) / 2;
-        top_position = ( $(window).height() - bubble_dimensions.height - k_panel_dimensions.height ) / 2;
+        $(bubble).hide().css({
+          left : "50%" , top : "50%",
+          marginLeft: -1 * bubble_dimensions.width / 2,
+          marginTop: -1 * bubble_dimensions.height / 2,
+          position : "fixed"
+        }).fadeIn({ duration : 100 });
       
       } else if(params.position) {
         left_position = params.position.left;
-        top_position = params.position.top;        
+        top_position = params.position.top;
+        $(bubble).hide().css({ left : left_position , top : top_position, position : "fixed" }).fadeIn({ duration : 100 });
                 
       } else if(params.anchor_element) {
         var anchor_item_position = NotificationManager.getRelativeAttributes(params.anchor_element);
         left_position = anchor_item_position.left;
         top_position = anchor_item_position.top - bubble_dimensions.height - 30;
+        $(bubble).hide().css({ left : left_position , top : top_position, position : "fixed" }).fadeIn({ duration : 100 });
         
       } 
       
-      $(bubble).hide()
-                .css({ left : left_position , top : top_position, position : "fixed" })
-                .fadeIn({ duration : 100 });
                       
     } // eo showAll
 
     
     // if an array of notice_objs are given
+    console.log(notice_info);
     if (Object.prototype.toString.call( notice_info ) === '[object Array]' ) {
       for( var x = 0; x < notice_info.length ; x++ ) {
-        var notice_obj = notice_info[x];
-        showAll(notice_obj);
+        console.log(notice_info[x]);
+        showAll(notice_info[x]);
       }
       
     // when is single notification object
     } else {
-      var notice_obj = notice_info;
-      showAll(notice_obj);
+      showAll(notice_info);
       
     }
 

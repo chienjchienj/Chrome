@@ -312,7 +312,7 @@ var setPagination = function(params, callback) {
     sessionManager.goToNextState(); //current state := 'idle'
     
     if (callback && typeof(callback) === "function")  
-      callback({status: 'success', session: sessionManager, sharedKrake: SharedKrake }); 
+      callback({status: 'success', session: sessionManager, sharedKrake: sharedKrake }); 
       
   }catch(err) {
     console.log(err);
@@ -320,6 +320,8 @@ var setPagination = function(params, callback) {
   }  
   
 }
+
+
 
 // @Description : deletes this column from the records
 var deleteColumn = function(params, callback) {
@@ -348,33 +350,28 @@ var deleteColumn = function(params, callback) {
 
 
 /*
- * @Description : Adding more data to this particular column
+ * @Description : Updates the title of a column
+ * @Param: params:object { values:params } 
+ */
+var editColumnTitle = function(params, callback) {
+
+  current_col = curr_SKH.findColumnById(params.column_id) || sessionManager.currentColumn;
+  is_curr = (sessionManager.currentColumn && sessionManager.currentColumn.columnId == params.column_id)
+  current_col.columnName = params.column_name;
+  callback && (typeof(callback) === "function") && 
+    callback({status: 'success', session: sessionManager, sharedKrake: SharedKrake, isCurrentColumn: is_curr }); 
+  
+};//eo editCurrentColumn
+
+
+/*
+ * @Description : Updates the Xpath value of a column
  * @Param: params:object { attribute:"xpath_1", values:params } 
  */
-var editCurrentColumn = function(params, callback) {
-  
-  //console.log('-- before "editCurrentColumn"');
-  //console.log( JSON.stringify(sessionManager) );
- 
-  switch(params.attribute) {
-    case 'xpath':
-      sessionManager.currentColumn.addSelection(params.values);
-      // sessionManager.goToNextState().goToNextState(); //current state := 'pre_selection_2'
-    break;
+var editCurrentColumnXpath = function(params, callback) {
 
-    case 'column_name':
-      console.log('=== 366 ===');
-      sessionManager.currentColumn.columnName = params.values.columnName;
-      console.log('=== 368 ===');
-    break;
-
-  }//eo switch
-  
-  //console.log('-- after "editCurrentColumn"');
-  //console.log( JSON.stringify(sessionManager) );
-
-  if (callback && typeof(callback) === "function")  
-    callback({status: 'success', session: sessionManager, sharedKrake: SharedKrake }); 
+  sessionManager.currentColumn.addSelection(params.values);
+  callback && (typeof(callback) === "function") && callback({status: 'success', session: sessionManager, sharedKrake: SharedKrake }); 
   
 };//eo editCurrentColumn
 
@@ -424,31 +421,6 @@ var matchPattern = function(callback) {
   if (callback && typeof(callback) === "function")   callback(response); 
 
 };//eo matchPattern
-
-
-
-var getColumnById = function(params, callback) {
-  try{
-    if(sessionManager.currentColumn && sessionManager.currentColumn.columnId == params.columnId) {
-      if (callback && typeof(callback) === "function") 
-        callback({ status : 'success', column : sessionManager.currentColumn }); 
-    }else{
-      //search in sharedKrake for column
-      var result = curr_SKH.findColumnByKey('columnId', params.columnId);
-      
-      if(result) {
-        if (callback && typeof(callback) === "function") 
-          callback({ status : 'success', column: result }); 
-      }else{
-        if (callback && typeof(callback) === "function") 
-          callback({ status : 'error' }); 
-      }    
-    }//eo if-else
-    
-  }catch(err) {
-    console.log(err);
-  }
-};//eo getColumnById
 
 
 
@@ -580,23 +552,27 @@ chrome.runtime.onMessage.addListener(
       case "add_pagination":
         sessionManager.goToNextState(request.params.values.state);
         sendResponse({status: 'success', session: sessionManager, sharedKrake: sharedKrake});
-      break;      
+      break;
       
       case "set_pagination":
         setPagination(request.params, sendResponse);
       break;
       
+      case "remove_pagination":
+        curr_SKH.unsetNextPager();
+      break;
+
       case "add_nested_krake":
         // TODO : To Extend      
+      break;
+
+      case 'edit_column_title':
+        editColumnTitle(request.params, sendResponse);
+      break;
+
+      case 'edit_column_xpath':
+        editCurrentColumnXpath(request.params, sendResponse);
       break;      
-
-      case 'get_column_by_id':
-        getColumnById(request.params, sendResponse);
-      break;
-
-      case 'edit_current_column':
-        editCurrentColumn(request.params, sendResponse);
-      break;
 
       case 'delete_column':
         deleteColumn(request.params, sendResponse);

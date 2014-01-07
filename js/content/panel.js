@@ -14,7 +14,6 @@
   this program. If not, see <http://www.gnu.org/licenses/>.
 
   Author:
-  Joseph Yang <sirjosephyang@krake.io>
   Gary Teh <garyjob@krake.io>  
 */
 
@@ -214,75 +213,11 @@ var Panel = {
 
   },
   
-  
-  
+
+
   // @Description : Handles pagination button clicked event
   uiBtnEditPaginationClick : function() {
-    // if is still editing current column
-      // check if has already selected any stuff
-        // if has already selected stuff 
-        //    save
-        //    remove save button
-        //    show link if necessary
-        // if not
-        //    show error
-    // else if is idle at the moment
-    // show pager
-
-    /*
-    //remove save column button    
-    var columnIdentifier = "#krake-column-" + column.columnId; 
-    var selector = columnIdentifier + ' .krake-control-button-save';
-    $(selector).remove();    
-    */
-    
-    var showIt = function() {
-      PaginationHandler.selectNextPager(); // eo showPagination
-    }    
-    
-    // checks the status first
-    chrome.extension.sendMessage({ action: "get_session"}, function(response) {
-      
-      var sessionManager = response.session;
-      var sharedKrake = response.sharedKrake;
-      
-      // when is in selection mode
-      if(sessionManager.currentState == 'selection_addition') {
-        
-        // When there is at least 1 selection for current column suffice
-        if (sessionManager.currentColumn.selections.length > 0) {
-          
-          chrome.extension.sendMessage({ action: "save_column" }, function(response) {
-            var columnIdentifier = "#krake-column-" + sessionManager.currentColumn.columnId;
-            var selector = columnIdentifier + ' .krake-control-button-save';
-            $(selector).remove();   // removes the save button
-            $('.tooltip').remove(); // remove visible tool tip just in case
-            
-            // shows the page link if current selected set of elements are hyperlink
-            var $detailPageLink = PageDivingHandler.showLink(sessionManager.currentColumn);
-            showIt();
-            
-          });
-        
-        // When no selections have been made for this column yet.
-        } else {
-          NotificationManager.showNotification({
-            type : 'error',
-            title : Params.NOTIFICATION_TITLE_SAVE_COLUMN_FAILED,
-            message : Params.NOTIFICATION_MESSAGE_SAVE_COLUMN_FAILED,
-            anchor_element : "#krake-column-" + sessionManager.currentColumn.columnId
-          });
-          
-        }
-      
-      // when is currently idle
-      } else {
-        showIt();
-                
-      }
-      
-    });    
-    
+    PaginationHandler.processEvent();
     
   },
 
@@ -291,29 +226,33 @@ var Panel = {
   attachEnterKeyEventToColumnTitle : function(columnId) {
     var identifier = "#krake-column-title-" + columnId;
 
-    var saveTitle = function(element, callback) {      
+    var saveTitle = function(element, callback) {    
       $(identifier).unbind('blur');
       $(identifier).text($(identifier).text());
       var newColumnTitle = $(identifier).text();
-      //self.updateBreadcrumbSegmentTitle(columnId, $.trim(newColumnTitle)); 
-      var params = { columnName : newColumnTitle }
-      chrome.extension.sendMessage({ action:"edit_current_column", params: { attribute:"column_name", values:params }}, 
+      chrome.extension.sendMessage({ 
+          action:"edit_column_title", 
+          params: { 
+            column_name: newColumnTitle,
+            column_id: $(identifier).attr("column_id")
+          }
+        },
         function(response) {
           if(response.status == 'success') {
             var selector = '#k_column-breadcrumb-' + columnId + ' a';
             var uriSelector = '#k_column-breadcrumb-' + columnId + ' a:nth-child(' + $(selector).length + ')' ;
             $(uriSelector).html( newColumnTitle );
             $(element).blur().next().focus();  return false;          
+          }
+          callback && callback(response.isCurrentColumn);
         }
-      });
-      callback && callback();    
+      );
       
     }
     
     var whenFocused = function() {
       // If user click on items on page without first having pressed enter
       $(identifier).blur(function(e) {
-        console.log('Blurring effect 314');
         var self = this;
         // when title has been already added to column title bar yet
         if( $(identifier).text().length > 0 ) {
@@ -333,21 +272,21 @@ var Panel = {
     
     $(identifier).keydown(function(e) {
       var self = this;
-      //e.preventDefault();
       e.stopPropagation(); // Ensures in page script does not hijack the keydown event
       
       // when the ENTER key was pressed
       if(e.which == 13) {
-        saveTitle(self, function() {
+        e.preventDefault();
+        saveTitle(self, function(toShow) {
+
           // Sends notification to click on elements on page
-          NotificationManager.showNotification({
+          toShow && NotificationManager.showNotification({
             type : 'info',
             title : Params.NOTIFICATION_TITLE_ADD_SELECTIONS,
             message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS,
-            position : {
-              center : true
-            }
+            position : { center : true }
           });         
+
         });   
       }
       

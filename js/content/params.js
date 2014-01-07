@@ -42,7 +42,10 @@ var Params = {
   
   // TO REFACTOR OUT OF SYSTEM
   NOTIFICATION_TITLE_NO_COLUMN_FAILED : 'No columns created yet',
-  NOTIFICATION_MESSAGE_NO_COLUMN_FAILED : 'Please ensure the item selection is completed before saving the column'
-  // END  
+  NOTIFICATION_MESSAGE_NO_COLUMN_FAILED : 'Please ensure the item selection is completed before saving the column',
+  // END
+
+  NEXT_PAGE_BUTTON_NOT_SET_DESC : 'Add Pagination',
+  NEXT_PAGE_BUTTON_SET_DESC : 'Remove Pagination'
     
 };//eo Params

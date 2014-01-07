@@ -57,7 +57,7 @@ var hidePanel = function() {
 };
 
 
-
+// @Description : Loads the hyperlinks found within the Krake panel for linking to other mapped pages from this one
 var reloadKrakeNavigation = function() {
   chrome.extension.sendMessage({ action: "get_ancestry" },  function(response) { 
     if(response.ancestry) {
@@ -72,21 +72,28 @@ var reloadKrakeNavigation = function() {
 
       }
     }
-  });  
+  });
 }
 
 
-// @Description : In case there was a page reload, populates the panel 
-//   with data from previously existing column in the Krake definitions of theinjectKrakeJson
-//   current Tab.
-var reloadExistingColumns = function() {
+// @Description : In case there was a page reload, populates the panel and the current page
+//   with data from previously defined Krake definitions for this
+//   current Tab if it exist
+var reloadExistingKrake = function() {
   chrome.extension.sendMessage({ action: "get_all_shared_krakes" },  function(response) { 
     var wrapper = $("#inner-wrapper");
     
-    // Populates the current pages columns first
-    var curr_page_shared_krakes = response.sharedKrakes[document.location.href].columns;
-    populateColumns(wrapper, curr_page_shared_krakes);    
-    delete response.sharedKrakes[document.location.href];
+    if(response.sharedKrakes[document.location.href]) {
+      var curr_page_krake = response.sharedKrakes[document.location.href];
+
+      // Populates the next page 
+      curr_page_krake.next_page && curr_page_krake.next_page.xpath && PaginationHandler.setNextPager(curr_page_krake.next_page.xpath);
+
+      // Populates the current pages columns first      
+      populateColumns(wrapper, curr_page_krake.columns);
+      delete response.sharedKrakes[document.location.href];
+
+    }
 
     // Populates other pages columns later
     var all_other_pages = Object.keys(response.sharedKrakes);
@@ -99,7 +106,7 @@ var reloadExistingColumns = function() {
     }
         
   });
-};//eo reloadExistingColumns
+};//eo reloadExistingKrake
 
 
 
@@ -115,9 +122,10 @@ var populateColumns = function(wrapper, columns, is_alien) {
       columns[i].url, 
       columns[i].genericXpath, 
       columns[i].colorCode );    
-    
+
     columns[i].is_alien = is_alien;
     wrapper.append(UIColumnFactory.recreateUIColumn(columns[i]));
+    Panel.attachEnterKeyEventToColumnTitle(columns[i].columnId);
     Panel.addBreadCrumbToColumn(columns[i]);
 
   }
@@ -237,7 +245,7 @@ chrome.extension.onMessage.addListener(
           UIElementSelector.init();
           NotificationManager.init(behavioral_mode);          
           Panel.init();
-          reloadExistingColumns();
+          reloadExistingKrake();
           reloadKrakeNavigation();
 
         }//eo if
@@ -277,7 +285,7 @@ if( !isKrakeDomain() ) {
   chrome.extension.sendMessage({ action:'inject_krake' }, function(response) {
     if(response.status == 'success') {
       response.krakeDefinition.client_version = chrome.runtime.getManifest().version;
-      $('#krake_content').html(JSON.format(response.krakeDefinition));        
+      $('#krake_content').html(JSON.format(response.krakeDefinition));
       $('#krake_name').val(response.krakeTitle);
     }
   });

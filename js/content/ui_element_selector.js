@@ -15,7 +15,6 @@
 
   Author:
   Gary Teh <garyjob@krake.io>   
-  Joseph Yang <sirjosephyang@krake.io>
 
 */
 
@@ -43,7 +42,8 @@ var UIElementSelector = {
     if (this.tagName != 'body') {
       this.style.outline = '4px solid ' + UIElementSelector.highLightColor; 
     }
-    return false; //preventDefault & stopPropogation
+    e.preventDefault();
+    e.stopPropagation();    
   },
   
   // @Description : attached events to DOM elements that are not part of the krake panel
@@ -112,7 +112,7 @@ var UIElementSelector = {
           
           // sets the xpath for the next_page operator & hides the next pager notification message
           chrome.extension.sendMessage({ action:'set_pagination', params: { values:params}}, function(response) {
-            // UIElementSelector.mode = 'select_element';
+
             NotificationManager.showNotification({
               type : 'info',
               title : Params.NOTIFICATION_TITLE_SAVED_SELECTIONS,
@@ -122,51 +122,61 @@ var UIElementSelector = {
               ],
               anchor_element : '#panel-left button#btn-create-list, #panel-left button#btn-done'
             });// eo showNotification
+
+            PaginationHandler.setNextPager(response.sharedKrake.next_page.xpath);
+            // UIElementSelector.highlightElements(document.URL, response.sharedKrake.next_page.xpath, " k_highlight_next_page");
+            // UIElementSelector.setHighLightColor(false);
             
           });// eo sendMessage
           
         break;
 
         case 'selection_addition' :
-          chrome.extension.sendMessage({ action:"edit_current_column", params: { attribute:"xpath", values:params }}, function(response) {
-            if(response.status == 'success') {
-              var sessionManager = response.session;
-              UIElementSelector.updateColumnText(sessionManager.currentColumn.columnId, 1, elementText, elementPathResult.nodeName);
-              //console.log( JSON.stringify(sessionManager) ); 
+          chrome.extension.sendMessage({ 
+              action:"edit_column_xpath", 
+              params: { 
+                values:params
+              }
+            }, 
+            function(response) {
+              if(response.status == 'success') {
+                var sessionManager = response.session;
+                UIElementSelector.updateColumnText(sessionManager.currentColumn.columnId, 1, elementText, elementPathResult.nodeName);
+                //console.log( JSON.stringify(sessionManager) ); 
 
-              //send mixpanel request
-              MixPanelHelper.triggerMixpanelEvent(null, 'event_8');
+                //send mixpanel request
+                MixPanelHelper.triggerMixpanelEvent(null, 'event_8');
 
-              chrome.extension.sendMessage({ action:"match_pattern" }, function(response) {
+                chrome.extension.sendMessage({ action:"match_pattern" }, function(response) {
 
-                if(response.status == 'success') { 
+                  if(response.status == 'success') { 
+                    
+                    NotificationManager.showNotification([{
+                        type : 'info',
+                        title : Params.NOTIFICATION_TITLE_SAVE_SELECTIONS,
+                        message : Params.NOTIFICATION_MESSAGE_ADD_MORE_SELECTIONS,
+                        elements_to_highlight : [
+                          '#krake-column-control-' + response.column.columnId + ' .krake-control-button-save'
+                        ],
+                        anchor_element : '#krake-column-control-' + response.column.columnId + ' .krake-control-button-save'
+                        
+                      },{
+                        type : 'info',
+                        title : Params.NOTIFICATION_TITLE_ADD_MORE_SELECTIONS,
+                        message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS,
+                        position : {
+                          center : true
+                        }
+                                                              
+                    }]);
+
+                    //highlight all elements depicted by genericXpath
+                    UIElementSelector.highlightElements(response.column.url, response.column.genericXpath, response.column.colorCode);                  
                   
-                  //highlight all elements depicted by genericXpath
-                  UIElementSelector.highlightElements(response.column.url, response.column.genericXpath, response.column.colorCode);
-                  
-                  NotificationManager.showNotification([{
-                      type : 'info',
-                      title : Params.NOTIFICATION_TITLE_SAVE_SELECTIONS,
-                      message : Params.NOTIFICATION_MESSAGE_ADD_MORE_SELECTIONS,
-                      elements_to_highlight : [
-                        '#krake-column-control-' + response.column.columnId + ' .krake-control-button-save'
-                      ],
-                      anchor_element : '#krake-column-control-' + response.column.columnId + ' .krake-control-button-save'
-                      
-                    },{
-                      type : 'info',
-                      title : Params.NOTIFICATION_TITLE_ADD_MORE_SELECTIONS,
-                      message : Params.NOTIFICATION_MESSAGE_PRE_SELECTIONS,
-                      position : {
-                        center : true
-                      }
-                                                            
-                  }]);
+                  }
+                });
                 
-                }
-              });
-              
-            }
+              }
           });
         break;
         
