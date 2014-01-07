@@ -90,14 +90,14 @@ var UIElementSelector = {
       // If is in the pre_next_pager_selection state always map to a hyperlink
       if(sessionManager.currentState == 'pre_next_pager_selection') {
         selected_dom_element = XpathHelper.findUpTag(self, 'A');
-        
+        var elementPathResult = XpathHelper.getElementXPath(selected_dom_element);
+
       } else {
         selected_dom_element = self;
+        var elementPathResult = XpathHelper.getElementXPath(selected_dom_element);
 
       }
-
-      var elementPathResult = XpathHelper.getElementXPath(selected_dom_element);
-      var elementText = XpathHelper.evaluateQuery(elementPathResult.xpath).text;
+      var elementText = XpathHelper.evaluateQuery(elementPathResult.xpath).text;      
 
       var params = {
         xpath : elementPathResult.xpath,
