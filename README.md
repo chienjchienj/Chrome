@@ -10,13 +10,12 @@ To check out the online engine go to
 
 # Backlog
 ## To Do list
-  - TODO : Column Name focused when [enter] is do nothing
   - TODO : To capture meta description content and use as description for Krake
   - TODO : Clean up the nested COOKIES none-sense
   - TODO : Ability to toggle bar at the bottom between visibility and non-visibility
 
 # Documentation
-This is how a single Shared Kraked data object for a page will look like
+This is how this browser extension stores a single Shared Kraked data object for a page in the background.
 
     {
       
