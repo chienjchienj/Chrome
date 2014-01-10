@@ -110,7 +110,7 @@ var XpathHelper =
     }
     catch(error)
     {
-      alert("Error occured while obtaining Xpath for the selected element.\nReason: " + error);
+      console.log("Error occured while obtaining Xpath for the selected element.\nReason: " + error);
     }
   },//eo getElementXPath
 
@@ -158,6 +158,7 @@ var XpathHelper =
   //    — Example : A, DIV, TR, TD
   // @return : parent_element:Object
   findUpTag : function(dom_element, tag) {
+    
     if (dom_element.tagName === tag)
         return dom_element;
         
@@ -174,3 +175,5 @@ var XpathHelper =
 
 };//eo XpathHelper
 
+// Export XpathHelper object of Jasmine testing
+try { module && (module.exports = XpathHelper); } catch(e){}

@@ -87,7 +87,7 @@ PaginationHandler.showPaginationOption = function() {
 PaginationHandler.startPaginationSelection = function() {
 
   // Temporary hard coding of pagination color 
-  UIElementSelector.setHighLightColor("#666666");
+  ColumnElementSelector.setHighLightColor("#666666");
 
   var params = {
     attribute : 'current_state',
@@ -117,8 +117,8 @@ PaginationHandler.startPaginationSelection = function() {
 
 // @Description : Highlights the next page element within the page as well as change the pagination button status
 PaginationHandler.setNextPager = function(xpath) {
-  UIElementSelector.highlightElements(document.URL, xpath, " k_highlight_next_page");
-  UIElementSelector.setHighLightColor(false);
+  ColumnElementSelector.highlightElements(document.URL, xpath, " k_highlight_next_page");
+  ColumnElementSelector.setHighLightColor(false);
   $("#btn-add-pagination").html(Params.NEXT_PAGE_BUTTON_SET_DESC);
 }
 

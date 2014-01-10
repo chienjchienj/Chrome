@@ -33,7 +33,7 @@
              }
    */
 
-var UIColumnFactory = {
+var ColumnDisplayFactory = {
   
   recreateUIColumn: function(column){
 
@@ -113,7 +113,7 @@ var UIColumnFactory = {
           if(response.status == 'success'){
             $(columnIdentifier).remove();
             //remove highlights
-            UIElementSelector.unHighLightElements(response.deletedColumn);
+            ColumnElementSelector.unHighLightElements(response.deletedColumn);
             
         }   
       });
@@ -176,11 +176,11 @@ var UIColumnFactory = {
             $(columnIdentifier).remove();
           
             //remove highlights
-            UIElementSelector.unHighLightElements(response.deletedColumn);
+            ColumnElementSelector.unHighLightElements(response.deletedColumn);
           
             // disables in-page element highlighting when its the current column that gets deleted
             if(response.session.currentState == 'idle') {
-              UIElementSelector.setHighLightColor(false);
+              ColumnElementSelector.setHighLightColor(false);
             
             }
           
@@ -212,9 +212,9 @@ var UIColumnFactory = {
           
           // remove visible tool tip just in case 
           $('.tooltip').remove();
-          //UIColumnFactory.addEditButton(columnId);
+          //ColumnDisplayFactory.addEditButton(columnId);
           
-          UIElementSelector.setHighLightColor(false);          
+          ColumnElementSelector.setHighLightColor(false);          
           NotificationManager.showNotification({
             type : 'info',
             title : Params.NOTIFICATION_TITLE_SAVED_SELECTIONS,
@@ -297,4 +297,4 @@ var UIColumnFactory = {
   }
 
 
-};//eo UIColumnFactory
+};//eo ColumnDisplayFactory
