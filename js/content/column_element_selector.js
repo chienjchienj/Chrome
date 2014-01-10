@@ -50,6 +50,9 @@ var ColumnElementSelector = {
   attachElementHighlightListeners : function() {    
     $('*:not(".k_panel")').bind('mouseover', ColumnElementSelector.mouseOver);
     $('*:not(".k_panel")').bind('mouseout', ColumnElementSelector.mouseOut);
+
+    $('*:not(".k_panel")').removeAttr("onclick");
+    $('*:not(".k_panel")').unbind("click");
     $('*:not(".k_panel")').bind('click', ColumnElementSelector.selectElement);
   },
 
