@@ -321,6 +321,27 @@ var setPagination = function(params, callback) {
   
 }
 
+// @Description : sets the pagination xpath to the current Krake
+// @param : wait_time:Integer
+// @param : callback:function({ 
+//   status : 'success' || 'error'
+//   session : sessionManager : Object
+// })
+var setWaitTime = function(wait_time, callback) {
+
+  try {
+    curr_SKH.setWaitTime(wait_time);
+    
+    if (callback && typeof(callback) === "function")  
+      callback({status: 'success', session: sessionManager, sharedKrake: sharedKrake }); 
+      
+  }catch(err) {
+    console.log(err);
+    if (callback && typeof(callback) === "function")  callback({status: 'error'});
+  }  
+  
+}
+
 
 
 // @Description : deletes this column from the records
@@ -547,6 +568,10 @@ chrome.runtime.onMessage.addListener(
       case "has_columns":
         hasColumns(request.params, sendResponse);
       break;      
+
+      case "set_wait_time":
+        setWaitTime(request.wait, sendResponse);
+      break;
       
       // transits into state for handling pagination selection event
       case "add_pagination":

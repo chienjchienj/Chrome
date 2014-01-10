@@ -206,6 +206,16 @@ SharedKrakeHelper.prototype.setNextPager = function(xpath) {
 
 
 
+// @Description : Given an integer sets it as the wait attribute
+// @param : wait_time:Integer
+SharedKrakeHelper.prototype.setWaitTime = function(wait_time) { 
+  var self = this;    
+  console.log('setWaitTime.wait := ' + wait_time);
+  sharedKrake.wait = wait_time;
+
+};//eo setNextPager
+
+
 
 // @Description : removes the next_page attribute for this current Shared_Krake
 // @param : xpath:String
@@ -215,56 +225,6 @@ SharedKrakeHelper.prototype.unsetNextPager = function() {
     delete sharedKrake.next_page;
   }
 };
-
-
-
-// @Description : Creates the actual scrape definition from the current sharedKrake object 
-//    at current level only
-// @param : callback:function
-//    status : String — 'success' || 'error'
-//    krake_json : Object
-SharedKrakeHelper.prototype.createScrapeDefinitionJSON = function(callback) {
-  var self = this;
-  
-  if(!self.SharedKrake.columns || self.SharedKrake.columns.length == 0) {
-    callback && callback( 'empty', false); 
-    return;
-   
-  }
-  
-  var krake_json = {};
-
-  for(var key in self.SharedKrake) {
-    var mappedColumnName = self.getMappedColumnName(key);
-
-    switch(key) {
-      case "origin_url":
-        krake_json[mappedColumnName] = self.SharedKrake[key];
-      break;
-
-      case "columns":
-        var result = self.createColumnsJson( self.SharedKrake.columns );
-        if(result)
-          krake_json["columns"] = result;
-      break;
-
-      case "next_page":
-        krake_json[key] = self.SharedKrake[key];
-      break;
-
-    }//eo switch
-
-  }//eo for
-
-  // sets the cookie object to the Krake definition
-  ch = new CookieHelper();
-  ch.setCookie(self.SharedKrake, function( status, sharedKrake ) {
-    self.SharedKrake = sharedKrake;
-    krake_json.cookies = self.SharedKrake.cookies;
-    callback && callback( 'success', krake_json);
-  });
-  
-};//eo createScrapeDefinitionJSON
 
 
 
@@ -372,6 +332,61 @@ SharedKrakeHelper.prototype.getKrakeDefinition = function(callback) {
   });
   
 }
+
+
+
+// @Description : Creates the actual scrape definition from the current sharedKrake object 
+//    at current level only
+// @param : callback:function
+//    status : String — 'success' || 'error'
+//    krake_json : Object
+SharedKrakeHelper.prototype.createScrapeDefinitionJSON = function(callback) {
+  var self = this;
+  
+  if(!self.SharedKrake.columns || self.SharedKrake.columns.length == 0) {
+    callback && callback( 'empty', false); 
+    return;
+   
+  }
+  
+  var krake_json = {};
+
+  for(var key in self.SharedKrake) {
+    var mappedColumnName = self.getMappedColumnName(key);
+
+    switch(key) {
+      case "origin_url":
+        krake_json[mappedColumnName] = self.SharedKrake[key];
+      break;
+
+      case "columns":
+        var result = self.createColumnsJson( self.SharedKrake.columns );
+        if(result)
+          krake_json["columns"] = result;
+      break;
+
+      case "next_page":
+        krake_json[key] = self.SharedKrake[key];
+      break;
+
+      case "wait":
+        krake_json[key] = self.SharedKrake[key];
+      break;      
+
+    }//eo switch
+
+  }//eo for
+
+  // sets the cookie object to the Krake definition
+  ch = new CookieHelper();
+  ch.setCookie(self.SharedKrake, function( status, sharedKrake ) {
+    self.SharedKrake = sharedKrake;
+    krake_json.cookies = self.SharedKrake.cookies;
+    callback && callback( 'success', krake_json);
+  });
+  
+};//eo createScrapeDefinitionJSON
+
 
 
 
