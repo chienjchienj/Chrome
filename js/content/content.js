@@ -31,8 +31,8 @@ var showPanel = function() {
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/params.js" } }); 
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/xpath_helper.js" } });
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/mixpanel_helper.js" } });
-        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/ui_element_selector.js" } });          
-        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/ui_column_factory.js" } });   
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/column_element_selector.js" } });          
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/column_display_factory.js" } });   
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/page_diving_handler.js" } });        
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/pagination_handler.js" } });
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/panel.js" } });         
@@ -118,13 +118,13 @@ var populateColumns = function(wrapper, columns, is_alien) {
   for(var i=0; i<columns.length; i++) {
       
     //highlight all elements depicted by genericXpath
-    !is_alien && UIElementSelector.highlightElements(
+    !is_alien && ColumnElementSelector.highlightElements(
       columns[i].url, 
       columns[i].genericXpath, 
       columns[i].colorCode );    
 
     columns[i].is_alien = is_alien;
-    wrapper.append(UIColumnFactory.recreateUIColumn(columns[i]));
+    wrapper.append(ColumnDisplayFactory.recreateUIColumn(columns[i]));
     Panel.attachEnterKeyEventToColumnTitle(columns[i].columnId);
     Panel.addBreadCrumbToColumn(columns[i]);
 
@@ -236,13 +236,13 @@ chrome.extension.onMessage.addListener(
 
       case "disable_krake":
         hidePanel();
-        UIElementSelector.restoreElementDefaultActions();
+        ColumnElementSelector.restoreElementDefaultActions();
       break;
 
       case "load_script_done":
 
         if(request.params.filename == "js/content/krake.js") {
-          UIElementSelector.init();
+          ColumnElementSelector.init();
           NotificationManager.init(behavioral_mode);          
           Panel.init();
           reloadExistingKrake();

@@ -200,7 +200,7 @@ SharedKrakeHelper.prototype.setNextPager = function(xpath) {
   console.log('setNextPager.xpath := ' + xpath);
   sharedKrake.next_page = sharedKrake.next_page || {};
   sharedKrake.next_page.xpath = xpath;
-  sharedKrake.next_page.clicked = true;
+  sharedKrake.next_page.click = true;
 
 };//eo setNextPager
 

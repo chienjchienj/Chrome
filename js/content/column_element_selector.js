@@ -21,13 +21,13 @@
 /*
  * This class handles the in page highlighting of elements
  */
-var UIElementSelector = {
+var ColumnElementSelector = {
   mode : 'select_element', //'select_element', 'select_next_pager'
 
   init : function() {
-    UIElementSelector.attachElementHighlightListeners();
-    UIElementSelector.highLightColor = false;
-    //UIElementSelector.highLightColor = false;
+    ColumnElementSelector.attachElementHighlightListeners();
+    ColumnElementSelector.highLightColor = false;
+    //ColumnElementSelector.highLightColor = false;
   },
   
   mouseOut : function(e) {
@@ -40,7 +40,7 @@ var UIElementSelector = {
     if ($(e.target).is('.k_panel') || $(e.target).parent('.k_panel').length ) return;
     
     if (this.tagName != 'body') {
-      this.style.outline = '4px solid ' + UIElementSelector.highLightColor; 
+      this.style.outline = '4px solid ' + ColumnElementSelector.highLightColor; 
     }
     e.preventDefault();
     e.stopPropagation();    
@@ -48,26 +48,26 @@ var UIElementSelector = {
   
   // @Description : attached events to DOM elements that are not part of the krake panel
   attachElementHighlightListeners : function() {    
-    $('*:not(".k_panel")').bind('mouseover', UIElementSelector.mouseOver);
-    $('*:not(".k_panel")').bind('mouseout', UIElementSelector.mouseOut);
-    $('*:not(".k_panel")').bind('click', UIElementSelector.selectElement);
+    $('*:not(".k_panel")').bind('mouseover', ColumnElementSelector.mouseOver);
+    $('*:not(".k_panel")').bind('mouseout', ColumnElementSelector.mouseOut);
+    $('*:not(".k_panel")').bind('click', ColumnElementSelector.selectElement);
   },
 
   // @Description : detach events from DOM elements that are not part of the krake panel
   detachElementHighlightListeners : function() {
-    $('*').unbind('mouseover', UIElementSelector.mouseOver);
-    $('*').unbind('mouseout', UIElementSelector.mouseOut);
-    $('*').unbind('click', UIElementSelector.selectElement);
+    $('*').unbind('mouseover', ColumnElementSelector.mouseOver);
+    $('*').unbind('mouseout', ColumnElementSelector.mouseOut);
+    $('*').unbind('click', ColumnElementSelector.selectElement);
   },
   
   // @Description : Sets the color to use during mouse over events
   setHighLightColor : function(hex_value) {
-    UIElementSelector.highLightColor = hex_value;
+    ColumnElementSelector.highLightColor = hex_value;
   },
   
 
   restoreElementDefaultActions : function() {
-    UIElementSelector.detachElementHighlightListeners();
+    ColumnElementSelector.detachElementHighlightListeners();
   },
 
   // @Description : Gets and sets the element Xpath to session when a click event occurs
@@ -124,8 +124,8 @@ var UIElementSelector = {
             });// eo showNotification
 
             PaginationHandler.setNextPager(response.sharedKrake.next_page.xpath);
-            // UIElementSelector.highlightElements(document.URL, response.sharedKrake.next_page.xpath, " k_highlight_next_page");
-            // UIElementSelector.setHighLightColor(false);
+            // ColumnElementSelector.highlightElements(document.URL, response.sharedKrake.next_page.xpath, " k_highlight_next_page");
+            // ColumnElementSelector.setHighLightColor(false);
             
           });// eo sendMessage
           
@@ -141,7 +141,7 @@ var UIElementSelector = {
             function(response) {
               if(response.status == 'success') {
                 var sessionManager = response.session;
-                UIElementSelector.updateColumnText(sessionManager.currentColumn.columnId, 1, elementText, elementPathResult.nodeName);
+                ColumnElementSelector.updateColumnText(sessionManager.currentColumn.columnId, 1, elementText, elementPathResult.nodeName);
                 //console.log( JSON.stringify(sessionManager) ); 
 
                 //send mixpanel request
@@ -171,7 +171,7 @@ var UIElementSelector = {
                     }]);
 
                     //highlight all elements depicted by genericXpath
-                    UIElementSelector.highlightElements(response.column.url, response.column.genericXpath, response.column.colorCode);                  
+                    ColumnElementSelector.highlightElements(response.column.url, response.column.genericXpath, response.column.colorCode);                  
                   
                   }
                 });
@@ -235,4 +235,4 @@ var UIElementSelector = {
     
   },
 
-};//eo UIElementSelector
+};//eo ColumnElementSelector

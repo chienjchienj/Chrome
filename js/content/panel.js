@@ -73,14 +73,14 @@ var Panel = {
         //only add UIColumn to panel once a logical column object is created in sessionManager
         if(response.status == 'success') {
           
-          Panel.uiPanelWrapper.prepend( UIColumnFactory.createUIColumn( response.session.currentColumn ) );
+          Panel.uiPanelWrapper.prepend( ColumnDisplayFactory.createUIColumn( response.session.currentColumn ) );
           Panel.attachEnterKeyEventToColumnTitle(newColumnId);
           Panel.addBreadCrumbToColumn( { columnId : newColumnId } );
 
           $('#krake-column-title-' + response.session.currentColumn.columnId).focus();
           
           // Attached detach event
-          UIElementSelector.setHighLightColor(response.session.currentColumn.colorHex);
+          ColumnElementSelector.setHighLightColor(response.session.currentColumn.colorHex);
           
           NotificationManager.showNotification({
             type : 'info',
