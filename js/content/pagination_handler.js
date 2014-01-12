@@ -1,7 +1,7 @@
 var PaginationHandler = {}
 
 // @Description : handles the event when the pagination button in the Wrapper panel is clicked 
-PaginationHandler.processEvent = function() {
+PaginationHandler.trigger = function() {
   
   // checks the status first
   chrome.extension.sendMessage({ action: "get_session"}, function(response) {
@@ -27,7 +27,7 @@ PaginationHandler.processEvent = function() {
           
           // shows the page link if current selected set of elements are hyperlink
           var $detailPageLink = PageDivingHandler.showLink(sessionManager.currentColumn);
-          PaginationHandler.startPaginationSelection();
+          PaginationHandler.start();
           
         });
       
@@ -44,7 +44,7 @@ PaginationHandler.processEvent = function() {
     
     // when is currently idle
     } else {
-      PaginationHandler.startPaginationSelection();
+      PaginationHandler.start();
               
     }
     
@@ -52,43 +52,10 @@ PaginationHandler.processEvent = function() {
 
 }
 
-// @Description : the prompt to allow users the ability to indicate if there is a pagination on this page
-PaginationHandler.showPaginationOption = function() {
-  
-  var self = this;
-  
-  //show prompt
-  NotificationManager.showOptionsYesNo({
-    title: Params.NOTIFICATION_TITLE_ACTIVATE_NEXT_PAGER,
-    message: Params.NOTIFICATION_MESSAGE_ACTIVATE_NEXT_PAGER,
-
-    // @Description : event is triggered when the 'yes' button is clicked
-    yesFunction : function(e) {
-      self.startPaginationSelection();
-    },
-    
-    // @Description : event is triggered when the 'no' button is clicked
-    noFunction : function(e) {
-      NotificationManager.showNotification({
-        type : 'info',
-        title : Params.NOTIFICATION_TITLE_SAVED_SELECTIONS,
-        message : Params.NOTIFICATION_MESSAGE_SAVED_SELECTIONS,
-        elements_to_highlight : [
-          '#panel-left button#btn-create-list, #panel-left button#btn-done'
-        ],
-        anchor_element : '#panel-left button#btn-create-list, #panel-left button#btn-done'
-      });      
-    } 
-  });
-
-}
-
 // @Description : Handles the event whereby user goes into the mode for selecting pagination
-PaginationHandler.startPaginationSelection = function() {
+PaginationHandler.start = function() {
 
-  // Temporary hard coding of pagination color 
-  ColumnElementSelector.setHighLightColor("#666666");
-
+  PaginationElementSelector.start("#666666");
   var params = {
     attribute : 'current_state',
     values : {
@@ -106,7 +73,7 @@ PaginationHandler.startPaginationSelection = function() {
   });
   
   // Adds the pagination declaration in the background
-  chrome.extension.sendMessage({ action:"add_pagination", params: params }, function(response) {
+  chrome.extension.sendMessage({ action:"start_pagination", params: params }, function(response) {
     if(response.status == 'success') {
       
     }
@@ -117,8 +84,8 @@ PaginationHandler.startPaginationSelection = function() {
 
 // @Description : Highlights the next page element within the page as well as change the pagination button status
 PaginationHandler.setNextPager = function(xpath) {
-  ColumnElementSelector.highlightElements(document.URL, xpath, " k_highlight_next_page");
-  ColumnElementSelector.setHighLightColor(false);
+  PaginationElementSelector.highlightElements(document.URL, xpath, " k_highlight_next_page");
+  PaginationElementSelector.stop();
   $("#btn-add-pagination").html(Params.NEXT_PAGE_BUTTON_SET_DESC);
 }
 

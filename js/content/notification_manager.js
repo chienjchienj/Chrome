@@ -126,7 +126,6 @@ var NotificationManager = {
 
     
     // if an array of notice_objs are given
-    console.log(notice_info);
     if (Object.prototype.toString.call( notice_info ) === '[object Array]' ) {
       for( var x = 0; x < notice_info.length ; x++ ) {
         console.log(notice_info[x]);

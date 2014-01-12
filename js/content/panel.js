@@ -39,7 +39,7 @@ var Panel = {
     // jQuery('#panel-left button').tooltip();
     
     Panel.uiBtnCreateList.bind('click', Panel.uiBtnCreateListClick);
-    Panel.uiBtnCreateList.bind('click', {eventNumber: 'event_4'}, MixPanelHelper.triggerMixpanelEvent);    
+    Panel.uiBtnCreateList.bind('click', {eventNumber: 'event_4'}, MixPanelHelper.fireEvent);    
     Panel.uiBtnEditPagination.bind('click', Panel.uiBtnEditPaginationClick);
     Panel.uiBtnDone.bind('click', Panel.uiBtnDoneClick);
     
@@ -78,10 +78,8 @@ var Panel = {
           Panel.addBreadCrumbToColumn( { columnId : newColumnId } );
 
           $('#krake-column-title-' + response.session.currentColumn.columnId).focus();
-          
-          // Attached detach event
-          ColumnElementSelector.setHighLightColor(response.session.currentColumn.colorHex);
-          
+          ColumnElementSelector.start(response.session.currentColumn.colorHex);
+
           NotificationManager.showNotification({
             type : 'info',
             title : Params.NOTIFICATION_TITLE_ENTER_COLUMN_NAME,
@@ -92,9 +90,7 @@ var Panel = {
             anchor_element : '#krake-column-title-' + response.session.currentColumn.columnId
           });
    
-        } else {
-          //show warning to user
-        }//eo if-else
+        }
       });
     }
     
@@ -102,40 +98,43 @@ var Panel = {
       var sessionManager = response.session;
       
       // when is in the mode for selecting new elements for inclusion into an existing column
-      if(sessionManager.currentState == 'selection_addition') {
-        
-        // when has already selected an item for the current column
-        if(sessionManager.currentColumn && sessionManager.currentColumn.selections && 
-          sessionManager.currentColumn.selections.length > 0) {
+      switch(sessionManager.currentState) {
+        case "selection_addition" : 
+          // when has already selected an item for the current column
+          if(sessionManager.currentColumn && sessionManager.currentColumn.selections && 
+            sessionManager.currentColumn.selections.length > 0) {
+              
+              chrome.extension.sendMessage({ action: "save_column" }, function(response) {
+                var columnIdentifier = "#krake-column-" + sessionManager.currentColumn.columnId; 
+                var selector = columnIdentifier + ' .krake-control-button-save';
+                $(selector).remove();
+                transitToNewList();
+              });
+              
+          } else {
             
-            // saves the current column
-            chrome.extension.sendMessage({ action: "save_column" }, function(response) {
-              //remove save column button
-              var columnIdentifier = "#krake-column-" + sessionManager.currentColumn.columnId; 
-              var selector = columnIdentifier + ' .krake-control-button-save';
-              $(selector).remove();
-              
-              // transit to new column
-              transitToNewList();
-              
+            NotificationManager.showNotification({
+              type : 'error',
+              title : Params.NOTIFICATION_TITLE_SAVE_COLUMN_FAILED,
+              message : Params.NOTIFICATION_MESSAGE_SAVE_COLUMN_FAILED,
+              anchor_element : "#krake-column-" + sessionManager.currentColumn.columnId
             });
             
-        } else {
-          
-          NotificationManager.showNotification({
-            type : 'error',
-            title : Params.NOTIFICATION_TITLE_SAVE_COLUMN_FAILED,
-            message : Params.NOTIFICATION_MESSAGE_SAVE_COLUMN_FAILED,
-            anchor_element : "#krake-column-" + sessionManager.currentColumn.columnId
-          });
-          
-        }
-        
-        
-      } else {
-        transitToNewList();
-        
-      }//eo if-else 
+          }        
+          break;
+
+        case "pre_next_pager_selection" : 
+          PaginationElementSelector.stop();
+          transitToNewList();
+          break;
+
+        case "idle" : 
+          transitToNewList();
+          break;
+
+        default:
+          console.log("In unknown state : " + sessionManager.currentState);
+      }
     });
   },  
 
@@ -146,7 +145,7 @@ var Panel = {
     
     var finished = function() {
       // send mixpanel request
-      MixPanelHelper.triggerMixpanelEvent(null, 'event_11');
+      MixPanelHelper.fireEvent(null, 'event_11');
       NotificationManager.hideAllMessages();
       chrome.extension.sendMessage({ action:'complete' }, function(response) {});
     }
@@ -217,7 +216,7 @@ var Panel = {
 
   // @Description : Handles pagination button clicked event
   uiBtnEditPaginationClick : function() {
-    PaginationHandler.processEvent();
+    PaginationHandler.trigger();
     
   },
 

@@ -28,18 +28,21 @@ var showPanel = function() {
     var panelWrapper = $('#k-panel-wrapper');
 
     panelWrapper.load(chrome.extension.getURL("html/panel.html"),function() {
-        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/params.js" } }); 
-        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/xpath_helper.js" } });
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/params.js" } });
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/mappers/xpath_mapper.js" } });
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/mappers/pagination_xpath_mapper.js" } });
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/mixpanel_helper.js" } });
-        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/column_element_selector.js" } });          
-        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/column_display_factory.js" } });   
-        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/page_diving_handler.js" } });        
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/selectors/element_selector.js" } });
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/selectors/column_element_selector.js" } });
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/selectors/pagination_element_selector.js" } });
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/column_display_factory.js" } });
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/page_diving_handler.js" } });     
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/pagination_handler.js" } });
-        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/panel.js" } });         
-        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/notification_manager.js" } });         
-        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/libs/bootstrap/bootstrap.min.js" } });   
-        chrome.extension.sendMessage({ action: "insert_css", params: { filename: "css/bootstrap.min.css" } });     
-        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/krake.js" } });        
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/panel.js" } });
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/notification_manager.js" } });
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/libs/bootstrap/bootstrap.min.js" } });
+        chrome.extension.sendMessage({ action: "insert_css", params: { filename: "css/bootstrap.min.css" } });
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/krake.js" } });
       }); 
   }//eo if
   
@@ -236,13 +239,13 @@ chrome.extension.onMessage.addListener(
 
       case "disable_krake":
         hidePanel();
-        ColumnElementSelector.restoreElementDefaultActions();
+        ColumnElementSelector.stop();
+        PaginationElementSelector.stop();
       break;
 
       case "load_script_done":
 
         if(request.params.filename == "js/content/krake.js") {
-          ColumnElementSelector.init();
           NotificationManager.init(behavioral_mode);          
           Panel.init();
           reloadExistingKrake();

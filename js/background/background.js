@@ -287,7 +287,7 @@ var newColumn = function(params, callback) {
   try{
 
     sessionManager.currentColumn = ColumnFactory.createColumn(params);
-    sessionManager.goToNextState();
+    sessionManager.goToNextState('selection_addition');
 
     if (callback && typeof(callback) === "function")  
       callback({status: 'success', session: sessionManager});  
@@ -314,7 +314,7 @@ var setPagination = function(params, callback) {
     if (callback && typeof(callback) === "function")  
       callback({status: 'success', session: sessionManager, sharedKrake: sharedKrake }); 
       
-  }catch(err) {
+  } catch(err) {
     console.log(err);
     if (callback && typeof(callback) === "function")  callback({status: 'error'});
   }  
@@ -574,7 +574,7 @@ chrome.runtime.onMessage.addListener(
       break;
       
       // transits into state for handling pagination selection event
-      case "add_pagination":
+      case "start_pagination":
         sessionManager.goToNextState(request.params.values.state);
         sendResponse({status: 'success', session: sessionManager, sharedKrake: sharedKrake});
       break;

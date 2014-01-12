@@ -36,7 +36,7 @@
 var ColumnDisplayFactory = {
   
   recreateUIColumn: function(column){
-
+    var self = this;
     var columnId = column.columnId;
     var type = column.columnType;
     var columnTitle = column.columnName;
@@ -46,41 +46,23 @@ var ColumnDisplayFactory = {
     var columnControlId =  "krake-column-control-" + columnId;
 
 
-    var $wrapper = $("<div>", { id: divKrakeColumnId, 
-                                class: "krake-column k_panel"});
-    
-
-                            
-    var $columnControl = $("<div>", { id: columnControlId,
-                                      class: "krake-column-control k_panel" });    
-                                      
+    var $wrapper = $("<div>", { id: divKrakeColumnId, class: "krake-column k_panel"});
+    var $columnControl = $("<div>", { id: columnControlId, class: "krake-column-control k_panel" });    
     var $detailPageLink = PageDivingHandler.getLink(column);
-
-    var editButtonImageUrl = "background-image: url(\"" +
-                               chrome.extension.getURL("images/edit.png") + 
-                              "\");";
-    var $editButton = $("<button>", { class: "k_panel krake-control-button krake-control-button-edit",
-                                      style:  editButtonImageUrl });
+    var editButtonImageUrl = "background-image: url(\"" + chrome.extension.getURL("images/edit.png") + "\");";
+    var $editButton = $("<button>", { class: "k_panel krake-control-button krake-control-button-edit", style:  editButtonImageUrl });
     $editButton.bind('click', function(){});
 
-
-
     var breadcrumbId = "k_column-breadcrumb-" + columnId;
-    var $breadcrumb = $("<div>", { id: breadcrumbId,
-                                   class: "krake-breadcrumb k_panel" });
-
+    var $breadcrumb = $("<div>", { id: breadcrumbId, class: "krake-breadcrumb k_panel" });
     column.is_alien && $breadcrumb.attr('title', 'go to page items were added').tooltip();
 
     var color_palette_id = "k_column-color-palette-" + columnId;
     var color_code = column.colorCode;
     column.is_alien && (color_code = '')
-    var $color_palette = $("<div>", { 
-        id: color_palette_id,
-        class: "krake-column-color-palette k_panel " + color_code,
-      });
+    var $color_palette = $("<div>", { id: color_palette_id, class: "krake-column-color-palette k_panel " + color_code });
 
     column.is_alien && $wrapper.addClass('krake_is_alien');
-
     var $columnName = $("<div>", {  id: columnNameId, 
                                     column_id: columnId,
                                     contenteditable: "true",
@@ -88,37 +70,7 @@ var ColumnDisplayFactory = {
                                     text: columnTitle });
 
 
-
-    var deleteButtonImageUrl = "background-image: url(\"" +
-                               chrome.extension.getURL("images/bin.png") + 
-                               "\");";
-    var $deleteButton = $("<button>", { class: "krake-control-button k_panel krake-control-button-delete",
-                                        style: deleteButtonImageUrl });
-    $deleteButton.bind('click', function(){
-      //send mixpanel request
-      MixPanelHelper.triggerMixpanelEvent(null, 'event_10');
-
-      NotificationManager.hideAllMessages();
-
-      var columnIdentifier = "#krake-column-" + columnId; 
-      chrome.extension.sendMessage({ 
-          action: "delete_column", 
-          params: { 
-            columnId : columnId,
-            url : column.url
-          } 
-        }, 
-        function(response){
-          
-          if(response.status == 'success'){
-            $(columnIdentifier).remove();
-            //remove highlights
-            ColumnElementSelector.unHighLightElements(response.deletedColumn);
-            
-        }   
-      });
-    });
-    $deleteButton.tooltip();    
+    $deleteButton = self.createDeleteButton(columnId, column.url);
     $columnControl = $columnControl.append($deleteButton);
 
     $wrapper.append($color_palette)
@@ -136,6 +88,7 @@ var ColumnDisplayFactory = {
 
   createUIColumn: function(column_obj)
   {
+    var self = this;
     var type = column_obj.columnType;
     var columnId = column_obj.columnId;
     
@@ -149,52 +102,7 @@ var ColumnDisplayFactory = {
     var $columnControl = $("<div>", {  id: columnControlId,
                                        class: "krake-column-control k_panel" });
     
-    //delete button
-    var deleteButtonImageUrl = "background-image: url(\"" +
-                               chrome.extension.getURL("images/bin.png") + 
-                              "\");";
-
-    var $deleteButton = $("<button>", { class: "k_panel krake-control-button krake-control-button-delete",
-                                        title: "delete column",
-                                        style:  deleteButtonImageUrl });
-
-    $deleteButton.bind('click', function(){
-      //send mixpanel request
-      MixPanelHelper.triggerMixpanelEvent(null, 'event_10');
-
-      NotificationManager.hideAllMessages();
-
-      var columnIdentifier = "#krake-column-" + columnId; 
-      chrome.extension.sendMessage({ 
-          action: "delete_column", 
-          params: { 
-            columnId: columnId ,
-            url : column_obj.url
-          } 
-        }, function(response){
-          if(response.status == 'success'){
-            $(columnIdentifier).remove();
-          
-            //remove highlights
-            ColumnElementSelector.unHighLightElements(response.deletedColumn);
-          
-            // disables in-page element highlighting when its the current column that gets deleted
-            if(response.session.currentState == 'idle') {
-              ColumnElementSelector.setHighLightColor(false);
-            
-            }
-          
-          }   
-      });
-    });
-    $deleteButton.tooltip();
-
-    //save button
-    /*
-    var saveButtonImageUrl = "background-image: url(\"" +
-                               chrome.extension.getURL("images/save.png") + 
-                              "\");";*/
-
+    $deleteButton = self.createDeleteButton(columnId, column_obj.url);    
     var $saveButton = $("<button>", { class: "k_panel krake-control-button-save k_btn",
                                       html : "Save",
                                       /* style:  saveButtonImageUrl, */
@@ -203,8 +111,11 @@ var ColumnDisplayFactory = {
     $saveButton.bind('click', function(){
       chrome.extension.sendMessage({ action: "save_column" }, function(response){
         if(response.status == 'success'){
+
+          ColumnElementSelector.stop();
+          
           //send mixpanel request
-          MixPanelHelper.triggerMixpanelEvent(null, 'event_9');
+          MixPanelHelper.fireEvent(null, 'event_9');
 
           var columnIdentifier = "#krake-column-" + columnId;
           var selector = columnIdentifier + ' .krake-control-button-save';
@@ -256,22 +167,14 @@ var ColumnDisplayFactory = {
                                     "data-placeholder": Params.DEFAULT_COLUMN_NAME });
     
     var color_palette_id = "k_column-color-palette-" + column_obj.columnId;
-    var $color_palette = $("<div>", { 
-        id: color_palette_id,
-        class: "krake-column-color-palette k_panel " + column_obj.colorCode,
-      });
+    var $color_palette = $("<div>", { id: color_palette_id, class: "krake-column-color-palette k_panel " + column_obj.colorCode });
     
     $columnControl = $columnControl.append($deleteButton);
 
-    $wrapper.append($color_palette)
-      .append($columnTitle)
-      .append($breadcrumb)
-      .append(
-        $columnControl.append($deleteButton)
-            .append($saveButton)
-        );
+    $wrapper.append($color_palette).append($columnTitle).append($breadcrumb).append(
+        $columnControl.append($deleteButton).append($saveButton)
+      );
         
-
     return $wrapper;
   },//eo createColumn
    
@@ -279,12 +182,8 @@ var ColumnDisplayFactory = {
    
   addEditButton : function(columnId){
     //edit button
-    var editButtonImageUrl = "background-image: url(\"" +
-                               chrome.extension.getURL("images/edit.png") + 
-                              "\");";
-
-    var $editButton = $("<button>", { class: "k_panel krake-control-button krake-control-button-edit",
-                                      style:  editButtonImageUrl });
+    var editButtonImageUrl = "background-image: url(\"" + chrome.extension.getURL("images/edit.png") + "\");";
+    var $editButton = $("<button>", { class: "k_panel krake-control-button krake-control-button-edit", style:  editButtonImageUrl });
 
     $editButton.bind('click', function(){
       chrome.extension.sendMessage({ action: "stage_column", params : { columnId : columnId } }, function(response){
@@ -294,7 +193,36 @@ var ColumnDisplayFactory = {
 
     var selector = "#krake-column-control-" + columnId; 
     $(selector).append($editButton);
+  },
+
+
+  createDeleteButton : function(column_id, column_url) {
+    var self = this;
+    var $deleteButton = $("<button>", { 
+      class: "krake-control-button k_panel krake-control-button-delete", 
+      style: "background-image: url(\"" + chrome.extension.getURL("images/bin.png") + "\");",
+      column_id: column_id,
+      column_url: column_url
+    });
+
+    $deleteButton.bind('click', function() {
+      NotificationManager.hideAllMessages();
+      chrome.extension.sendMessage({ action: "delete_column", params: { columnId : column_id, url : column_url }}, function(response) {
+        if(response.status == 'success'){
+          $("#krake-column-" + column_id).remove();
+          ColumnElementSelector.unHighLightElements(response.deletedColumn);
+          if(response.session.currentState == 'idle') {
+            ColumnElementSelector.stop();
+          }
+        }
+      });
+
+    });
+
+    $deleteButton.tooltip();
+    return $deleteButton;
   }
+
 
 
 };//eo ColumnDisplayFactory
