@@ -10,6 +10,7 @@ To check out the online engine go to
 
 # Backlog
 ## To Do list
+  - TODO : solve the bug of clicking on column non-select after clicking on pagination
   - TODO : To capture meta description content and use as description for Krake
   - TODO : Clean up the nested COOKIES none-sense
   - TODO : Ability to toggle bar at the bottom between visibility and non-visibility

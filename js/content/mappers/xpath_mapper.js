@@ -1,6 +1,6 @@
-var XpathHelper = 
+var XpathMapper = 
 {
-  triggerMixpanelEvent : function(e, eventNumber){
+  fireEvent : function(e, eventNumber){
     var _eventNumber = e? e.data.eventNumber : eventNumber;
     chrome.extension.sendMessage({ action: "fire_mixpanel_event", 
                                    params: { eventNumber : _eventNumber } });
@@ -83,13 +83,13 @@ var XpathHelper =
       var nodename = element.nodeName.toLowerCase();
       
       var link = nodename=="a"? element.href : nodename=="img"? element.src : null;
-      var xpath = XpathHelper.getElementTreeXPath(element);
+      var xpath = XpathMapper.getElementTreeXPath(element);
       
       // In case its ancestor is a hyperlink
       if(!link) {
-        var ancestor_link_ele = XpathHelper.findUpTag(element, 'A');
+        var ancestor_link_ele = XpathMapper.findUpTag(element, 'A');
         if(ancestor_link_ele) {
-          var hyperlink_xpath = XpathHelper.getElementTreeXPath(ancestor_link_ele);
+          var hyperlink_xpath = XpathMapper.getElementTreeXPath(ancestor_link_ele);
           link = ancestor_link_ele.href
         }
       
@@ -173,7 +173,7 @@ var XpathHelper =
   }
   
 
-};//eo XpathHelper
+};//eo XpathMapper
 
-// Export XpathHelper object of Jasmine testing
-try { module && (module.exports = XpathHelper); } catch(e){}
+// Export XpathMapper object of Jasmine testing
+try { module && (module.exports = XpathMapper); } catch(e){}
