@@ -210,7 +210,7 @@ var ColumnDisplayFactory = {
       chrome.extension.sendMessage({ action: "delete_column", params: { columnId : column_id, url : column_url }}, function(response) {
         if(response.status == 'success'){
           $("#krake-column-" + column_id).remove();
-          ColumnElementSelector.unHighlightElements(response.deletedColumn);
+          ColumnElementSelector.unHighLightElements(response.deletedColumn);
           if(response.session.currentState == 'idle') {
             ColumnElementSelector.stop();
           }

@@ -114,7 +114,7 @@ var ElementSelector = {
 
   // @Description : removes the DOM elements highlighted given a column detail
   // @param : column:Object
-  unHighlightElements : function(column) {
+  unHighLightElements : function(column) {
     
     if(document.URL != column.url) return;
        
