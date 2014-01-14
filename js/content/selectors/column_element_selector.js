@@ -79,7 +79,7 @@ ColumnElementSelector.selectElement = function(e) {
             }]);
 
             //highlight all elements depicted by genericXpath
-            self.highlightElements(response.column.url, response.column.genericXpath, response.column.colorCode);                  
+            self.highlightXpathElements(response.column.url, response.column.genericXpath, response.column.colorCode);                  
           
           }
         });

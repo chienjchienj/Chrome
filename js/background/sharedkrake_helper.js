@@ -194,13 +194,28 @@ SharedKrakeHelper.prototype.getBreadcrumbColumnArray = function(columns, columnI
 
 
 // @Description : Given an Xpath String sets it as the xpath attribute in the next_page attribute for this current Shared_Krake
-// @param : xpath:String
-SharedKrakeHelper.prototype.setNextPager = function(xpath) { 
+// @param : value:Object
+//    xpath:String
+//    dom_query:String
+SharedKrakeHelper.prototype.setNextPager = function(values) { 
   var self = this;    
-  console.log('setNextPager.xpath := ' + xpath);
-  sharedKrake.next_page = sharedKrake.next_page || {};
-  sharedKrake.next_page.xpath = xpath;
-  sharedKrake.next_page.click = true;
+  if (values.xpath) {
+    console.log('setNextPager.xpath := ' + values.xpath);
+    sharedKrake.next_page = sharedKrake.next_page || {};
+    sharedKrake.next_page.xpath = values.xpath;
+    sharedKrake.next_page.click = true;
+
+  } else if(values.dom_query) {
+    console.log('setNextPager.dom_query := ' + values.dom_query);
+    sharedKrake.next_page = sharedKrake.next_page || {};
+    sharedKrake.next_page.dom_query = values.dom_query;
+    sharedKrake.next_page.click = true;    
+
+  } else {
+    console.log('setNextPager failed');
+
+  }
+
 
 };//eo setNextPager
 

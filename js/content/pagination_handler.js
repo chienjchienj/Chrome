@@ -83,14 +83,21 @@ PaginationHandler.start = function() {
 
 
 // @Description : Highlights the next page element within the page as well as change the pagination button status
-PaginationHandler.setNextPager = function(xpath) {
-  PaginationElementSelector.highlightElements(document.URL, xpath, " k_highlight_next_page");
+// @param: pagination_ele:Object
+//    xpath:String
+//    dom_query:String
+PaginationHandler.setNextPager = function(pagination_ele) {
+  if(pagination_ele) {
+    pagination_ele.xpath && PaginationElementSelector.highlightXpathElements(document.URL, pagination_ele.xpath, " k_highlight_next_page");
+    pagination_ele.dom_query && PaginationElementSelector.highlightCssElements(document.URL, pagination_ele.dom_query, " k_highlight_next_page");
+  }
+  
   PaginationElementSelector.stop();
   $("#btn-add-pagination").html(Params.NEXT_PAGE_BUTTON_SET_DESC);
 }
 
 // @Description : Unhighlights the next page element within the page as well as change the pagination button status
-PaginationHandler.unsetNextPager = function(xpath) {
+PaginationHandler.unsetNextPager = function() {
   $(".k_highlight_next_page").removeClass("k_highlight_next_page");
   $("#btn-add-pagination").html(Params.NEXT_PAGE_BUTTON_NOT_SET_DESC);
   chrome.extension.sendMessage({ action: "remove_pagination"});

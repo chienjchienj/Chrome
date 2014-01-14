@@ -308,7 +308,7 @@ var newColumn = function(params, callback) {
 var setPagination = function(params, callback) {
 
   try {
-    curr_SKH.setNextPager(params.values.xpath);
+    curr_SKH.setNextPager(params.values);
     sessionManager.goToNextState(); //current state := 'idle'
     
     if (callback && typeof(callback) === "function")  

@@ -34,26 +34,40 @@ PaginationElementSelector.selectElement = function(e) {
   e.stopPropagation();
 
   chrome.extension.sendMessage({ action: 'get_session'}, function(response) {
-    var pagination_ele = PaginationXpathMapper.getElementXPath( e.target);
-    var params = { xpath : pagination_ele.xpath };
+    var pagination_ele = PaginationMapper.getElementSignature(e.target);
+
+    if(pagination_ele && (pagination_ele.xpath || pagination_ele.dom_query) ) {      
+
+      chrome.extension.sendMessage({ action:'set_pagination', params: { values:pagination_ele }}, function(response) {
+
+        NotificationManager.showNotification({
+          type : 'info',
+          title : Params.NOTIFICATION_TITLE_SAVED_SELECTIONS,
+          message : Params.NOTIFICATION_MESSAGE_SAVED_SELECTIONS,
+          elements_to_highlight : [
+            '#panel-left button#btn-create-list, #panel-left button#btn-done'
+          ],
+          anchor_element : '#panel-left button#btn-create-list, #panel-left button#btn-done'
+        });// eo showNotification
+
+        console.log(response.sharedKrake);
+        PaginationHandler.setNextPager(response.sharedKrake.next_page);
+        e.currentTarget.style.outline = '';
+        
+      });
+
+    } else {
+
+        NotificationManager.showNotification({
+          type : 'error',
+          title : Params.NOTIFICATION_TITLE_NEXT_PAGER_ERROR,
+          message : Params.NOTIFICATION_MESSAGE_NEXT_PAGER_ERROR,
+          position : {
+            center : true
+          }
+        });        
+    }
     
-    // sets the xpath for the next_page operator & hides the next pager notification message
-    chrome.extension.sendMessage({ action:'set_pagination', params: { values:params }}, function(response) {
-
-      NotificationManager.showNotification({
-        type : 'info',
-        title : Params.NOTIFICATION_TITLE_SAVED_SELECTIONS,
-        message : Params.NOTIFICATION_MESSAGE_SAVED_SELECTIONS,
-        elements_to_highlight : [
-          '#panel-left button#btn-create-list, #panel-left button#btn-done'
-        ],
-        anchor_element : '#panel-left button#btn-create-list, #panel-left button#btn-done'
-      });// eo showNotification
-
-      PaginationHandler.setNextPager(response.sharedKrake.next_page.xpath);
-      e.currentTarget.style.outline = '';
-      
-    });// eo sendMessage    
   });
 
 }
