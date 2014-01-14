@@ -94,7 +94,7 @@ var ElementSelector = {
 
   // @Description : removes the DOM elements highlighted given a column detail
   // @param : column:Object
-  highlightElements : function(url, genericXpath, colorCode) {
+  highlightXpathElements : function(url, genericXpath, colorCode) {
     if(document.URL != url) return;
     
     var result = XpathMapper.evaluateQuery(genericXpath);
@@ -105,11 +105,16 @@ var ElementSelector = {
     }
   },
 
+  // @Description : removes the DOM elements highlighted given a column detail
+  // @param : column:Object
+  highlightCssElements : function(url, css, colorCode) {
+    document.URL == url && $(css).addClass(colorCode);
+  },
 
 
   // @Description : removes the DOM elements highlighted given a column detail
   // @param : column:Object
-  unHighLightElements : function(column) {
+  unHighlightElements : function(column) {
     
     if(document.URL != column.url) return;
        

@@ -32,6 +32,9 @@ var Params = {
   NOTIFICATION_TITLE_SELECT_NEXT_PAGER : '<b>Click</b> on link to next page. It is usually a button that says <b>next</b> or <b>></b>',
   NOTIFICATION_MESSAGE_SELECT_NEXT_PAGER : '',
 
+  NOTIFICATION_TITLE_NEXT_PAGER_ERROR : 'Selected item is not a hyperlink',
+  NOTIFICATION_MESSAGE_NEXT_PAGER_ERROR : '',  
+
   NOTIFICATION_TITLE_ENTER_COLUMN_NAME : 'Give this column a name and press <b>ENTER</b>',
   NOTIFICATION_MESSAGE_ENTER_COLUMN_NAME : '',
 

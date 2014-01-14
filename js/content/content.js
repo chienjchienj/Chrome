@@ -30,7 +30,7 @@ var showPanel = function() {
     panelWrapper.load(chrome.extension.getURL("html/panel.html"),function() {
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/params.js" } });
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/mappers/xpath_mapper.js" } });
-        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/mappers/pagination_xpath_mapper.js" } });
+        chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/mappers/pagination_mapper.js" } });
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/mixpanel_helper.js" } });
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/selectors/element_selector.js" } });
         chrome.extension.sendMessage({ action: "load_script", params: { filename: "js/content/selectors/column_element_selector.js" } });
@@ -90,7 +90,7 @@ var reloadExistingKrake = function() {
       var curr_page_krake = response.sharedKrakes[document.location.href];
 
       // Populates the next page 
-      curr_page_krake.next_page && curr_page_krake.next_page.xpath && PaginationHandler.setNextPager(curr_page_krake.next_page.xpath);
+      curr_page_krake.next_page && curr_page_krake.next_page.xpath && PaginationHandler.setNextPager(curr_page_krake.next_page);
 
       // Populates the current pages columns first      
       populateColumns(wrapper, curr_page_krake.columns);
@@ -121,7 +121,7 @@ var populateColumns = function(wrapper, columns, is_alien) {
   for(var i=0; i<columns.length; i++) {
       
     //highlight all elements depicted by genericXpath
-    !is_alien && ColumnElementSelector.highlightElements(
+    !is_alien && ColumnElementSelector.highlightXpathElements(
       columns[i].url, 
       columns[i].genericXpath, 
       columns[i].colorCode );    
