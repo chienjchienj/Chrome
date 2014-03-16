@@ -31,7 +31,7 @@ var sessionManager = null;
 // sharedKrake that corresponds to the current URL in the current tab
 var sharedKrake = null;
 
-// The actual krake definition object to be used for populating the edit field on https://krake.io/krakes/new
+// The actual krake definition object to be used for populating the edit field on https://getdata.io/krakes/new
 var compiledKDO = null;
 var krake_title = null;
 
@@ -219,18 +219,18 @@ var compileKrakeJson = function(callback) {
 }
 
 /* 
- *  @Description : Creates a new Tab to location https://krake.io/krakes/new
+ *  @Description : Creates a new Tab to location https://getdata.io/krakes/new
  *    when the Done button is clicked on the front end
  */
 var sendKrakeToApp = function() {
   checkKrakeCookies(function(is_logged_in) {
     if(is_logged_in) {
-      chrome.tabs.create({'url': 'https://krake.io/krakes/new' }, function(tab) {
+      chrome.tabs.create({'url': 'https://getdata.io/krakes/new' }, function(tab) {
         // Tab opened.
         console.log(tab)
       });
     } else {
-      chrome.tabs.create({'url': 'https://krake.io/members/sign_in?ext_login=true' }, function(tab) {
+      chrome.tabs.create({'url': 'https://getdata.io/members/sign_in?ext_login=true' }, function(tab) {
         // Tab opened.
         console.log(tab)
       });      
@@ -247,11 +247,11 @@ var sendKrakeToApp = function() {
  *  @param callback( cookie_exist:boolean )
  */
 var checkKrakeCookies = function(callback) {
-  chrome.cookies.get({"url": 'https://krake.io', "name": '_mbd_dev_session'}, function(cookie) {
+  chrome.cookies.get({"url": 'https://getdata.io', "name": '_mbd_dev_session'}, function(cookie) {
     if(cookie) {
       callback(true);
     } else {
-      chrome.cookies.get({"url": 'https://krake.io', "name": '  remember_member_token'}, function(cookie) {
+      chrome.cookies.get({"url": 'https://getdata.io', "name": '  remember_member_token'}, function(cookie) {
         if(cookie) {
           callback(true);
         } else {

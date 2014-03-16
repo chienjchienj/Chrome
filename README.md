@@ -6,7 +6,7 @@ To download and test run the currently publish version go to the
 [Chrome Extension Gallery](https://chrome.google.com/webstore/detail/krakeio/ofncgcgajhgnbkbmkdhbgkoopfbemhfj "Krake Browser Extension")
 
 To check out the online engine go to
-[Krake.IO](https://krake.io "Data Harvesting")
+[Krake.IO](https://getdata.io "Data Harvesting")
 
 # Backlog
 ## To Do list

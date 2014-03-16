@@ -44,7 +44,7 @@ mixpanel.init("6739c9644606bc42c8ac134c22e1d691");
 // Unique user identity across web application and browser extension
 setup_mixpanel_muuid = function() {
   console.log('Setting up muuid at ' + new Date());
-  chrome.cookies.get({"url": 'https://krake.io', "name": 'muuid'}, function(cookie) {
+  chrome.cookies.get({"url": 'https://getdata.io', "name": 'muuid'}, function(cookie) {
 
     // When MixPanel Unique User ID is already set for this browser extension    
     if(cookie) {
@@ -86,7 +86,7 @@ setup_mixpanel_muuid = function() {
 setup_muuid_frame = function() {
   console.log('Setting Krake.IO Unique User ID cookie');
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "https://krake.io/muuid", true);
+  xhr.open("GET", "https://getdata.io/muuid", true);
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
       console.log('Loaded Krake.IO iframe');

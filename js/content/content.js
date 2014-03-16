@@ -7,7 +7,7 @@ var behavioral_mode = TUTORIAL_MODE;
 
 // @Description : Checks if the domain allows for loading of the Krake Panel in the Page
 function isKrakeDomain() {
-  if( document.domain == 'krake.io' || document.domain == 'localhost' ) {
+  if( document.domain == 'getdata.io' || document.domain == 'localhost' ) {
     return true;
   } else {
     return false;
@@ -295,7 +295,7 @@ if( !isKrakeDomain() ) {
 
 // redirect 
 } else if ( isKrakeDomain() && document.location.pathname == '/loggedin-via-extension' ) { 
-  document.location = 'https://krake.io/krakes/new'
+  document.location = 'https://getdata.io/krakes/new'
 }
 
 })();//eof
