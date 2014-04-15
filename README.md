@@ -9,14 +9,39 @@ To check out the online engine go to
 [Krake.IO](https://getdata.io "Data Harvesting")
 
 # Backlog
-## To Do list
+## To Do list based upon priorities
+  — TODO : To implement full unit testing coverage for tool
+  — TODO : Conversion of notations to use CSS selector
+  — TODO : Abstraction of class files for easy re-porting to Safari and Firefox
   - TODO : To capture meta description content and use as description for Krake
-  - TODO : Clean up the nested COOKIES none-sense
+  - TODO : Clean up the nested COOKIES nonsense
   - TODO : Ability to toggle bar at the bottom between visibility and non-visibility
 
-# Documentation
-This is how this browser extension stores a single Shared Kraked data object for a page in the background.
 
+
+# Documentation
+
+### Unit test
+
+##### Jasmine
+For testing of DOM Tree independent Class behaviours
+```console
+jasmine-node --coffee spec_j
+```
+
+##### PhantomJS
+For testing Class behaviors in the context of a DOM Tree
+
+```console
+coffee
+phantomjs spec_p/test_suit.js
+```
+
+
+
+### Meta body for storage of Krake definition
+This is how this browser extension stores a single Shared Kraked data object for a page in the background.
+```json
     {
       
       // The page this Krake definition is mapping to
@@ -152,3 +177,5 @@ This is how this browser extension stores a single Shared Kraked data object for
           }
       ]
     }
+
+```    
