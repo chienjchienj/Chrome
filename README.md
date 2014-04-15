@@ -33,7 +33,7 @@ jasmine-node --coffee spec_j
 For testing Class behaviors in the context of a DOM Tree
 
 ```console
-coffee
+coffee spec_p/fixtures/test_server.coffee
 phantomjs spec_p/test_suit.js
 ```
 
