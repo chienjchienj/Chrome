@@ -2,6 +2,7 @@
    "background": {
       "scripts": [ "js/libs/jquery/jquery_1.9.1.min.js", 
                    "js/libs/async/async.js", 
+                   "js/libs/mixpanel/mixpanel.js",                   
                    "js/background/params.js",
                    "js/background/tutorial.js",
                    "js/background/cookie_helper.js",                   
@@ -10,8 +11,8 @@
                    "js/background/color_generator.js",           
                    "js/background/session_manager.js",
                    "js/background/columns.js",
+                   "js/background/mixpanel_event.js",                   
                    "js/background/pattern_matcher.js",
-                   "js/libs/mixpanel/mixpanel.js",
                    "js/background/background.js" ]
    },
    "browser_action": {
