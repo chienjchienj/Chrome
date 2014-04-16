@@ -53,14 +53,65 @@ This is how this browser extension stores a single Shared Kraked data object for
       // maps_to_categoryId_in_parent_shared_krakes
       "parent_columnId" : "arbitrary_string",
       
-      // The xpath to utilize in the event there is a next page
+      // The css selector to utilize in the event there is a next page
       next_page : {
-        "xpath" : "arbiturary_string"
+        "dom_query" : "arbiturary_string"
       },
       
       // Page title
       page_title : "arbiturary_string",
-      
+            
+      // The columns of data
+      "columns": [
+          {
+              "columnId": 5452399814,
+              "columnName": "category name",           
+              "dom_anchor": [{
+                  el: "td",
+                  class: ".class1.class2"
+                },{                
+                  el: "div",
+                  class: ".class1.class2"
+                },{
+                  el: "a",
+                  class: ".class1.class2"
+                }],
+              // Maximum 5 levels, ordered from root to edge
+              "dom_element": [{
+                  el: "td",
+                  class: ".class1.class2"
+                },{                
+                  el: "div",
+                  class: ".class1.class2"
+                },{
+                  el: "a",
+                  class: ".class1.class2"
+                },{
+                  el: "span",
+                  class: ".class1.class2"
+                },{
+                  el: "img",
+                  class: ".class1.class2"
+                }],
+              "requiredAttribute": null
+          },
+          {
+              "columnId": 5554264208,
+              "columnType": "list",
+              "columnName": "category icon",
+              "genericAncestorLinkXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]",              
+              "genericXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]/span[1]/img[1]",
+              "requiredAttribute": "src"
+          },
+          {
+              "columnId": 734958031,
+              "columnName": "header",
+              "genericAncestorLinkXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]",              
+              "genericXpath": "/html[1]/body[1]/div/div[4]/div[3]/div[5]/div[1]/div[1]/div[1]/div[1]/ul[1]/li[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h2[1]",
+              "requiredAttribute": null
+          }
+      ],
+
       // cookies
       "cookies" : [{
           "domain": ".imdb.com",
@@ -85,97 +136,8 @@ This is how this browser extension stores a single Shared Kraked data object for
           "session": false,
           "storeId": "0",
           "value": "1535048846"
-      }],
-      
-      // The columns of data
-      "columns": [
-          {
-              "columnId": 5452399814,
-              "columnName": "category name",
-              "colorCode": " k_highlight_FFCC00 ",
-              "url": "http://sg.yahoo.com/?p=us",
-              "selections" : [{
-                  "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]/span[2]",
-                  "elementType": "SPAN",
-                  "elementText": "Messenger",
-                  "elementLink": null,
-                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
-              },{
-                  "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[3]/a[1]/span[2]",
-                  "elementType": "SPAN",
-                  "elementText": "News",
-                  "elementLink": null,
-                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
-              },{
-                  "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[3]/a[1]/span[2]",
-                  "elementType": "SPAN",
-                  "elementText": "News",
-                  "elementLink": null,
-                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
-              }],              
-              "genericAncestorLinkXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]",
-              "genericXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]/span[2]",
-              "requiredAttribute": null
-          },
-          {
-              "columnId": 5554264208,
-              "columnType": "list",
-              "columnName": "category icon",
-              "colorCode": " k_highlight_FF6600 ",
-              "url": "http://sg.yahoo.com/?p=us",
-              "selections" : [{
-                  "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]/span[2]",
-                  "elementType": "SPAN",
-                  "elementText": "Messenger",
-                  "elementLink": null,
-                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
-              },{
-                  "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[3]/a[1]/span[2]",
-                  "elementType": "SPAN",
-                  "elementText": "News",
-                  "elementLink": null,
-                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
-              },{
-                  "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[3]/a[1]/span[2]",
-                  "elementType": "SPAN",
-                  "elementText": "News",
-                  "elementLink": null,
-                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
-              }],              
-              "genericAncestorLinkXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]",              
-              "genericXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]/span[1]/img[1]",
-              "requiredAttribute": "src"
-          },
-          {
-              "columnId": 734958031,
-              "columnType": "single",
-              "columnName": "header",
-              "colorCode": " k_highlight_3EA99F ",
-              "url": "http://sg.yahoo.com/?p=us",
-              "selections" : [{
-                  "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]/span[2]",
-                  "elementType": "SPAN",
-                  "elementText": "Messenger",
-                  "elementLink": null,
-                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
-              },{
-                  "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[3]/a[1]/span[2]",
-                  "elementType": "SPAN",
-                  "elementText": "News",
-                  "elementLink": null,
-                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
-              },{
-                  "xpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[3]/a[1]/span[2]",
-                  "elementType": "SPAN",
-                  "elementText": "News",
-                  "elementLink": null,
-                  "ancestorLinkXpath" : "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li[2]/a[1]"
-              }],
-              "genericAncestorLinkXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]",              
-              "genericXpath": "/html[1]/body[1]/div/div[4]/div[3]/div[5]/div[1]/div[1]/div[1]/div[1]/ul[1]/li[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h2[1]",
-              "requiredAttribute": null
-          }
-      ]
+      }]
+
     }
 
 ```    
