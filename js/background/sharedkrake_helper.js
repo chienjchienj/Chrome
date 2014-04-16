@@ -8,7 +8,6 @@ var SharedKrakeHelper = function(tab_id, url, title) {
   self.tab_id = tab_id;
   self.url = url;
   self.setSharedKrake(tab_id, url, title);
-  
 };
 
 

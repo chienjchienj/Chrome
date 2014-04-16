@@ -39,105 +39,104 @@ phantomjs spec_p/test_suit.js
 
 
 
-### Meta body for storage of Krake definition
-This is how this browser extension stores a single Shared Kraked data object for a page in the background.
+### Data Structure
+
+##### Browser Tabs Mapping
+Each Tab owns multiple PageMaps
+
 ```json
-    {
-      
-      // The page this Krake definition is mapping to
-      "origin_url": "http://sg.yahoo.com/?p=us",
-            
-      // some_urls_within_the_same_shared_krakes_object
-      "parent_url" : "arbitrary_string",
-      
-      // maps_to_categoryId_in_parent_shared_krakes
-      "parent_columnId" : "arbitrary_string",
-      
-      // The css selector to utilize in the event there is a next page
-      next_page : {
-        "dom_query" : "arbiturary_string"
-      },
-      
-      // Page title
-      page_title : "arbiturary_string",
-            
-      // The columns of data
-      "columns": [
-          {
-              "columnId": 5452399814,
-              "columnName": "category name",           
-              "dom_anchor": [{
-                  el: "td",
-                  class: ".class1.class2"
-                },{                
-                  el: "div",
-                  class: ".class1.class2"
-                },{
-                  el: "a",
-                  class: ".class1.class2"
-                }],
-              // Maximum 5 levels, ordered from root to edge
-              "dom_element": [{
-                  el: "td",
-                  class: ".class1.class2"
-                },{                
-                  el: "div",
-                  class: ".class1.class2"
-                },{
-                  el: "a",
-                  class: ".class1.class2"
-                },{
-                  el: "span",
-                  class: ".class1.class2"
-                },{
-                  el: "img",
-                  class: ".class1.class2"
-                }],
-              "requiredAttribute": null
-          },
-          {
-              "columnId": 5554264208,
-              "columnType": "list",
-              "columnName": "category icon",
-              "genericAncestorLinkXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]",              
-              "genericXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]/span[1]/img[1]",
-              "requiredAttribute": "src"
-          },
-          {
-              "columnId": 734958031,
-              "columnName": "header",
-              "genericAncestorLinkXpath": "/html[1]/body[1]/div/div[4]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/ol[1]/li/a[1]",              
-              "genericXpath": "/html[1]/body[1]/div/div[4]/div[3]/div[5]/div[1]/div[1]/div[1]/div[1]/ul[1]/li[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h2[1]",
-              "requiredAttribute": null
-          }
-      ],
+{
+  tab_id_1:INTEGER : {
+    isActive: BOOLEAN,
+    shared_krakes: {
+      url1:STRING : PageMap
+    },
+    ...
+  },
+  ...
+  tab_id_10:INTEGER : {...}
+}
+```
 
-      // cookies
-      "cookies" : [{
-          "domain": ".imdb.com",
-          "expirationDate": 1535023661.151548,
-          "hostOnly": false,
-          "httpOnly": false,
-          "name": "session-id",
-          "path": "/",
-          "secure": false,
-          "session": false,
-          "storeId": "0",
-          "value": "448-7368846-1611791"
-      },
-      {
-          "domain": ".imdb.com",
-          "expirationDate": 1535023661.15161,
-          "hostOnly": false,
-          "httpOnly": false,
-          "name": "session-id-time",
-          "path": "/",
-          "secure": false,
-          "session": false,
-          "storeId": "0",
-          "value": "1535048846"
-      }]
+##### PageMap
+Each PageMap maps to one specific URL. Each PageMap can have 0 or 1 parent
+```json
+{
+  
+  // The page this is mapped to
+  "origin_url": STRING,
+        
+  // The page this page is a child of
+  "parent_url" : STRING,
+  
+  // The parent this child maps to
+  "parent_columnId" : INTEGER,
+  
+  // The css selector to utilize in the event there is a next page
+  next_page : { "dom_query" : STRING },
+  
+  // Page title
+  page_title : "arbiturary_string",
+        
+  // The columns of data
+  "columns": [{
+    "columnId": INTEGER,
+    "columnName": STRING,
+    "dom_anchor": [{ 
+        el: "td",
+        position: 1,        
+        class: ".class1.class2",
+        id: "#dom_id"
+      },{                
+        el: "div",
+        position: 2,        
+        class: ".class1.class2",
+        id: "#dom_id"
+      },{
+        el: "a",
+        class: ".class1.class2",
+        id: "#dom_id"
+      }],
+    // Maximum 5 levels, ordered from root to edge
+    "dom_element": [{ // Translates to td:nth-child(1).class1.class2#dom_id
+        el: "td",
+        class: ".class1.class2",
+        id: "#dom_id"
+      },{                
+        el: "div",
+        class: ".class1.class2",
+        id: "#dom_id"
+      },{
+        el: "a",
+        class: ".class1.class2",
+        id: "#dom_id"
+      },{
+        el: "span",
+        class: ".class1.class2",
+        id: "#dom_id"
+      },{
+        el: "img",
+        class: ".class1.class2",
+        id: "#dom_id"
+      }],
+    "requiredAttribute": null
+  },
+  ...],
 
-    }
+  // cookies
+  "cookies" : [{
+      "domain": ".imdb.com",
+      "expirationDate": 1535023661.151548,
+      "hostOnly": false,
+      "httpOnly": false,
+      "name": "session-id",
+      "path": "/",
+      "secure": false,
+      "session": false,
+      "storeId": "0",
+      "value": "448-7368846-1611791"
+  },
+  ...]
+}
 
 ```    
