@@ -1,19 +1,19 @@
 {
    "background": {
-      "scripts": [ "js/libs/jquery/jquery_1.9.1.min.js", 
-                   "js/libs/async/async.js", 
-                   "js/libs/mixpanel/mixpanel.js",                   
-                   "js/background/params.js",
-                   "js/background/tutorial.js",
-                   "js/background/cookie_helper.js",                   
-                   "js/background/sharedkrake_template.js",
-                   "js/background/sharedkrake_helper.js",
-                   "js/background/color_generator.js",           
-                   "js/background/session_manager.js",
-                   "js/background/columns.js",
-                   "js/background/mixpanel_event.js",                   
-                   "js/background/pattern_matcher.js",
-                   "js/background/background.js" ]
+      "scripts": [ 
+        "js/libs/jquery/jquery_1.9.1.min.js",
+         "js/libs/async/async.js",
+         "js/libs/mixpanel/mixpanel.js",
+         "js/background/schemas/sharedkrake_template.js",
+         "js/background/schemas/params.js",
+         "js/background/helpers/sharedkrake_helper.js",
+         "js/background/helpers/cookie_helper.js",
+         "js/background/helpers/session_manager.js",
+         "js/background/helpers/mixpanel_event.js",
+         "js/background/helpers/pattern_matcher.js",
+         "js/background/models/columns.js",
+         "js/background/background.js"
+      ]
    },
    "browser_action": {
       "default_icon": "images/krake_icon_disabled_24.png",
@@ -21,13 +21,15 @@
    },
 
    "content_scripts": [ {
-      "matches"   : ["<all_urls>"],
-      "css": [ "css/content.css"], 
-      "js": [ "js/content/load_time.js",
-              "js/libs/jquery/jquery_1.9.1.min.js",
-              "js/libs/jquery/jquery_ui_1.10.3.js", 
-              "js/content/behavioral_mode.js",
-              "js/content/content.js" ],
+      "matches"   : [ "<all_urls>" ],
+      "css": [ "css/content.css" ], 
+      "js": [ 
+        "js/content/load_time.js",
+        "js/libs/jquery/jquery_1.9.1.min.js",
+        "js/libs/jquery/jquery_ui_1.10.3.js", 
+        "js/content/behavioral_mode.js",
+        "js/content/content.js" 
+      ],
       "matches": [ "http://*/*", "https://*/*" ],
       "run_at": "document_end"
    } ],

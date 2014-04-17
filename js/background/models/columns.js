@@ -1,9 +1,6 @@
 var ColumnFactory = {
   createColumn: function(params){
     var column = new Column(params);
-    var color_obj = colorGenerator.getColor();
-    column.colorCode = color_obj.css_class;
-    column.colorHex = color_obj.hex;
     return column;
   }//eo createColumn
 };

@@ -9,7 +9,6 @@
         url2 : shared_krake_definition
       },
       sessionManager : SessionManager
-      colorGenerator : ColorGenerator
     },
     <<tab_id_1>> : {
       isActive : boolean,
@@ -18,7 +17,6 @@
         url2 : shared_krake_definition
       },
       sessionManager : SessionManager,
-      colorGenerator : ColorGenerator
     }
   }
 
@@ -34,9 +32,6 @@ var sharedKrake = null;
 // The actual krake definition object to be used for populating the edit field on https://getdata.io/krakes/new
 var compiledKDO = null;
 var krake_title = null;
-
-// Color generator object that corresponds to the current URL in the current tab
-var colorGenerator = null;
 
 // SharedKrakeHelper object that corresponds to the current URL in the current tab
 var curr_SKH = null;
@@ -68,7 +63,6 @@ var handleIconClick = function(tab) {
     records[tab.id] = records[tab.id] || {}
     records[tab.id].isActive = true;
     sessionManager = records[tab.id].sessionManager = records[tab.id].sessionManager || new SessionManager();    
-    colorGenerator = records[tab.id].colorGenerator = records[tab.id].colorGenerator || new ColorGenerator();   
     curr_SKH = new SharedKrakeHelper(tab.id, tab.url, tab.title);
     sharedKrake = curr_SKH.SharedKrake;
     
