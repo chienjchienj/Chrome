@@ -49,9 +49,10 @@ Each Tab owns multiple PageMaps
   tab_id_1:INTEGER : {
     isActive: BOOLEAN,
     shared_krakes: {
-      url1:STRING : PageMap
+      url1:STRING : PageMap,
+      ...
     },
-    ...
+    history: []
   },
   ...
   tab_id_10:INTEGER : {...}
