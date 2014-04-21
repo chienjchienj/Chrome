@@ -9,29 +9,34 @@
     page_title:String
 
   Return:
-    page:Page
+    page:KPage
 
 **/ 
-var Page = function(origin_url, window_id, parent_url, parent_column_id, page_title) { 
+var KPage = function(origin_url, window_id, parent_url, parent_column_id, page_title) { 
 
-  pages = Page.find({ origin_url: origin_url, window_id: window_id });
+  pages = KPage.find({ origin_url: origin_url, window_id: window_id });
   if(pages.length > 0) return pages[0];
   
   var self = this;
+  self.id               = KPage.getId();
   self.origin_url       = origin_url;
   self.window_id        = window_id;
   self.parent_url       = parent_url;
   self.parent_column_id = parent_column_id;
   self.page_title       = page_title;
-  self.columns          = [];
-  Page.instances.push(self);
+  KPage.instances.push(self);
 
 };
 
 /** Class level methods **/
 
 /** page instances **/
-Page.instances = [];
+KPage.instances = [];
+
+/** Generates a unique id for a new KPage **/
+KPage.getId = function() {
+  return KPage.instances.length + 1;
+};
 
 /**
   Static: Finds and returns a page object
@@ -42,13 +47,14 @@ Page.instances = [];
       window_id:Integer
 
   Return:
-    page:Page
+    page:KPage
 **/
-Page.find = function(param) {
-  return Page.instances.filter(function(page) {
+KPage.find = function(param) {
+  param = param || {};
+  return KPage.instances.filter(function(obj) {
     to_return = true;
-    Object.keys(param).forEach(function(attribute) {
-      to_return &= param[attribute] == page[attribute];
+    Object.keys(param).forEach(function(attr) {
+      to_return &= param[attr] == obj[attr];
     });
     return to_return;
   });
@@ -57,16 +63,14 @@ Page.find = function(param) {
 /**
   clears all the page instances from memory
 **/
-Page.reset = function() {
-  Page.instances = [];
+KPage.reset = function() {
+  KPage.instances = [];
 };
-
-
 
 /**
   Returns true if page has parent, false otherwise
 **/
-Page.prototype.hasParent = function() {
+KPage.prototype.hasParent = function() {
   var self = this;
   return !!self.parent_url;
 };
@@ -74,13 +78,13 @@ Page.prototype.hasParent = function() {
 /**
   Returns the parent page object or false
 **/
-Page.prototype.parent = function() {
+KPage.prototype.parent = function() {
   var self = this;
   if(!self.parent_url) {
     return false;
 
   } else {
-    return Page.find({ origin_url: self.parent_url, window_id: self.window_id })[0];
+    return KPage.find({ origin_url: self.parent_url, window_id: self.window_id })[0];
 
   }
   
@@ -89,13 +93,13 @@ Page.prototype.parent = function() {
 /**
   Returns child pages of current page object
 **/ 
-Page.prototype.children = function() {
+KPage.prototype.children = function() {
   var self = this;
-  return Page.find({ parent_url: self.origin_url, window_id: self.window_id });  
+  return KPage.find({ parent_url: self.origin_url, window_id: self.window_id });  
 };
 
 /** Returns the most ancient of pages that is ancestor of this page that has not parent **/
-Page.prototype.root = function() {
+KPage.prototype.root = function() {
   var self = this;
   var current_page = this;
   while(current_page.hasParent()) {
@@ -107,12 +111,23 @@ Page.prototype.root = function() {
 /** 
   Returns a column object
 **/
-Page.prototype.newColumn = function() {
+KPage.prototype.newColumn = function() {
   var self = this;
-  var column = new Column();
-  self.columns.push(column);
+  return new Column(self.id);
+};
+
+
+/** Returns all the columns belonging to this KPage **/
+KPage.prototype.columns = function() {
+  var self = this;
+  return Column.find({page_id: self.id});
 }
 
 /** Node environmental dependencies **/
-try { var Column = require('./column'); } catch(e) {}
-try { module && (module.exports = Page); } catch(e){}
+try { var Column = require('./kcolumn'); } catch(e) {}
+try { 
+  module && (module.exports = { 
+    KPage: KPage, 
+    Column: Column
+  }); 
+} catch(e){}

@@ -42,7 +42,7 @@ phantomjs spec_p/test_suit.js
 ### Data Structure
 
 ##### Browser Tabs Mapping
-Each Tab owns multiple PageMaps
+Each Window owns multiple Page objects
 
 ```json
 {
@@ -81,25 +81,10 @@ Each PageMap maps to one specific URL. Each PageMap can have 0 or 1 parent
         
   // The columns of data
   "columns": [{
-    "columnId": INTEGER,
-    "columnName": STRING,
-    "dom_anchor": [{ 
-        el: "td",
-        position: 1,        
-        class: ".class1.class2",
-        id: "#dom_id"
-      },{                
-        el: "div",
-        position: 2,        
-        class: ".class1.class2",
-        id: "#dom_id"
-      },{
-        el: "a",
-        class: ".class1.class2",
-        id: "#dom_id"
-      }],
+    id: INTEGER,
+    col_name: STRING,
     // Maximum 5 levels, ordered from root to edge
-    "dom_element": [{ // Translates to td:nth-child(1).class1.class2#dom_id
+    dom_array: [{ // Translates to td:nth-child(1).class1.class2#dom_id
         el: "td",
         class: ".class1.class2",
         id: "#dom_id"
@@ -120,7 +105,7 @@ Each PageMap maps to one specific URL. Each PageMap can have 0 or 1 parent
         class: ".class1.class2",
         id: "#dom_id"
       }],
-    "requiredAttribute": null
+    required_attribute: STRING
   },
   ...],
 
