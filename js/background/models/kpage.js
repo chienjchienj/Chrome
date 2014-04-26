@@ -111,23 +111,37 @@ KPage.prototype.root = function() {
 /** 
   Returns a column object
 **/
-KPage.prototype.newColumn = function() {
+KPage.prototype.newKColumn = function() {
   var self = this;
-  return new Column(self.id);
+  return new KColumn(self.id);
 };
 
 
 /** Returns all the columns belonging to this KPage **/
-KPage.prototype.columns = function() {
+KPage.prototype.kcolumns = function() {
   var self = this;
-  return Column.find({page_id: self.id});
+  return KColumn.find({page_id: self.id});
+}
+
+/**
+  Returns the JSON partial for the data definition schema
+  
+  Returns:
+    options_object: https://getdata.io/docs/define-data#options_object
+**/
+KPage.prototype.toParams = function() {
+  var self = this;
+  partial = {};
+  partial.columns = self.kcolumns.map(function(kcolumn) {
+    return kcolumn.toParams();
+  });
 }
 
 /** Node environmental dependencies **/
-try { var Column = require('./kcolumn'); } catch(e) {}
-try { 
+try { var KColumn = require('./kcolumn'); } catch(e) {}
+  try { 
   module && (module.exports = { 
     KPage: KPage, 
-    Column: Column
+    KColumn: KColumn
   }); 
 } catch(e){}
