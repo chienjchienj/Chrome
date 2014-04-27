@@ -4,11 +4,10 @@
         "js/libs/jquery/jquery_1.9.1.min.js",
          "js/libs/async/async.js",
          "js/libs/mixpanel/mixpanel.js",
+         "js/background/models/kcookie.js",         
          "js/background/models/kcolumn.js",
          "js/background/models/kpagination.js",
          "js/background/models/kpage.js",
-         "js/background/helpers/cookie_helper.js",
-         "js/background/helpers/session_manager.js",
          "js/background/helpers/mixpanel_event.js",
          "js/background/app.js"
       ]
