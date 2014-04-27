@@ -153,7 +153,7 @@ KColumn.partialLineageMerge = function(old_dom_array, new_dom_array) {
   Sets the dom array for this column
   returns false if the input is invalid
 **/
-KColumn.prototype.setDomArray = function(dom_array) {
+KColumn.prototype.set = function(dom_array) {
   var self = this;  
 
   if( !KColumn.isArray(dom_array) ) { return false; };
@@ -164,6 +164,12 @@ KColumn.prototype.setDomArray = function(dom_array) {
   });
 
   return true;
+}
+
+/** Return true if dom_array is empty **/
+KColumn.prototype.isSet = function() {
+  var self = this;    
+  return self.dom_array.length > 0;
 }
 
 /** Return true if dom_array is empty **/
@@ -234,7 +240,7 @@ KColumn.prototype.clone = function() {
 
   var twin_bro = new KColumn(self.page_id);  
   twin_bro.required_attribute = self.required_attribute;
-  twin_bro.setDomArray(dom_array);  
+  twin_bro.set(dom_array);  
   return twin_bro;
 };
 
@@ -249,12 +255,12 @@ KColumn.prototype.merge = function(new_dom_array) {
   var self = this;
   if(self.hasSameLineage(new_dom_array)) {
     merged_array = KColumn.fullLineageMerge(self.dom_array, new_dom_array);
-    self.setDomArray(merged_array);
+    self.set(merged_array);
     return true;
 
   } else if(self.hasSameTailType(new_dom_array)) {
     merged_array = KColumn.partialLineageMerge(self.dom_array, new_dom_array);
-    self.setDomArray(merged_array);
+    self.set(merged_array);
     return true;
 
   }

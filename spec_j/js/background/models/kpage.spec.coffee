@@ -1,12 +1,14 @@
-KPageVar = require "../../../../js/background/models/kpage"
-KPage = KPageVar.KPage
-KColumn = KPageVar.KColumn
+KPageVar    = require "../../../../js/background/models/kpage"
+KPage       = KPageVar.KPage
+KColumn     = KPageVar.KColumn
+KPagination = KPageVar.KPagination
 
 describe "KPage", ->
 
   beforeEach ->
     KPage.reset()
     KColumn.reset()
+    KPagination.reset()
     @page_url       = "http://google.com"
     @window_id      = 10
     @parent_url     = "http://google.com"
@@ -128,5 +130,309 @@ describe "KPage", ->
 
   describe "toParams", ->
     it "should return well formed partial for columns with no nesting", ->
-    it "should return well formed partial for columns with 1 level nesting", ->
-    it "should return well formed partial for columns with 2 level nesting", ->
+      page = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      col1  = new KColumn page.id
+      col2  = new KColumn page.id
+
+      col1.set [{
+          el: "td"
+          class: ".row"
+          id: "#clementi"
+        },{                
+          el: "p"
+          position: 2
+          class: ".contact-info"
+        },{
+          el: "a"
+          class: ".address"
+        },{
+          el: "span"
+          class: ".street"
+        },{
+          el: "b"
+          class: ".prop-img"
+        }]
+      
+      col2.set [{
+          el: "td"
+          class: ".row"
+          id: "#clementi"
+        }]
+      expect(page.toParams()).toEqual { 
+        columns: [{ 
+            col_name:   'Property 1',
+            dom_query:  'td.row#clementi > p:nth-child(2).contact-info > a.address > span.street > b.prop-img' 
+          }, {
+            col_name:   'Property 2',
+            dom_query:  'td.row#clementi' 
+          }]
+      }
+
+    it "should return well formed partial for columns with pagination", ->
+      page = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      col1  = new KColumn page.id
+      col1.set [{
+          el: "td"
+          class: ".row"
+          id: "#clementi"
+        },{                
+          el: "p"
+          position: 2
+          class: ".contact-info"
+        },{
+          el: "a"
+          class: ".address"
+        },{
+          el: "span"
+          class: ".street"
+        },{
+          el: "b"
+          class: ".prop-img"
+        }]
+      
+      pagination1 = new KPagination page.id
+      pagination1.set [{
+          el: "td"
+          class: ".row"
+          id: "#clementi"
+        },{                
+          el: "p"
+          position: 2
+          class: ".contact-info"
+        },{
+          el: "a"
+          class: ".address"
+        }]
+
+      expect(page.toParams()).toEqual { 
+        columns: [{ 
+            col_name:   'Property 1',
+            dom_query:  'td.row#clementi > p:nth-child(2).contact-info > a.address > span.street > b.prop-img' 
+          }],
+        next_page: 
+          dom_query: 'td.row#clementi > p:nth-child(2).contact-info > a.address'
+          click: true
+      }
+
+    describe "1 level columns nesting", ->
+      it "should return well formed partial for columns with 1 level nesting", ->
+        page = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+        col1  = new KColumn page.id
+        col1.set [{
+            el: "td"
+            class: ".row"
+            id: "#col1"
+          }]
+        
+        sub_page_l1 = new KPage @page_url + "sub1", @window_id, @page_url, col1.id, @page_title
+        col2  = new KColumn sub_page_l1.id
+        col2.set [{
+            el: "td"
+            class: ".row"
+            id: "#col2"
+          }]        
+
+        expect(page.toParams()).toEqual { 
+          columns: [{ 
+            col_name:   'Property 1',
+            dom_query:  'td.row#col1' 
+            options: 
+              origin_url : 'http://google.comsub1'
+              columns: [{
+                col_name:   'Property 2',
+                dom_query:  'td.row#col2' 
+              }]
+          }]
+        }
+
+      it "should return well formed partial for columns with 1 level nesting and pagination", ->
+        page    = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+        kpage1  = new KPagination page.id
+        kpage1.set [{
+            el: "a"
+            class: ".next1"
+          }]
+
+        col1    = new KColumn page.id
+        col1.set [{
+            el: "td"
+            class: ".row"
+            id: "#col1"
+          }]
+
+
+        
+        sub_page_l1 = new KPage @page_url + "sub1", @window_id, @page_url, col1.id, @page_title
+        col2        = new KColumn sub_page_l1.id
+        col2.set [{
+            el: "td"
+            class: ".row"
+            id: "#col2"
+          }]
+        kpage2  = new KPagination sub_page_l1.id
+        kpage2.set [{
+            el: "a"
+            class: ".next2"
+          }]
+
+        expect(page.toParams()).toEqual { 
+          columns: [{ 
+            col_name:   'Property 1',
+            dom_query:  'td.row#col1' 
+            options: 
+              origin_url : 'http://google.comsub1'
+              columns: [{
+                col_name:   'Property 2',
+                dom_query:  'td.row#col2'
+              }]
+              next_page:
+                dom_query : "a.next2"
+                click: true
+          }]
+          next_page:
+            dom_query : "a.next1"
+            click: true
+        }   
+
+    describe "2 level columns nesting", ->
+      it "should return well formed partial for columns with 2 level nesting", ->
+        page = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+        col1  = new KColumn page.id
+        col1.set [{
+            el: "td"
+            class: ".row"
+            id: "#col1"
+          }]
+        
+        sub_page_l1 = new KPage @page_url + "sub1", @window_id, @page_url, col1.id, @page_title
+        col2  = new KColumn sub_page_l1.id
+        col2.set [{
+            el: "td"
+            class: ".row"
+            id: "#col2"
+          }]
+
+        sub_page_l2 = new KPage @page_url + "sub2", @window_id, @page_url + "sub1", col2.id, @page_title
+        col3  = new KColumn sub_page_l2.id
+        col3.set [{
+            el: "td"
+            class: ".row"
+            id: "#col3"
+          }]
+
+        expect(page.toParams()).toEqual { 
+          columns: [{ 
+            col_name:   'Property 1',
+            dom_query:  'td.row#col1' 
+            options: 
+              origin_url : 'http://google.comsub1'
+              columns: [{
+                col_name:   'Property 2',
+                dom_query:  'td.row#col2'
+                options: 
+                  origin_url : 'http://google.comsub2'
+                  columns: [{
+                    col_name:   'Property 3',
+                    dom_query:  'td.row#col3' 
+                  }]                
+              }]
+          }]
+        }        
+
+      it "should return well formed partial for columns with 2 level nesting and pagination", ->
+        page    = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+        kpage1  = new KPagination page.id
+        kpage1.set [{
+            el: "a"
+            class: ".next1"
+          }]
+
+        col1    = new KColumn page.id
+        col1.set [{
+            el: "td"
+            class: ".row"
+            id: "#col1"
+          }]
+
+
+        
+        sub_page_l1 = new KPage @page_url + "sub1", @window_id, @page_url, col1.id, @page_title
+        col2        = new KColumn sub_page_l1.id
+        col2.set [{
+            el: "td"
+            class: ".row"
+            id: "#col2"
+          }]
+        kpage2  = new KPagination sub_page_l1.id
+        kpage2.set [{
+            el: "a"
+            class: ".next2"
+          }]
+
+
+
+        sub_page_l2 = new KPage @page_url + "sub2", @window_id, @page_url + "sub1", col2.id, @page_title
+        col3  = new KColumn sub_page_l2.id
+        col3.set [{
+            el: "td"
+            class: ".row"
+            id: "#col3"
+          }] 
+        kpage3  = new KPagination sub_page_l2.id
+        kpage3.set [{
+            el: "a"
+            class: ".next3"
+          }]         
+
+        expect(page.toParams()).toEqual { 
+          columns: [{ 
+            col_name:   'Property 1',
+            dom_query:  'td.row#col1' 
+            options: 
+              origin_url : 'http://google.comsub1'
+              columns: [{
+                col_name:   'Property 2'
+                dom_query:  'td.row#col2'
+                options:
+                  origin_url : 'http://google.comsub2'
+                  columns: [{
+                    col_name:   'Property 3'
+                    dom_query:  'td.row#col3'
+                  }]
+                  next_page:
+                    dom_query : "a.next3"
+                    click: true                  
+              }]
+              next_page:
+                dom_query : "a.next2"
+                click: true
+          }]
+          next_page:
+            dom_query : "a.next1"
+            click: true
+        }   
+
+  describe "kcolumnsToParams", ->
+    it "should have return well formed params", ->
+      page    = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      col1    = new KColumn page.id
+      col1.set [{
+          el: "td"
+          class: ".row"
+          id: "#col1"
+        }]
+      expect(page.kcolumnsToParams()).toEqual [{
+          col_name: "Property 1"
+          dom_query: "td.row#col1"
+        }]
+
+  describe "kcolumnsIsSet", ->
+    it "should have columns set", ->
+      page    = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      col1    = new KColumn page.id
+      col1.set [{
+          el: "td"
+          class: ".row"
+          id: "#col1"
+        }]
+      expect(page.kcolumnsIsSet()).toBe true

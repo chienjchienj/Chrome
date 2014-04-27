@@ -1,3 +1,7 @@
+/** Node environmental dependencies **/
+try { var KColumn = require('./kcolumn'); } catch(e) {}
+try { var KPagination = require('./kpagination'); } catch(e) {}
+
 /**
   Constructor: Instantiates a new page Instance if it not already exist. Returns the existing one otherwise
 
@@ -18,12 +22,12 @@ var KPage = function(origin_url, window_id, parent_url, parent_column_id, page_t
   if(pages.length > 0) return pages[0];
   
   var self = this;
-  self.id               = KPage.getId();
-  self.origin_url       = origin_url;
-  self.window_id        = window_id;
-  self.parent_url       = parent_url;
-  self.parent_column_id = parent_column_id;
-  self.page_title       = page_title;
+  self.id                   = KPage.getId();
+  self.origin_url           = origin_url;
+  self.window_id            = window_id;
+  self.parent_url           = parent_url;
+  self.parent_column_id     = parent_column_id;
+  self.page_title           = page_title;
   KPage.instances.push(self);
 
 };
@@ -108,6 +112,7 @@ KPage.prototype.root = function() {
   return current_page;
 };
 
+
 /** 
   Returns a column object
 **/
@@ -123,25 +128,80 @@ KPage.prototype.kcolumns = function() {
   return KColumn.find({page_id: self.id});
 }
 
+KPage.prototype.kpaginationIsSet = function() {
+  var self = this;
+  return KPagination.find({page_id: self.id}).length > 0 && KPagination.find({page_id: self.id})[0].isSet();
+}
+
+/** Returns true if Kcolumns have been set for this KPage **/
+KPage.prototype.kcolumnsIsSet = function() {
+  var self = this;
+  return KColumn.find({page_id: self.id}).length > 0;
+}
+
 /**
   Returns the JSON partial for the data definition schema
-  
+
+  Params:
+    include_url: Boolean
+
   Returns:
     options_object: https://getdata.io/docs/define-data#options_object
+
 **/
-KPage.prototype.toParams = function() {
+KPage.prototype.toParams = function(include_url) {
   var self = this;
-  partial = {};
-  partial.columns = self.kcolumns.map(function(kcolumn) {
-    return kcolumn.toParams();
+
+  var partial = {};
+  if(self.kcolumnsIsSet())      partial.columns = self.kcolumnsToParams();  
+  else return false;
+
+  if(include_url)               partial.origin_url = self.origin_url;
+  if(self.kpaginationIsSet())   partial.next_page = self.kpaginationToParams();
+  return partial;
+}
+
+KPage.prototype.kpaginationToParams = function() {
+  var self = this;
+  var paginations = KPagination.find({ page_id: self.id });
+  if(paginations.length > 0) return paginations[0].toParams();
+}
+
+/**
+  Returns the JSON partial for the data definition schema
+
+  Returns:
+    columns_object: https://getdata.io/docs/define-data#columns
+
+**/
+KPage.prototype.kcolumnsToParams = function() {
+  var self = this;
+  return self.kcolumns().map(function(kcolumn) {
+    var col_partial = kcolumn.toParams();
+    var child_pages = KPage.find({ parent_column_id: kcolumn.id });
+
+    if(child_pages.length > 0) {
+      var child_page = child_pages[0];
+      if(col_partial.required_attribute == 'href' || col_partial.required_attribute == 'src' ) {
+        col_partial.options = child_page.toParams();
+      } else {
+        col_partial.options = child_page.toParams(true);  
+      }
+    }
+    return col_partial;
+
   });
 }
 
-/** Node environmental dependencies **/
-try { var KColumn = require('./kcolumn'); } catch(e) {}
-  try { 
+
+
+/**
+  Explore module for use in NodeJs
+**/
+try { 
   module && (module.exports = { 
-    KPage: KPage, 
-    KColumn: KColumn
+    KPage:        KPage, 
+    KColumn:      KColumn,
+    KPagination:  KPagination
   }); 
 } catch(e){}
