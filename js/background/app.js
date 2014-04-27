@@ -71,10 +71,3 @@ Application.refreshEvent = function(tabId, changeInfo, tab) {
   if(kwin.isActive()) BrowserIconView.activate();
   else BrowserIconView.deactivate();
 }
-
-/**
-  Routes the incoming request to the respective controllers
-**/
-Application.routeAction = function(request) {
-
-}
