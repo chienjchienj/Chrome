@@ -28,7 +28,7 @@ Application.msgEvent = function(request, sender, sendResponse){
   } 
 
   if (!Application.msg_controllers[controller]) {
-    console.log("controller does not exist: %s", controller);
+    console.log("controller is not registered: %s", controller);
     return;
   } 
 
