@@ -1,9 +1,9 @@
 var BrowserIconView = function() {}
 
 BrowserIconView.activate = function() {
-  chrome.browserAction.setIcon({path:"images/krake_icon_24.png"});
+  Env.setIcon(CONFIG["active_icon"]);
 }
 
 BrowserIconView.deactivate = function() {
-  chrome.browserAction.setIcon({path:"images/krake_icon_disabled_24.png"});
+  Env.setIcon(CONFIG["inactive_icon"]);
 }

@@ -3,4 +3,4 @@ MixPanelController = require "../../../../js/background/controllers/mix_panel_co
 
 describe "MixPanelController", ->
   it "Constructor", ->
-    mxpc = new MixPanelController("Something")
+    mxpc = new MixPanelController("SOME_MX_KEY", "SOME_CHROME_VERSION")

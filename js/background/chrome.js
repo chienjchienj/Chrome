@@ -1,3 +1,18 @@
+/**
+  Wrapper of chrome environment specific functions
+**/
+var Env = {};
+
+Env.getSelectedTab = function(query, callback) {
+  chrome.tabs.getSelected(query, callback);  
+}
+
+Env.setIcon = function(img_path) {
+  chrome.browserAction.setIcon({path:img_path});
+}
+
+
+
 // Backwards compatibility hack for Chrome 20 - 25, ensures the plugin works for Chromium as well
 if(chrome.runtime && !chrome.runtime.onMessage) {
   chrome.runtime.onMessage = chrome.extension.onMessage
@@ -13,4 +28,4 @@ chrome.tabs.onUpdated.addListener(Application.refreshEvent);
 chrome.browserAction.onClicked.addListener(Application.iconEvent);
 
 // @Description : handles for tab change event
-chrome.tabs.onActivated.addListener(Application.tabEvent);
+chrome.tabs.onActivated.addListener(Application.tabEvent);  
