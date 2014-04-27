@@ -43,6 +43,8 @@ Application.msgEvent = function(request, sender, sendResponse){
   console.log(results);
 }
 
+
+/** Called when the icon on the top right hand corner of the browser is clicked **/
 Application.iconEvent = function(tab) {  
   var window_id = tab.id;
   var kwin = new KWindow(window_id);
@@ -58,6 +60,7 @@ Application.iconEvent = function(tab) {
   }
 };
 
+/** Called when user clicks to activate another window in the browser **/
 Application.tabEvent = function(action_info) {
   var window_id = action_info.tabId;
   var kwin = new KWindow(window_id);
@@ -66,6 +69,7 @@ Application.tabEvent = function(action_info) {
     
 }
 
+/** Called when user refreshes a window in the browser **/
 Application.refreshEvent = function(tabId, changeInfo, tab) {
   var kwin = new KWindow(tab.id);
   if(kwin.isActive()) BrowserIconView.activate();
