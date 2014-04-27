@@ -15,12 +15,12 @@ Application.msg_controllers = {
 
     sender:Object
     sendResponse:Object
-    
+
 **/
 Application.msgEvent = function(request, sender, sendResponse){
   var controller = request.controller;
   var method     = request.method;
-  var args_array = request.args_array;
+  var args_array = request.args_array || [];
 
   if(!controller) {
     console.log("controller needs to be specificed");
