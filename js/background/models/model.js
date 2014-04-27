@@ -1,3 +1,0 @@
-var KModel = function() {
-  
-}

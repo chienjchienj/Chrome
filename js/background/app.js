@@ -1,97 +1,39 @@
-/***************************************************************************/
-/************************  Browser Action Icon  ****************************/
-/***************************************************************************/
+var Application = function() {}
 
-var handleIconClick = function(tab) {
+Application.iconEvent = function(tab) {  
+  var window_id = tab.id;
+  var kwin = new KWindow(window_id);
   
-  // Sets the tab.id to global for easier reference during debugging
-  curr_tab_id = tab.id;
-  
-  // Deactivation Krake within this Tab
-  if(records[tab.id] && records[tab.id].isActive) {
-    records[tab.id].isActive = false;
-    updateBrowserActionIcon(tab.id);
-        
-    clearCache();
-    MixpanelEvents.event_3();
-    disableKrake();
+  if(kwin.isActive()) {
+    console.log("DeActiving");
+    kwin.deactivate();
+    BrowserIconView.deactivate();
 
-  // Activating Krake within this Tab     
   } else {
-  
-    // Setting up of variables belonging to this tab
-    records[tab.id] = records[tab.id] || {}
-    records[tab.id].isActive = true;
-    sessionManager = records[tab.id].sessionManager = records[tab.id].sessionManager || new SessionManager();    
-    curr_SKH = new SharedKrakeHelper(tab.id, tab.url, tab.title);
-    sharedKrake = curr_SKH.SharedKrake;
-    
-    updateBrowserActionIcon(tab.id);
-    clearCache();
-    MixpanelEvents.event_2();
-
-    enableKrake();
+    kwin.activate();
+    BrowserIconView.activate();
     
    }
 
-};//eo handleIconClick
+};
 
-
-
-// @Description : When a new tab is clicks
-var newTabFocused = function(action_info) {
-
-  // Updates the Browser extension ICON
-  updateBrowserActionIcon(action_info.tabId);
-  
-  // Gets the current tab
-  chrome.tabs.get(action_info.tabId, function(tab) {
-    curr_SKH = new SharedKrakeHelper(tab.id, tab.url, tab.title);
-    sharedKrake = curr_SKH.SharedKrake;
-  });
-  
-  // Sets the tab.id to global for easier reference during debugging
-  curr_tab_id = action_info.tabId;
-  
+Application.tabEvent = function(action_info) {
+  var window_id = action_info.tabId;
+  var kwin = new KWindow(window_id);
+  if(kwin.isActive()) BrowserIconView.activate();
+  else BrowserIconView.deactivate();
+    
 }
 
-
-
-// @Description : When page was reloaded
-var pageReloaded = function(tabId, changeInfo, tab) {
-  //re-render panel using columns objects from storage if any. 
-  records[tab.id] = records[tab.id] || {};
-  curr_SKH = new SharedKrakeHelper(tab.id, tab.url, tab.title);
-  sharedKrake = curr_SKH.SharedKrake;
-  
-  if(records[tab.id].isActive) {
-    //Remove column that is not done editing from sessionManager
-    sessionManager.currentState = "idle";
-    sessionManager.currentColumn = null;
-
-    chrome.tabs.sendMessage(tabId, { action : "enable_krake"}, function(response) {
-      records[tab.id].isActive = true;
-    });
-  }//eo if
+Application.reloadEvent = function(tabId, changeInfo, tab) {
+  var kwin = new KWindow(tab.id);
+  if(kwin.isActive()) BrowserIconView.activate();
+  else BrowserIconView.deactivate();
 }
 
-
-
-// @Description : Changes the icon on display depending on the current state of the browser extension
-var updateBrowserActionIcon = function(tab_id) {
-  if( records[tab_id] && records[tab_id].isActive ) {
-    chrome.browserAction.setIcon({path:"images/krake_icon_24.png"});
-    
-  } else {
-    chrome.browserAction.setIcon({path:"images/krake_icon_disabled_24.png"});
-    
-  }
-
-};//eo updateBrowserActionIcon
-
-
-
-
+Application.messageEvent = function(request, sender, sendResponse){
+  
+}
 
 // Backwards compatibility hack for Chrome 20 - 25, ensures the plugin works for Chromium as well
 if(chrome.runtime && !chrome.runtime.onMessage) {
@@ -99,18 +41,15 @@ if(chrome.runtime && !chrome.runtime.onMessage) {
 } 
   
 // @Description : Listens for message calls from the front end
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    
-});
-
+chrome.runtime.onMessage.addListener(Application.messageEvent);
 
 // @Description : handles page reload event
-chrome.tabs.onUpdated.addListener(pageReloaded);
+chrome.tabs.onUpdated.addListener(Application.reloadEvent);
 
 // @Description : handles extension Icon click event
-chrome.browserAction.onClicked.addListener(handleIconClick);
+chrome.browserAction.onClicked.addListener(Application.iconEvent);
 
 // @Description : handles for tab change event
-chrome.tabs.onActivated.addListener(newTabFocused);
+chrome.tabs.onActivated.addListener(Application.tabEvent);
 
 
