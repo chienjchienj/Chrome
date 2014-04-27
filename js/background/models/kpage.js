@@ -193,11 +193,7 @@ KPage.prototype.kcolumnsToParams = function() {
   });
 }
 
-
-
-/**
-  Export module for use in NodeJs
-**/
+/** Export for node testing **/
 try { 
   module && (module.exports = { 
     KPage:        KPage, 

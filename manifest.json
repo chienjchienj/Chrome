@@ -12,7 +12,7 @@
         "js/background/models/kwindow.js",
         "js/background/views/browser_icon_view.js",
         "js/background/controllers/mix_panel_controller.js",
-        "js/background/app.js",
+        "js/background/application.js",
         "js/background/chrome.js"
       ]
    },

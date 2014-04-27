@@ -1,7 +1,14 @@
+/** Node environmental dependencies **/
+try { var CONFIG              = require('./config/config'); } catch(e) {}
+try { var KWindow             = require('./models/kwindow'); } catch(e) {}
+try { var MixPanelController  = require('./controllers/mix_panel_controller'); } catch(e) {}
+try { var BrowserIconView     = require('./views/browser_icon_view'); } catch(e) {}
+
+
 var Application = {};
 
 Application.msg_controllers = {
-  mixpanel: new MixPanelController(CONFIG["MixPanelKey"])
+  mixpanel: new MixPanelController(CONFIG["mixpanel_key"], CONFIG["version"])
 };
 
 /**
@@ -75,3 +82,14 @@ Application.refreshEvent = function(tabId, changeInfo, tab) {
   if(kwin.isActive()) BrowserIconView.activate();
   else BrowserIconView.deactivate();
 }
+
+/** Export for node testing **/
+try { 
+  module && (module.exports = { 
+    CONFIG:               CONFIG, 
+    Application:          Application, 
+    MixPanelController:   MixPanelController,
+    KPagination:          KPagination,
+    BrowserIconView:      BrowserIconView,
+  }); 
+} catch(e){}
