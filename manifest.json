@@ -10,7 +10,7 @@
          "js/background/helpers/cookie_helper.js",
          "js/background/helpers/session_manager.js",
          "js/background/helpers/mixpanel_event.js",
-         "js/background/background.js"
+         "js/background/app.js"
       ]
    },
    "browser_action": {
