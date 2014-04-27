@@ -9,16 +9,16 @@ var MixPanelController = function(mixpanel_key, version) {
 
 MixPanelController.prototype.setId = function() {
   var self = this;
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "https://getdata.io/muuid", true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4) {
-      self.id = JSON.parse(xhr.responseText)["muuid"];
+  self.xhr = new XMLHttpRequest();
+  self.xhr.open("GET", "https://getdata.io/muuid", true);
+  self.xhr.onreadystatechange = function() {
+    if (self.xhr.readyState == 4) {  
+      self.id = JSON.parse(self.xhr.responseText)["muuid"];
       console.log("Identity : %s", self.id);
       mixpanel.identify(self.id);
     }
   }
-  xhr.send();
+  self.xhr.send();
 }
 
 /** Returns the current User id on MixPanel **/

@@ -7,3 +7,11 @@ BrowserIconView.activate = function() {
 BrowserIconView.deactivate = function() {
   Env.setIcon(CONFIG["inactive_icon"]);
 }
+
+/** Export for node testing **/
+try { 
+  module && (module.exports = BrowserIconView); 
+} catch(e){
+  console.log(e)
+
+}

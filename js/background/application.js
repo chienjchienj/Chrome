@@ -1,8 +1,8 @@
 /** Node environmental dependencies **/
+try { var BrowserIconView     = require('./views/browser_icon_view'); } catch(e) {}
 try { var CONFIG              = require('./config/config'); } catch(e) {}
 try { var KWindow             = require('./models/kwindow'); } catch(e) {}
 try { var MixPanelController  = require('./controllers/mix_panel_controller'); } catch(e) {}
-try { var BrowserIconView     = require('./views/browser_icon_view'); } catch(e) {}
 
 
 var Application = {};
@@ -45,9 +45,10 @@ Application.msgEvent = function(request, sender, sendResponse){
 
   }
 
-  controller_obj = Application.msg_controllers[controller]
-  var results = controller_obj[method].apply(controller_obj, args_array);
-  console.log(results);
+  controller_obj  = Application.msg_controllers[controller]
+  res             = {}
+  res.response    = controller_obj[method].apply(controller_obj, args_array);
+  sendResponse && sendResponse(res);
 }
 
 
@@ -57,7 +58,6 @@ Application.iconEvent = function(tab) {
   var kwin = new KWindow(window_id);
   
   if(kwin.isActive()) {
-    console.log("DeActiving");
     kwin.deactivate();
     BrowserIconView.deactivate();
 
@@ -86,10 +86,10 @@ Application.refreshEvent = function(tabId, changeInfo, tab) {
 /** Export for node testing **/
 try { 
   module && (module.exports = { 
-    CONFIG:               CONFIG, 
-    Application:          Application, 
-    MixPanelController:   MixPanelController,
-    KPagination:          KPagination,
+    Application:          Application,     
     BrowserIconView:      BrowserIconView,
+    CONFIG:               CONFIG,
+    KWindow:              KWindow,    
+    MixPanelController:   MixPanelController
   }); 
 } catch(e){}
