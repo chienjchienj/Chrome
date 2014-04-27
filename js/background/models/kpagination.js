@@ -102,7 +102,7 @@ KPagination.prototype.toParams = function() {
 
 
 /**
-  Explore module for use in NodeJs
+  Export module for use in NodeJs
 **/
 try { 
   module && (module.exports = KPagination); 

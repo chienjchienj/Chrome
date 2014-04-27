@@ -196,7 +196,7 @@ KPage.prototype.kcolumnsToParams = function() {
 
 
 /**
-  Explore module for use in NodeJs
+  Export module for use in NodeJs
 **/
 try { 
   module && (module.exports = { 
