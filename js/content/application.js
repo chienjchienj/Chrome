@@ -2,14 +2,21 @@ Application = {}
 
 Application.msgEvent = function(request, sender, sendResponse) {
 
-  if(!request.method) {
-    console.log("Controller %s, method %s does not exist", "Application", request.method)
+  var method      = request.method
+  var args_array  = request.args_array || [];
+
+  if(!method) {
+    console.log("Controller %s, method %s does not exist", "Application", method)
+    return;
   }
   
-  if(request.method && !Application[request.method]) {
-    console.log("Controller %s, method %s does not exist", "Application", request.method)
+  if(method && !Application[method]) {
+    console.log("Controller %s, method %s does not exist", "Application", method)
+    return;
   }
-  console.log("Calling method : %s", request.method);
+
+  console.log("Calling method : %s", method);
+  Application[method].apply(Application, args_array);
 }
 
 Application.activate = function() {

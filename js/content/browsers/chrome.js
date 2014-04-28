@@ -3,3 +3,9 @@
 **/
 
 chrome.extension.onMessage.addListener(Application.msgEvent);
+
+var Env = {};
+
+Env.sendMessage = function(payload, callback) {
+  chrome.runtime.sendMessage(payload, callback);
+}
