@@ -1,8 +1,8 @@
 var Application = {}
 
 Application.views = {
-  sidebar: SideBar,
-  page: Page
+  sidebar: new SideBar(),
+  page: new Page()
 }
 
 /** Holds all compiled handlebar templates **/
@@ -20,7 +20,6 @@ Application.handle_bars = ["sidebar", "column"];
 **/
 Application.init = function() {
   Application.loadHandleBarTemplates();
-  Application.page = new Page();
 }
 
 /** 
@@ -50,8 +49,8 @@ Application.msgEvent = function(request, sender, sendResponse) {
 **/
 Application.activate = function() {
   $("body").css({ paddingLeft: CONFIG["sidebar_width"] });
-  Application.page.render();
-  Application.page.el;
+  Application.views.sidebar.render();
+  console.log(Application.views.sidebar.el);
 }
 
 /** 
