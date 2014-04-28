@@ -20,9 +20,9 @@ Application.msgEvent = function(request, sender, sendResponse) {
 }
 
 Application.activate = function() {
-  $("body").css({ paddingLeft: "0px" });
+  $("body").css({ paddingLeft: CONFIG["sidebar_width"] });
 }
 
 Application.deactivate = function() {
-  $("body").css({ paddingLeft: CONFIG["sidebar_width"] });
+  $("body").css({ paddingLeft: "0px" });  
 }
