@@ -1,3 +1,4 @@
+require "../../fixtures/env_stubs"
 KWindow    = require "../../../../js/background/models/kwindow"
 
 describe "KWindow", ->
@@ -25,3 +26,17 @@ describe "KWindow", ->
       kwins = KWindow.find({ id: @window_id });
       expect(kwins.length).toEqual 1
       expect(kwins[0].isActive()).toBe true
+
+  describe "activate", ->
+    it "should be emit activate event", ->
+      spyOn(Env, "sendMessage")
+      kwin1 = new KWindow @window_id
+      kwin1.activate()
+      expect(Env.sendMessage).toHaveBeenCalled()
+
+  describe "deactivate", ->
+    it "should be emit activate event", ->
+      spyOn(Env, "sendMessage")
+      kwin1 = new KWindow @window_id
+      kwin1.deactivate()
+      expect(Env.sendMessage).toHaveBeenCalled()

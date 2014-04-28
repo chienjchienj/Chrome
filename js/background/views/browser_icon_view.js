@@ -11,7 +11,4 @@ BrowserIconView.deactivate = function() {
 /** Export for node testing **/
 try { 
   module && (module.exports = BrowserIconView); 
-} catch(e){
-  console.log(e)
-
-}
+} catch(e){}

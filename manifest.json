@@ -1,10 +1,26 @@
 {
+   "content_scripts": [ {
+      "matches"   : [ "<all_urls>" ],
+      "css": [ "css/content.css" ], 
+      "js": [ 
+        "js/content/config/config.js",
+        "js/content/lib/handlebars.js",
+        "js/content/lib/underscore-min.js",
+        "js/content/lib/backbone-min.js",
+        "js/content/lib/jquery_1.9.1.min.js",
+        "js/content/lib/jquery_ui_1.10.3.js", 
+        "js/content/views/sidebar.js",        
+        "js/content/views/page.js",
+        "js/content/application.js",
+        "js/content/browsers/chrome.js"
+      ],
+      "matches": [ "http://*/*", "https://*/*" ],
+      "run_at": "document_end"
+   } ],  
    "background": {
       "scripts": [ 
-        "js/libs/jquery/jquery_1.9.1.min.js",
-        "js/libs/async/async.js",
-        "js/libs/mixpanel/mixpanel.js",
         "js/background/config/config.js",
+        "js/background/lib/mixpanel.js",
         "js/background/models/kcookie.js",
         "js/background/models/kcolumn.js",
         "js/background/models/kpagination.js",
@@ -13,27 +29,13 @@
         "js/background/views/browser_icon_view.js",
         "js/background/controllers/mix_panel_controller.js",
         "js/background/application.js",
-        "js/background/chrome.js"
+        "js/background/browsers/chrome.js"
       ]
    },
    "browser_action": {
       "default_icon": "images/krake_icon_disabled_24.png",
       "default_title": "Get Data"
    },
-
-   "content_scripts": [ {
-      "matches"   : [ "<all_urls>" ],
-      "css": [ "css/content.css" ], 
-      "js": [ 
-        "js/content/load_time.js",
-        "js/libs/jquery/jquery_1.9.1.min.js",
-        "js/libs/jquery/jquery_ui_1.10.3.js", 
-        "js/content/behavioral_mode.js",
-        "js/content/content.js" 
-      ],
-      "matches": [ "http://*/*", "https://*/*" ],
-      "run_at": "document_end"
-   } ],
    "web_accessible_resources": [
     "images/bin.png",
     "images/save.png",
