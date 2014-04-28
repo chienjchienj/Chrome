@@ -4,12 +4,12 @@
       "css": [ "css/content.css" ], 
       "js": [ 
         "js/content/config/config.js",
+        "js/content/lib/jquery_1.9.1.min.js",
+        "js/content/lib/jquery_ui_1.10.3.js",        
         "js/content/lib/handlebars.js",
         "js/content/lib/underscore-min.js",
-        "js/content/lib/backbone-min.js",
-        "js/content/lib/jquery_1.9.1.min.js",
-        "js/content/lib/jquery_ui_1.10.3.js", 
-        "js/content/views/sidebar.js",        
+        "js/content/lib/backbone-min.js", 
+        "js/content/views/sidebar.js",       
         "js/content/views/page.js",
         "js/content/application.js",
         "js/content/browsers/chrome.js"
@@ -37,6 +37,8 @@
       "default_title": "Get Data"
    },
    "web_accessible_resources": [
+    "js/content/templates/sidebar.hbs",
+    "js/content/templates/column.hbs",
     "images/bin.png",
     "images/save.png",
     "images/link.png",
