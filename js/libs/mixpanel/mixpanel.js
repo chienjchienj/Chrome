@@ -42,7 +42,7 @@
 mixpanel.init("6739c9644606bc42c8ac134c22e1d691");
 
 // Ensures the muuid cookie is set
-get_muuid = function(callback) {
+var get_muuid = function(callback) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "https://getdata.io/muuid", true);
   xhr.onreadystatechange = function() {
@@ -57,7 +57,7 @@ get_muuid = function(callback) {
 };
 
 // Unique user identity across web application and browser extension
-setup_mixpanel = function(muuid) {
+var setup_mixpanel = function(muuid) {
   mixpanel.identify(muuid);
 
   // When its the first time installing
