@@ -41,64 +41,49 @@
 })(document, window.mixpanel || []);
 mixpanel.init("6739c9644606bc42c8ac134c22e1d691");
 
-// Unique user identity across web application and browser extension
-setup_mixpanel_muuid = function() {
-  console.log('Setting up muuid at ' + new Date());
-  chrome.cookies.get({"url": 'https://getdata.io', "name": 'muuid'}, function(cookie) {
-
-    // When MixPanel Unique User ID is already set for this browser extension    
-    if(cookie) {
-
-      mixpanel.identify(cookie.value);
-      console.log('MUUID : %s', cookie.value);
-
-      // When its the first time installing
-      if(window.localStorage && localStorage.getItem('first_install') != 'yes'){
-        mixpanel.track("developer - extension installed - browser", {
-          'extension_version' : chrome.runtime.getManifest().version
-        });
-        //console.log('executed');
-        localStorage.setItem('first_install', 'yes');
-        localStorage.setItem('old_extension_version', chrome.runtime.getManifest().version );
-        console.log('new browser extension install : ' +  chrome.runtime.getManifest().version);
-      
-      // When updating the browser extension
-      } else if(localStorage.getItem('old_extension_version') && localStorage.getItem('old_extension_version') != chrome.runtime.getManifest().version) {
-        mixpanel.track("developer - extension updated - browser", {
-          'extension_version' : chrome.runtime.getManifest().version,
-          'old_extension_version' : localStorage.getItem('old_extension_version')
-        });
-        localStorage.setItem('old_extension_version', chrome.runtime.getManifest().version );
-        console.log('browser extension update : ' +  chrome.runtime.getManifest().version);
-        
-      };
-
-    // When MixPanel Unique User ID is not set yet for this browser extension
-    } else {
-      setup_muuid_frame();
-    }
-
-  });
-};
-
-
 // Ensures the muuid cookie is set
-setup_muuid_frame = function() {
-  console.log('Setting Krake.IO Unique User ID cookie');
+get_muuid = function(callback) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "https://getdata.io/muuid", true);
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
-      console.log('Loaded Krake.IO iframe');
-      setup_mixpanel_muuid();
+      var muuid = JSON.parse(xhr.responseText)["muuid"];
+      console.log("User mixpanel id : %s", muuid);
+      setup_mixpanel(muuid);
     }
   }
   xhr.send();  
 
 };
 
-console.log('Mixpanel 101');
-setup_mixpanel_muuid();
+// Unique user identity across web application and browser extension
+setup_mixpanel = function(muuid) {
+  mixpanel.identify(muuid);
+
+  // When its the first time installing
+  if(window.localStorage && localStorage.getItem('first_install') != 'yes'){
+    mixpanel.track("developer - extension installed - browser", {
+      'extension_version' : chrome.runtime.getManifest().version
+    });
+    //console.log('executed');
+    localStorage.setItem('first_install', 'yes');
+    localStorage.setItem('old_extension_version', chrome.runtime.getManifest().version );
+    console.log('new browser extension install : ' +  chrome.runtime.getManifest().version);
+  
+  // When updating the browser extension
+  } else if(localStorage.getItem('old_extension_version') && localStorage.getItem('old_extension_version') != chrome.runtime.getManifest().version) {
+    mixpanel.track("developer - extension updated - browser", {
+      'extension_version' : chrome.runtime.getManifest().version,
+      'old_extension_version' : localStorage.getItem('old_extension_version')
+    });
+    localStorage.setItem('old_extension_version', chrome.runtime.getManifest().version );
+    console.log('browser extension update : ' +  chrome.runtime.getManifest().version);
+    
+  };
+
+};
+
+get_muuid();
 
 
 /***************************************************************************/
