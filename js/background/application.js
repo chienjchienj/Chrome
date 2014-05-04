@@ -3,12 +3,14 @@ try { var BrowserIconView     = require('./views/browser_icon_view'); } catch(e)
 try { var CONFIG              = require('./config/config'); } catch(e) {}
 try { var KWindow             = require('./models/kwindow'); } catch(e) {}
 try { var MixPanelController  = require('./controllers/mix_panel_controller'); } catch(e) {}
+try { var KColumnsController  = require('./controllers/kcolumns_controller'); } catch(e) {}
 
 
 var Application = {};
 
 Application.msg_controllers = {
-  mixpanel: new MixPanelController(CONFIG["mixpanel_key"], CONFIG["version"])
+  mixpanel: new MixPanelController(CONFIG["mixpanel_key"], CONFIG["version"]),
+  kcolumns: KColumnsController
 };
 
 /**
@@ -28,6 +30,7 @@ Application.msgEvent = function(request, sender, sendResponse){
   var controller = request.controller;
   var method     = request.method;
   var args_array = request.args_array || [];
+  if(sender.tab) args_array.push(sender.tab)
 
   if(!controller) {
     console.log("controller needs to be specificed");
@@ -47,7 +50,7 @@ Application.msgEvent = function(request, sender, sendResponse){
 
   controller_obj  = Application.msg_controllers[controller]
   res             = {}
-  res.response    = controller_obj[method].apply(controller_obj, args_array);
+  res.message    = controller_obj[method].apply(controller_obj, args_array);
   sendResponse && sendResponse(res);
 }
 
@@ -90,6 +93,7 @@ try {
     BrowserIconView:      BrowserIconView,
     CONFIG:               CONFIG,
     KWindow:              KWindow,    
-    MixPanelController:   MixPanelController
+    MixPanelController:   MixPanelController,
+    KColumnsController:   KColumnsController
   }); 
 } catch(e){}

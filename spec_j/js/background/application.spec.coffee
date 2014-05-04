@@ -20,7 +20,7 @@ describe "Application", ->
         method: "getId",
         args_array: ["arg1", "arg2", "arg3"]
       }, {}, (res)=>
-        expect(res.response).toEqual "STUBBING"
+        expect(res.message).toEqual "STUBBING"
         expect(Application.msg_controllers["mixpanel"].getId).toHaveBeenCalledWith("arg1", "arg2", "arg3")
         done()
 

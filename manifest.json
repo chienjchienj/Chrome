@@ -9,7 +9,9 @@
         "js/content/lib/handlebars.js",
         "js/content/lib/underscore-min.js",
         "js/content/lib/backbone-min.js", 
-        "js/content/views/sidebar.js",       
+        "js/content/lib/backbone-override.js", 
+        "js/content/models/column.js",
+        "js/content/views/sidebar.js",
         "js/content/views/page.js",
         "js/content/application.js",
         "js/content/browsers/chrome.js"
@@ -28,6 +30,7 @@
         "js/background/models/kwindow.js",
         "js/background/views/browser_icon_view.js",
         "js/background/controllers/mix_panel_controller.js",
+        "js/background/controllers/kcolumns_controller.js",
         "js/background/application.js",
         "js/background/browsers/chrome.js"
       ]

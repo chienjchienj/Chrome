@@ -1,9 +1,6 @@
 var Application = {}
 
-Application.views = {
-  sidebar: new SideBar(),
-  page: new Page()
-}
+Application.page = new Page();
 
 /** Holds all compiled handlebar templates **/
 Application.templates = {}
@@ -48,16 +45,14 @@ Application.msgEvent = function(request, sender, sendResponse) {
   Activates the Application within this Window
 **/
 Application.activate = function() {
-  $("body").css({ paddingLeft: CONFIG["sidebar_width"] });
-  Application.views.sidebar.render();
-  console.log(Application.views.sidebar.el);
+  Application.page.activate();
 }
 
 /** 
   Deactivates the Application within this Window
 **/
 Application.deactivate = function() {
-  $("body").css({ paddingLeft: "0px" });  
+  Application.page.deactivate();
 }
 
 /** 
@@ -84,3 +79,4 @@ Application.loadHandleBarTemplates = function(callback) {
 }
 
 Application.init();
+console.log(Application);

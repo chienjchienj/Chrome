@@ -310,5 +310,20 @@ KColumn.prototype.toParams = function() {
   return partial;
 }
 
+/**
+  Returns the JSON for content.js display
+**/
+KColumn.prototype.toJson = function() {
+  var self = this;
+  var partial = {};
+  partial.id        = self.id;
+  partial.page_id   = self.page_id;
+  partial.col_name  = self.col_name;
+  partial.dom_query = self.domQuery();
+  partial.dom_array = self.dom_array;
+  if(self.required_attribute) partial.required_attribute = self.required_attribute;
+  return partial;
+}
+
 /** Node environmental dependencies **/
 try { module && (module.exports = KColumn); } catch(e){}
