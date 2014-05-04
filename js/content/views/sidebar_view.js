@@ -1,9 +1,19 @@
-var SideBar = Backbone.View.extend({
+var SideBarView = Backbone.View.extend({
 
   className: "getdata-sidebar",
 
   events : {
     "click #add_columns": "addColumn"
+  },
+
+  initialize: function() {
+    var self     = this;
+    self.columns = new Columns();
+    self.columns.fetch({
+      success: function(results) {}, 
+      error: function(error) {}
+    });
+
   },
 
   render: function() {
@@ -14,19 +24,14 @@ var SideBar = Backbone.View.extend({
   },
 
   addColumn: function() {
-    var someThing = new Column();
+    var self = this;
+    self.columns.newColumn(function() {
+
+    })
     
   },
 
-  renderColumns: function() {
-    var self = this;
-    Columns.fetch().success(function(results) {
-      self.$el.find("#columns").html(self.template(results));
-    })
-  },
-
   template: function() {
-    console.log(Application);
     return Application.templates['sidebar'];
   }
 });

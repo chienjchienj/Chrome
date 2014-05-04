@@ -11,8 +11,8 @@ Env.setIcon = function(img_path) {
   chrome.browserAction.setIcon({path:img_path});
 }
 
-Env.sendMessage = function(window_id, payload, callback) {
-  chrome.tabs.sendMessage(window_id, payload, callback);
+Env.sendMessage = function(tab_id, payload, callback) {
+  chrome.tabs.sendMessage(tab_id, payload, callback);
 }
 
 /**

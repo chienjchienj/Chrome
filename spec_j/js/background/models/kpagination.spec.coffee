@@ -5,14 +5,14 @@ describe "KPagination", ->
   beforeEach ->
     KPagination.reset()
     @page_url       = "http://google.com"
-    @window_id      = 10
+    @tab_id      = 10
     @parent_url     = "http://google.com"
     @parent_col_id  = 11111
     @page_title     = "what to do"
 
   describe "setPagination", ->
     it "should return true when given dom_array with anchor element in lineage", ->
-      pagin1 = new KPagination @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      pagin1 = new KPagination @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
       setting_res = pagin1.set [{
           el: "td"
           class: ".row"
@@ -46,7 +46,7 @@ describe "KPagination", ->
       }]
 
     it "should return false when given dom_array with no anchor element", ->
-      pagin1 = new KPagination @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      pagin1 = new KPagination @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
       setting_res = pagin1.set [{
           el: "td"
           class: ".row"
@@ -70,7 +70,7 @@ describe "KPagination", ->
 
   describe "isSet", ->
     it "should return true when set", ->
-      pagin1 = new KPagination @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      pagin1 = new KPagination @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
       setting_res = pagin1.set [{
           el: "td"
           class: ".row"
@@ -93,12 +93,12 @@ describe "KPagination", ->
       expect(pagin1.isSet()).toEqual true
 
     it "should return false when not set", ->
-      pagin1 = new KPagination @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      pagin1 = new KPagination @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
       expect(pagin1.isSet()).toEqual false
 
   describe "domQuery", ->
     it "should return well defined dom_query", ->
-      pagin1 = new KPagination @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      pagin1 = new KPagination @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
       setting_res = pagin1.set [{
           el: "td"
           class: ".row"
@@ -124,7 +124,7 @@ describe "KPagination", ->
 
   describe "toParams", ->
     it "should return well formated pagination object", ->
-      pagin1 = new KPagination @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      pagin1 = new KPagination @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
       setting_res = pagin1.set [{
           el: "td"
           class: ".row"

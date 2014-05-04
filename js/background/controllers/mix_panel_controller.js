@@ -22,7 +22,7 @@ MixPanelController.prototype.setId = function() {
 }
 
 /** Returns the current User id on MixPanel **/
-MixPanelController.prototype.getId = function(something) {
+MixPanelController.prototype.getId = function() {
   var self = this;
   return self.id;
 }

@@ -14,4 +14,4 @@ Env.getSelectedTab = (query, callback)->
 
 Env.setIcon = (img_path)->
 
-Env.sendMessage = (window_id, payload, callback)->
+Env.sendMessage = (tab_id, payload, callback)->

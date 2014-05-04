@@ -1,7 +1,7 @@
 /** Node environmental dependencies **/
 try { var BrowserIconView     = require('./views/browser_icon_view'); } catch(e) {}
 try { var CONFIG              = require('./config/config'); } catch(e) {}
-try { var KWindow             = require('./models/kwindow'); } catch(e) {}
+try { var KTab             = require('./models/ktab'); } catch(e) {}
 try { var MixPanelController  = require('./controllers/mix_panel_controller'); } catch(e) {}
 try { var KColumnsController  = require('./controllers/kcolumns_controller'); } catch(e) {}
 
@@ -32,33 +32,33 @@ Application.msgEvent = function(request, sender, sendResponse){
   var args_array = request.args_array || [];
   if(sender.tab) args_array.push(sender.tab)
 
+  res = {}
   if(!controller) {
-    console.log("controller needs to be specificed");
-    return;
-  } 
-
-  if (!Application.msg_controllers[controller]) {
-    console.log("controller is not registered: %s", controller);
-    return;
-  } 
-
-  if (Application.msg_controllers[controller] && !Application.msg_controllers[controller][method]) {
-    console.log("controller %s, method %s does not exist: %s", controller, method);
-    return;
+    res.status  = "error";
+    res.err_msg = "controller needs to be specificed";
+    
+  } else if (!Application.msg_controllers[controller]) {
+    res.status  = "error";
+    res.err_msg = "controller is not registered: " + controller;
+    
+  } else if (Application.msg_controllers[controller] && !Application.msg_controllers[controller][method]) {
+    res.status  = "error";
+    res.err_msg = "controller " + controller + ", method " + method + " does not exist"
+    
+  } else {
+    controller_obj  = Application.msg_controllers[controller];
+    res             = controller_obj[method].apply(controller_obj, args_array);
 
   }
-
-  controller_obj  = Application.msg_controllers[controller]
-  res             = {}
-  res.message    = controller_obj[method].apply(controller_obj, args_array);
   sendResponse && sendResponse(res);
+
 }
 
 
 /** Called when the icon on the top right hand corner of the browser is clicked **/
 Application.iconEvent = function(tab) {  
-  var window_id = tab.id;
-  var kwin = new KWindow(window_id);
+  var tab_id = tab.id;
+  var kwin = new KTab(tab_id);
   
   if(kwin.isActive()) {
     kwin.deactivate();
@@ -72,8 +72,8 @@ Application.iconEvent = function(tab) {
 
 /** Called when user clicks to activate another window in the browser **/
 Application.tabEvent = function(action_info) {
-  var window_id = action_info.tabId;
-  var kwin = new KWindow(window_id);
+  var tab_id = action_info.tabId;
+  var kwin = new KTab(tab_id);
   if(kwin.isActive()) BrowserIconView.activate();
   else BrowserIconView.deactivate();
     
@@ -81,7 +81,7 @@ Application.tabEvent = function(action_info) {
 
 /** Called when user refreshes a window in the browser **/
 Application.refreshEvent = function(tabId, changeInfo, tab) {
-  var kwin = new KWindow(tab.id);
+  var kwin = new KTab(tab.id);
   if(kwin.isActive()) BrowserIconView.activate();
   else BrowserIconView.deactivate();
 }
@@ -92,7 +92,7 @@ try {
     Application:          Application,     
     BrowserIconView:      BrowserIconView,
     CONFIG:               CONFIG,
-    KWindow:              KWindow,    
+    KTab:              KTab,    
     MixPanelController:   MixPanelController,
     KColumnsController:   KColumnsController
   }); 

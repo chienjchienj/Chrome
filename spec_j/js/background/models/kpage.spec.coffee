@@ -10,7 +10,7 @@ describe "KPage", ->
     KColumn.reset()
     KPagination.reset()
     @page_url       = "http://google.com"
-    @window_id      = 10
+    @tab_id      = 10
     @parent_url     = "http://google.com"
     @parent_col_id  = 11111
     @page_title     = "what to do"
@@ -18,85 +18,85 @@ describe "KPage", ->
   describe "Constructor", ->
 
     it "should only create page instance once for each url loaded in a window", ->
-      page = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      page = new KPage @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
       expect(KPage.instances.length).toEqual 1
-      expect(KPage.instances[0].window_id).toEqual @window_id
+      expect(KPage.instances[0].tab_id).toEqual @tab_id
       expect(KPage.instances[0].origin_url).toEqual @page_url      
 
     it "should only create page instance once for each url loaded in a window", ->
-      page1 = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
-      page2 = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      page1 = new KPage @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
+      page2 = new KPage @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
       expect(KPage.instances.length).toEqual 1
 
   describe "find", ->
     it "should find page instance by parent_url", ->
-      page1 = new KPage @page_url + "page1", @window_id, @parent_url, @parent_col_id, @page_title
-      page2 = new KPage @page_url + "page2", @window_id, @parent_url, @parent_col_id + 1, @page_title
+      page1 = new KPage @page_url + "page1", @tab_id, @parent_url, @parent_col_id, @page_title
+      page2 = new KPage @page_url + "page2", @tab_id, @parent_url, @parent_col_id + 1, @page_title
       expect(KPage.find({ parent_url: @parent_url}).length).toEqual 2
 
     it "should find page instance by parent_col_id", ->
-      page1 = new KPage @page_url + "page1", @window_id, @parent_url, @parent_col_id, @page_title
-      page2 = new KPage @page_url + "page2", @window_id, @parent_url, @parent_col_id + 1, @page_title
+      page1 = new KPage @page_url + "page1", @tab_id, @parent_url, @parent_col_id, @page_title
+      page2 = new KPage @page_url + "page2", @tab_id, @parent_url, @parent_col_id + 1, @page_title
       expect(KPage.find({ parent_column_id: @parent_col_id}).length).toEqual 1
       expect(KPage.find({ parent_column_id: @parent_col_id})[0].origin_url).toEqual @page_url + "page1"
 
     it "should find page instance by parent_col_id and parent_url", ->
-      page1 = new KPage @page_url + "page1", @window_id, @parent_url, @parent_col_id, @page_title
-      page2 = new KPage @page_url + "page2", @window_id, @parent_url, @parent_col_id + 1, @page_title
+      page1 = new KPage @page_url + "page1", @tab_id, @parent_url, @parent_col_id, @page_title
+      page2 = new KPage @page_url + "page2", @tab_id, @parent_url, @parent_col_id + 1, @page_title
       expect(KPage.find({ parent_column_id: @parent_col_id, parent_url: @parent_url }).length).toEqual 1
       expect(KPage.find({ parent_column_id: @parent_col_id})[0].origin_url).toEqual @page_url + "page1"
 
-    it "should find page instance by parent_col_id, parent_url and window_id", ->
-      page1 = new KPage @page_url + "page1", @window_id, @parent_url, @parent_col_id, @page_title
-      page2 = new KPage @page_url + "page2", @window_id, @parent_url, @parent_col_id + 1, @page_title
-      page3 = new KPage @page_url + "page3", @window_id, @parent_url, @parent_col_id + 2, @page_title
-      expect(KPage.find({ parent_column_id: @parent_col_id, parent_url: @parent_url, window_id: @window_id }).length).toEqual 1
+    it "should find page instance by parent_col_id, parent_url and tab_id", ->
+      page1 = new KPage @page_url + "page1", @tab_id, @parent_url, @parent_col_id, @page_title
+      page2 = new KPage @page_url + "page2", @tab_id, @parent_url, @parent_col_id + 1, @page_title
+      page3 = new KPage @page_url + "page3", @tab_id, @parent_url, @parent_col_id + 2, @page_title
+      expect(KPage.find({ parent_column_id: @parent_col_id, parent_url: @parent_url, tab_id: @tab_id }).length).toEqual 1
       expect(KPage.find({ parent_column_id: @parent_col_id})[0].origin_url).toEqual @page_url + "page1"
 
   describe "hasParent", ->
 
     it "should have parent", ->
-      page = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      page = new KPage @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
       expect(page.hasParent()).toEqual true
 
     it "should not have parent when parent url is null", ->
-      page = new KPage @page_url, @window_id, null, null, @page_title
+      page = new KPage @page_url, @tab_id, null, null, @page_title
       expect(page.hasParent()).toEqual false
 
     it "should not have parent when parent url is undefined", ->
-      page = new KPage @page_url, @window_id, undefined, undefined, @page_title
+      page = new KPage @page_url, @tab_id, undefined, undefined, @page_title
       expect(page.hasParent()).toEqual false
 
     it "should not have parent when parent url is false", ->
-      page = new KPage @page_url, @window_id, false, false, @page_title
+      page = new KPage @page_url, @tab_id, false, false, @page_title
       expect(page.hasParent()).toEqual false
 
   describe "parent", ->
     it "should return its parent", ->
-      page1 = new KPage @page_url, @window_id, null, null, @page_title
-      page2 = new KPage "Somewhere over the rainbow", @window_id, @page_url, @parent_col_id, @page_title      
+      page1 = new KPage @page_url, @tab_id, null, null, @page_title
+      page2 = new KPage "Somewhere over the rainbow", @tab_id, @page_url, @parent_col_id, @page_title      
       expect(page2.parent()).toEqual page1
 
   describe "root", ->
     it "should return earliest ancestor", ->
-      page1 = new KPage @page_url, @window_id, null, null, @page_title
-      page2 = new KPage "sub1", @window_id, @page_url, @parent_col_id, @page_title
-      page3 = new KPage "sub2", @window_id, "sub1", @parent_col_id, @page_title
-      page4 = new KPage "sub3", @window_id, "sub2", @parent_col_id, @page_title
+      page1 = new KPage @page_url, @tab_id, null, null, @page_title
+      page2 = new KPage "sub1", @tab_id, @page_url, @parent_col_id, @page_title
+      page3 = new KPage "sub2", @tab_id, "sub1", @parent_col_id, @page_title
+      page4 = new KPage "sub3", @tab_id, "sub2", @parent_col_id, @page_title
       expect(page4.root()).toEqual page1
 
   describe "children", ->
     it "should return its direct children", ->
-      page1 = new KPage @page_url, @window_id, null, null, @page_title
-      page2 = new KPage "sub1", @window_id, @page_url, @parent_col_id, @page_title
-      page3 = new KPage "sub2", @window_id, @page_url, @parent_col_id, @page_title
-      page4 = new KPage "sub3", @window_id, @page_url, @parent_col_id, @page_title
+      page1 = new KPage @page_url, @tab_id, null, null, @page_title
+      page2 = new KPage "sub1", @tab_id, @page_url, @parent_col_id, @page_title
+      page3 = new KPage "sub2", @tab_id, @page_url, @parent_col_id, @page_title
+      page4 = new KPage "sub3", @tab_id, @page_url, @parent_col_id, @page_title
       expect(page1.children().length).toEqual 3
 
   describe "newKColumn", ->
     it "should create a column with a generated id", ->
-      page1 = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
-      page2 = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      page1 = new KPage @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
+      page2 = new KPage @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
       col = page2.newKColumn()
       expect(col.page_id).toEqual page2.id
       expect(col.id).toEqual 1
@@ -111,7 +111,7 @@ describe "KPage", ->
 
   describe "columns", ->
     it "should return kcolumns belonging to page only", ->
-      page1 = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      page1 = new KPage @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
       col = page1.newKColumn()
       col2 = page1.newKColumn()
       expect(page1.kcolumns().length).toEqual 2
@@ -123,14 +123,14 @@ describe "KPage", ->
           ).sort()
       ).toEqual [col.id, col2.id];
 
-      page2 = new KPage "Second page", @window_id, @parent_url, @parent_col_id, @page_title
+      page2 = new KPage "Second page", @tab_id, @parent_url, @parent_col_id, @page_title
       col3 = page2.newKColumn()
       expect(page2.kcolumns().length).toEqual 1
       expect(page2.kcolumns()[0].id).toEqual col3.id
 
   describe "toParams", ->
     it "should return well formed partial for columns with no nesting", ->
-      page = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      page = new KPage @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
       col1  = new KColumn page.id
       col2  = new KColumn page.id
 
@@ -169,7 +169,7 @@ describe "KPage", ->
       }
 
     it "should return well formed partial for columns with pagination", ->
-      page = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      page = new KPage @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
       col1  = new KColumn page.id
       col1.set [{
           el: "td"
@@ -216,7 +216,7 @@ describe "KPage", ->
 
     describe "1 level columns nesting", ->
       it "should return well formed partial for columns with 1 level nesting", ->
-        page = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+        page = new KPage @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
         col1  = new KColumn page.id
         col1.set [{
             el: "td"
@@ -224,7 +224,7 @@ describe "KPage", ->
             id: "#col1"
           }]
         
-        sub_page_l1 = new KPage @page_url + "sub1", @window_id, @page_url, col1.id, @page_title
+        sub_page_l1 = new KPage @page_url + "sub1", @tab_id, @page_url, col1.id, @page_title
         col2  = new KColumn sub_page_l1.id
         col2.set [{
             el: "td"
@@ -246,7 +246,7 @@ describe "KPage", ->
         }
 
       it "should return well formed partial for columns with 1 level nesting and pagination", ->
-        page    = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+        page    = new KPage @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
         kpage1  = new KPagination page.id
         kpage1.set [{
             el: "a"
@@ -262,7 +262,7 @@ describe "KPage", ->
 
 
         
-        sub_page_l1 = new KPage @page_url + "sub1", @window_id, @page_url, col1.id, @page_title
+        sub_page_l1 = new KPage @page_url + "sub1", @tab_id, @page_url, col1.id, @page_title
         col2        = new KColumn sub_page_l1.id
         col2.set [{
             el: "td"
@@ -296,7 +296,7 @@ describe "KPage", ->
 
     describe "2 level columns nesting", ->
       it "should return well formed partial for columns with 2 level nesting", ->
-        page = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+        page = new KPage @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
         col1  = new KColumn page.id
         col1.set [{
             el: "td"
@@ -304,7 +304,7 @@ describe "KPage", ->
             id: "#col1"
           }]
         
-        sub_page_l1 = new KPage @page_url + "sub1", @window_id, @page_url, col1.id, @page_title
+        sub_page_l1 = new KPage @page_url + "sub1", @tab_id, @page_url, col1.id, @page_title
         col2  = new KColumn sub_page_l1.id
         col2.set [{
             el: "td"
@@ -312,7 +312,7 @@ describe "KPage", ->
             id: "#col2"
           }]
 
-        sub_page_l2 = new KPage @page_url + "sub2", @window_id, @page_url + "sub1", col2.id, @page_title
+        sub_page_l2 = new KPage @page_url + "sub2", @tab_id, @page_url + "sub1", col2.id, @page_title
         col3  = new KColumn sub_page_l2.id
         col3.set [{
             el: "td"
@@ -340,7 +340,7 @@ describe "KPage", ->
         }        
 
       it "should return well formed partial for columns with 2 level nesting and pagination", ->
-        page    = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+        page    = new KPage @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
         kpage1  = new KPagination page.id
         kpage1.set [{
             el: "a"
@@ -356,7 +356,7 @@ describe "KPage", ->
 
 
         
-        sub_page_l1 = new KPage @page_url + "sub1", @window_id, @page_url, col1.id, @page_title
+        sub_page_l1 = new KPage @page_url + "sub1", @tab_id, @page_url, col1.id, @page_title
         col2        = new KColumn sub_page_l1.id
         col2.set [{
             el: "td"
@@ -371,7 +371,7 @@ describe "KPage", ->
 
 
 
-        sub_page_l2 = new KPage @page_url + "sub2", @window_id, @page_url + "sub1", col2.id, @page_title
+        sub_page_l2 = new KPage @page_url + "sub2", @tab_id, @page_url + "sub1", col2.id, @page_title
         col3  = new KColumn sub_page_l2.id
         col3.set [{
             el: "td"
@@ -414,7 +414,7 @@ describe "KPage", ->
 
   describe "kcolumnsToParams", ->
     it "should have return well formed params", ->
-      page    = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      page    = new KPage @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
       col1    = new KColumn page.id
       col1.set [{
           el: "td"
@@ -428,7 +428,7 @@ describe "KPage", ->
 
   describe "kcolumnsIsSet", ->
     it "should have columns set", ->
-      page    = new KPage @page_url, @window_id, @parent_url, @parent_col_id, @page_title
+      page    = new KPage @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
       col1    = new KColumn page.id
       col1.set [{
           el: "td"

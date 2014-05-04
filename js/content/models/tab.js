@@ -1,25 +1,19 @@
-var Column = Backbone.Model.extend({});
+var Tab = Backbone.Model.extend({
+  url: "ktab",
 
-var Columns = Backbone.Collection.extend({
-  model: Column,
-  url: "kcolumns",
-
-  newColumn: function(callback) {
+  load : function() {
     var self = this;
     return self.fetch({
       method: 'new',
       success: function(collection, response, options) {
-        var col = new Column();
         Object.keys(response).forEach(function(attribute) {
-          col.set(attribute, response[attribute]);
+          self.set(attribute, response[attribute]);
         });
-        self.models.push(col);
-        console.log(self.models)
+        console.log(self);
       },
       error: function(collection, response, options) {
         console.log(arguments);
       }
     });
   }
-
 });

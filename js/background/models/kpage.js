@@ -7,7 +7,7 @@ try { var KPagination = require('./kpagination'); } catch(e) {}
 
   Params: 
     origin_url:String
-    window_id:Integer
+    tab_id:Integer
     parent_url:String
     parent_column_id:String
     page_title:String
@@ -16,15 +16,15 @@ try { var KPagination = require('./kpagination'); } catch(e) {}
     page:KPage
 
 **/ 
-var KPage = function(origin_url, window_id, parent_url, parent_column_id, page_title) { 
+var KPage = function(origin_url, tab_id, parent_url, parent_column_id, page_title) { 
 
-  pages = KPage.find({ origin_url: origin_url, window_id: window_id });
+  pages = KPage.find({ origin_url: origin_url, tab_id: tab_id });
   if(pages.length > 0) return pages[0];
   
   var self = this;
   self.id                   = KPage.getId();
   self.origin_url           = origin_url;
-  self.window_id            = window_id;
+  self.tab_id               = tab_id;
   self.parent_url           = parent_url;
   self.parent_column_id     = parent_column_id;
   self.page_title           = page_title;
@@ -48,7 +48,7 @@ KPage.getId = function() {
   Params: 
     param:Hash
       origin_url:String
-      window_id:Integer
+      tab_id:Integer
 
   Return:
     page:KPage
@@ -88,7 +88,7 @@ KPage.prototype.parent = function() {
     return false;
 
   } else {
-    return KPage.find({ origin_url: self.parent_url, window_id: self.window_id })[0];
+    return KPage.find({ origin_url: self.parent_url, tab_id: self.tab_id })[0];
 
   }
   
@@ -99,7 +99,7 @@ KPage.prototype.parent = function() {
 **/ 
 KPage.prototype.children = function() {
   var self = this;
-  return KPage.find({ parent_url: self.origin_url, window_id: self.window_id });  
+  return KPage.find({ parent_url: self.origin_url, tab_id: self.tab_id });  
 };
 
 /** Returns the most ancient of pages that is ancestor of this page that has not parent **/
