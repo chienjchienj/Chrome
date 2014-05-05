@@ -14,7 +14,7 @@ describe "Application", ->
 
   describe "msgEvent", ->
     it "should call mixpanel controller", (done)->
-      spyOn(Application.msg_controllers["mixpanel"], "getId").andReturn("STUBBING")
+      spyOn(Application.msg_controllers["mixpanel"], "getId").andReturn({ data: "STUBBING", status: "success" })
       Application.msgEvent {
         controller: "mixpanel", 
         method: "getId",

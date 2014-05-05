@@ -11,4 +11,8 @@ describe "MixPanelController", ->
       @mxpc.xhr.responseText = '{"muuid": "STUBBING"}'
       @mxpc.xhr.readyState = 4      
       @mxpc.xhr.onreadystatechange()
-      expect(@mxpc.getId()).toEqual "STUBBING"
+      expect(@mxpc.getId()).toEqual {
+        status: "success",
+        data: "STUBBING"
+      }
+      

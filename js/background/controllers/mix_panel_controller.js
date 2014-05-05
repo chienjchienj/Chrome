@@ -24,7 +24,10 @@ MixPanelController.prototype.setId = function() {
 /** Returns the current User id on MixPanel **/
 MixPanelController.prototype.getId = function() {
   var self = this;
-  return self.id;
+  var response    = {}
+  response.data   = self.id;
+  response.status = 'success';
+  return response;
 }
 
 MixPanelController.prototype.trackVersion = function() {

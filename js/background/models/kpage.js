@@ -161,6 +161,21 @@ KPage.prototype.toParams = function(include_url) {
   return partial;
 }
 
+/**
+  Returns the JSON for content.js display
+**/
+KPage.prototype.toJson = function() {
+  var self = this;
+  var partial = {};
+  partial.id                = self.id;
+  partial.origin_url        = self.origin_url;
+  partial.tab_id            = self.tab_id;
+  partial.parent_url        = self.parent_url;
+  partial.parent_column_id  = self.parent_column_id;
+  partial.page_title        = self.page_title;
+  return partial;
+}
+
 KPage.prototype.kpaginationToParams = function() {
   var self = this;
   var paginations = KPagination.find({ page_id: self.id });

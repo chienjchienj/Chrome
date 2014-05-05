@@ -9,11 +9,8 @@ var Tab = Backbone.Model.extend({
         Object.keys(response).forEach(function(attribute) {
           self.set(attribute, response[attribute]);
         });
-        console.log(self);
       },
-      error: function(collection, response, options) {
-        console.log(arguments);
-      }
+      error: function(collection, response, options) {}
     });
   }
 });

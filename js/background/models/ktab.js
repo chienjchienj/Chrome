@@ -32,15 +32,23 @@ KTab.prototype.isActive = function() {
 }
 
 KTab.prototype.activate = function() {
-  var self = this;
+  var self    = this;
   self.active = true;
   Env.sendMessage(self.id, { method: "activate" }, function() {});
 }
 
 KTab.prototype.deactivate = function() {
-  var self = this;
+  var self    = this;
   self.active = false;
   Env.sendMessage(self.id, { method: "deactivate" }, function() {});  
+}
+
+KTab.prototype.toJson = function() {
+  var self        = this;
+  var partial     = {};
+  partial.active  = self.active;
+  partial.id      = self.id;
+  return partial;  
 }
 
 /**

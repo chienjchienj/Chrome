@@ -33,6 +33,8 @@
         "js/background/views/browser_icon_view.js",
         "js/background/controllers/mix_panel_controller.js",
         "js/background/controllers/kcolumns_controller.js",
+        "js/background/controllers/kpage_controller.js",
+        "js/background/controllers/ktab_controller.js",
         "js/background/application.js",
         "js/background/browsers/chrome.js"
       ]

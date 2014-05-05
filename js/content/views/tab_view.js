@@ -3,18 +3,21 @@ var TabView = Backbone.View.extend({
   el: "body",
 
   initialize: function() {
-    var self  = this;
-    self.tab  = new Tab();
-    self.page = new Page();
-    promise1 = self.tab.load();
-    promise2 = self.page.load();
-    promise2.fail(function(err_msg) {
-      console.log("Promised Failed");
-    });
+    var self      = this;
+    self.tab      = new Tab();
+    self.page     = new Page();
+    promise_tab   = self.tab.load();
+    promise_page  = self.page.load();
 
-    promise2.done(function(data){
-      console.log("Promised Done");
-    });
+    $.when(promise_tab, promise_page).then(
+      function() {
+        if(self.tab.get('active')) self.activate();
+      }, 
+      function(){
+        console.log("Combine failed");
+        console.log(arguments);
+      }
+    )
   },
 
   render: function() {

@@ -4,7 +4,7 @@ try { var KTab = require('../models/ktab'); } catch(e) {}
 
 var KColumnsController = {};
 
-KColumnsController.new = function(tab_obj) {
+KColumnsController.new = function(data_obj, tab_obj) {
   var kpage       = new KPage(tab_obj.url, tab_obj.id, tab_obj.title);
   var kc          = new KColumn(kpage.id);
 
@@ -14,8 +14,8 @@ KColumnsController.new = function(tab_obj) {
   return response;
 }
 
-KColumnsController.read = function(data, tab_obj) {
-  console.log(data);
+KColumnsController.read = function(data_obj, tab_obj) {
+  console.log(data_obj);
   
   response        = {}
   response.data   = KColumn.find({ }).map(function(kcol) {
