@@ -46,11 +46,9 @@
    "web_accessible_resources": [
     "js/content/templates/sidebar.hbs",
     "js/content/templates/column.hbs",
-    "images/bin.png",
-    "images/save.png",
-    "images/link.png",
-    "images/edit.png",
-    "images/close.png",
+    "images/get-data-a.png",
+    "images/sidebar-add-icon.png",
+    "images/sidebar-pagination-icon.png",
     "html/panel.html"
   ],
    "description": "Extract data with Krake",
