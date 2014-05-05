@@ -3,4 +3,59 @@
   position: fixed;
   top: 0px;
   left: 0px;
+  z-index: 9999;
+}
+
+.getdata-sidebar .column {
+  background-color: #2b2825;
+  width: 180px;
+  height: 30px;
+}
+
+.getdata-sidebar .column .stick-holder {
+  width: 40px;
+  height: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  float: left;
+}
+
+.getdata-sidebar .column .stick-holder .stick-non-pagination {
+  width: 3px;
+  height: 20px;
+  padding-right: 2px;
+}
+
+.getdata-sidebar .column .property-name-holder {
+  font-weight: 100;  
+  font-size: 12px;
+  line-height: 20px;
+  font-family: "helvetica";
+  color: #ffffff;  
+  float: left;
+  height: 20px;
+  width: 100px;
+  margin-top: 5px;
+  margin-bottom: 5px;  
+  padding-left: 3px;
+  padding-right: 3px;  
+}
+
+.getdata-sidebar .column .property-name-holder:focus {
+  background-color: #221f1c;
+  outline: none;
+}
+
+.getdata-sidebar .column .stick-holder .stick-pagination {
+  width: 4px;
+  height: 20px;
+  padding-right: 1px;
+}
+
+.getdata-sidebar .column .counter {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }

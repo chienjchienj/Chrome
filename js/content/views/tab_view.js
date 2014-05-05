@@ -6,10 +6,13 @@ var TabView = Backbone.View.extend({
     var self      = this;
     self.tab      = new Tab();
     self.page     = new Page();
+    self.columns   = new Columns();
+
     promise_tab   = self.tab.load();
     promise_page  = self.page.load();
+    promise_cols  = self.columns.fetch();
 
-    $.when(promise_tab, promise_page).then(
+    $.when(promise_tab, promise_page, promise_cols).then(
       function() {
         if(self.tab.get('active')) self.activate();
       }, 
@@ -22,7 +25,8 @@ var TabView = Backbone.View.extend({
 
   render: function() {
     var self = this;
-    self.sidebar_view = new SideBarView();    
+    self.sidebar_view = new SideBarView();
+    self.sidebar_view.tab = self;
     self.sidebar_view.render();
   },
 

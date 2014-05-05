@@ -1,4 +1,14 @@
-var Column = Backbone.Model.extend({});
+var Column = Backbone.Model.extend({
+
+  forTemplate: function() {
+    var self = this;
+    var json_obj  = {};
+    json_obj.col_name = self.get('col_name');
+    json_obj.id       = self.get('id');
+    return json_obj;
+  }
+
+});
 
 var Columns = Backbone.Collection.extend({
   model: Column,
