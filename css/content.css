@@ -4,6 +4,56 @@
   top: 0px;
   left: 0px;
   z-index: 9999;
+  font-family: "helvetica";
+  font-weight: 100;  
+}
+
+.getdata-sidebar #header {
+  height: 18px;
+  padding-left: 23px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #c66a09;
+}
+
+.getdata-sidebar #header img {
+  height: 18px;
+  width: 22px;
+  float: left;
+  margin-right: 5px;
+}
+
+.getdata-sidebar #header div {
+  height: 18px;
+  width: 100px;
+  font-size: 12px;
+  line-height: 22px;
+  text-transform:uppercase;
+  color: #fff;
+  float: left;
+}
+
+.getdata-sidebar #add_columns {
+  height: 25px;
+  width: 140px;
+  margin: 20px;
+  background-color: #086cb9;
+  text-transform: uppercase;
+  border: 1px #207ac0;
+  color: #fff;
+  cursor: pointer;
+  text-align: center;
+  font-size: 10px;
+  line-height: 25px;
+}
+
+.getdata-sidebar #add_columns:hover {
+  border: 1px #207ac0;
+  -webkit-box-shadow: 0px 0px 2px 1px rgba(255, 255, 255, 0.4);
+}
+
+.getdata-sidebar #columns {
+  overflow: scroll;
 }
 
 .getdata-sidebar .column {
@@ -27,10 +77,8 @@
 }
 
 .getdata-sidebar .column .property-name-holder {
-  font-weight: 100;  
   font-size: 12px;
   line-height: 20px;
-  font-family: "helvetica";
   color: #ffffff;  
   float: left;
   height: 20px;

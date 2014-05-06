@@ -14,7 +14,7 @@ var Columns = Backbone.Collection.extend({
   model: Column,
   url: "kcolumns",
 
-  newColumn: function(callback) {
+  newColumn: function(success_cb, failure_cb) {
     var self = this;
     return self.fetch({
       method: 'new',
@@ -24,10 +24,11 @@ var Columns = Backbone.Collection.extend({
           col.set(attribute, response[attribute]);
         });
         self.models.push(col);
-        console.log(self.models)
+        success_cb && success_cb(col);
       },
       error: function(collection, response, options) {
         console.log(arguments);
+        failure_cb && failure_cb(arguments)
       }
     });
   }

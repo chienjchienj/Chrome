@@ -7,6 +7,7 @@
         "js/content/lib/jquery_1.9.1.min.js",
         "js/content/lib/jquery_ui_1.10.3.js",        
         "js/content/lib/handlebars.js",
+        "js/content/lib/handlebar-helpers.js",
         "js/content/lib/underscore-min.js",
         "js/content/lib/backbone-min.js", 
         "js/content/lib/backbone-override.js", 
@@ -46,7 +47,7 @@
    "web_accessible_resources": [
     "js/content/templates/sidebar.hbs",
     "js/content/templates/column.hbs",
-    "images/get-data-a.png",
+    "images/logo-a.png",
     "images/sidebar-add-icon.png",
     "images/sidebar-pagination-icon.png",
     "html/panel.html"
