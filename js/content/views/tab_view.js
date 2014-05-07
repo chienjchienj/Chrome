@@ -27,7 +27,8 @@ var TabView = Backbone.View.extend({
     self.sidebar_view = new SideBarView();
     self.sidebar_view.tab = self;
     self.sidebar_view.render();
-    self.$el.append(self.sidebar_view.el);    
+    self.$el.append(self.sidebar_view.el);
+    return self;
   },
 
   activate: function() {

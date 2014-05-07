@@ -4,7 +4,7 @@ try { var KTab = require('../models/ktab'); } catch(e) {}
 
 var KColumnsController = {};
 
-KColumnsController.new = function(data_obj, tab_obj) {
+KColumnsController.create = function(data_obj, tab_obj) {
   var kpage       = new KPage(tab_obj.url, tab_obj.id, tab_obj.title);
   var kc          = new KColumn(kpage.id);
 
@@ -12,6 +12,17 @@ KColumnsController.new = function(data_obj, tab_obj) {
   response.data   = kc.toJson();
   response.status = "success";
   return response;
+}
+
+KColumnsController.update = function(new_attributes, tab_obj) {
+  console.log(new_attributes);
+  var kc          = new KColumn.find({ id: new_attributes.id })[0];
+  console.log("=== Start : Updating Column Object ===");
+  console.log(kc);
+  console.log(new_attributes);
+  console.log("=== End : Updating Column Object ===");
+  response        = {}
+  response.status = "success";
 }
 
 KColumnsController.read = function(data_obj, tab_obj) {

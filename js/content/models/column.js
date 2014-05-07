@@ -1,5 +1,5 @@
 var Column = Backbone.Model.extend({
-
+  url: "kcolumns",
   forTemplate: function() {
     var self = this;
     var json_obj  = {};
@@ -17,7 +17,7 @@ var Columns = Backbone.Collection.extend({
   newColumn: function(success_cb, failure_cb) {
     var self = this;
     return self.fetch({
-      method: 'new',
+      method: 'create',
       success: function(collection, response, options) {
         var col = new Column();
         Object.keys(response).forEach(function(attribute) {

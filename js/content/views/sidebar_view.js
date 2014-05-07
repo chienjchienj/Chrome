@@ -9,7 +9,7 @@ var SideBarView = Backbone.View.extend({
   initialize: function(tab) {
     var self        = this;
     self.parent_tab = tab;
-    self.columns    = new Columns();    
+    self.columns    = new Columns();
     $(window).on("resize", function() {
       self.resize();
     });
@@ -20,7 +20,7 @@ var SideBarView = Backbone.View.extend({
     self.$el.html(self.template());
     self.resize();
     self.renderColumns();
-
+    return self;
   },
 
   resize: function() {
@@ -40,8 +40,8 @@ var SideBarView = Backbone.View.extend({
     self.columns.fetch({
       success: function() {
         self.columns.models.forEach(function(col) {
-          var col_html = Application.templates['column']( col.forTemplate() );
-          self.$el.find("#columns").append( col_html);
+          var col_view = new ColumnView(col);
+          self.$el.find("#columns").append( col_view.$el );
         })
       }
     });

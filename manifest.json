@@ -14,6 +14,7 @@
         "js/content/models/tab.js",
         "js/content/models/page.js",
         "js/content/models/column.js",
+        "js/content/views/column_view.js",
         "js/content/views/sidebar_view.js",
         "js/content/views/tab_view.js",
         "js/content/application.js",

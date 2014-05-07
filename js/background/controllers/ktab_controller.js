@@ -1,6 +1,6 @@
 var KTabController = {};
 
-KTabController.new = function(data_obj, tab_obj) {
+KTabController.create = function(data_obj, tab_obj) {
   var ktab       = new KTab(tab_obj.id);
   response        = {}
   response.data   = ktab.toJson();

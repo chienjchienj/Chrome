@@ -76,7 +76,7 @@
   padding-right: 2px;
 }
 
-.getdata-sidebar .column .property-name-holder {
+.getdata-sidebar .column .col-name {
   font-size: 12px;
   line-height: 20px;
   color: #ffffff;  
@@ -89,7 +89,7 @@
   padding-right: 3px;  
 }
 
-.getdata-sidebar .column .property-name-holder:focus {
+.getdata-sidebar .column .col-name:focus {
   background-color: #221f1c;
   outline: none;
 }
@@ -100,10 +100,16 @@
   padding-right: 1px;
 }
 
-.getdata-sidebar .column .counter {
-  display: inline-block;
+.getdata-sidebar .column .counter-holder {
+  float: left;
   width: 20px;
   height: 20px;
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+.getdata-sidebar .column .counter-holder .counter {
+  font-size: 12px;
+  background-color: #fff;
+  border-radius:15px;
 }
