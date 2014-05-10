@@ -16,6 +16,7 @@ Application.handle_bars = ["sidebar", "column"];
 Application.init = function() {
   console.log("loading templates");
   Application.loadHandleBarTemplates(Application.render);
+  Env.registerListener(Application.msgEvent);
 }
 
 Application.render = function() {
@@ -62,11 +63,10 @@ Application.deactivate = function() {
   Loads and compiles all handlebar .hbs files to Application.templates for easy use in Application
 **/
 Application.loadHandleBarTemplates = function(callback) {
-  var curr_temp = Application.handle_bars.pop();
-  var loading_bay = $('<div>');
+  var template_name = Application.handle_bars.pop();
 
-  loading_bay.load(chrome.extension.getURL("js/content/templates/" + curr_temp + ".hbs"), function() {
-    Application.templates[curr_temp] = Handlebars.compile($(loading_bay).html());
+  Env.loadTemplate(template_name, function(html_text) {
+    Application.templates[template_name] = Handlebars.compile(html_text);
 
     if(Application.handle_bars.length > 0) {
       Application.loadHandleBarTemplates(callback);
@@ -75,8 +75,9 @@ Application.loadHandleBarTemplates = function(callback) {
       callback && callback();
 
     }
-
+    
   });
+
 }
 
 Application.init();

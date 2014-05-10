@@ -31,6 +31,11 @@ var Columns = Backbone.Collection.extend({
         failure_cb && failure_cb(arguments)
       }
     });
+  },
+
+  forPage: function(page_id) {
+    var self = this;
+    return self.where({ page_id: page_id });
   }
 
 });

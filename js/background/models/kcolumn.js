@@ -1,7 +1,8 @@
-var KColumn = function(page_id) {
+var KColumn = function(page_id, tab_id) {
   var self = this;
   self.id                 = KColumn.getId();
   self.page_id            = page_id;
+  self.tab_id             = tab_id;
   self.col_name           = "Property " + self.id
   self.dom_array          = [];
   self.required_attribute = null;  

@@ -3,6 +3,7 @@
       "matches"   : [ "<all_urls>" ],
       "css": [ "css/content.css" ], 
       "js": [ 
+        "js/content/browsers/chrome.js",      
         "js/content/config/config.js",
         "js/content/lib/jquery_1.9.1.min.js",
         "js/content/lib/jquery_ui_1.10.3.js",        
@@ -17,8 +18,7 @@
         "js/content/views/column_view.js",
         "js/content/views/sidebar_view.js",
         "js/content/views/tab_view.js",
-        "js/content/application.js",
-        "js/content/browsers/chrome.js"
+        "js/content/application.js"
       ],
       "matches": [ "http://*/*", "https://*/*" ],
       "run_at": "document_end"

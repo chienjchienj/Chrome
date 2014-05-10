@@ -6,25 +6,20 @@ var SideBarView = Backbone.View.extend({
     "click #add_columns": "addColumn"
   },
 
-  initialize: function(tab) {
+  initialize: function() {
     var self        = this;
-    self.parent_tab = tab;
     self.columns    = new Columns();
     $(window).on("resize", function() {
-      self.resize();
+      self.onResize();
     });
   },
 
-  render: function() {
+  setParentTab: function(tab_obj) {
     var self = this;
-    self.$el.html(self.template());
-    self.resize();
-    self.renderColumns();
-    return self;
+    self.parent_tab = tab_obj;    
   },
 
-  resize: function() {
-    console.log("Resizing");
+  onResize: function() {
     var self = this;
     self.$el.width(CONFIG["sidebar_width"]);
     self.$el.height(window.innerHeight);    
@@ -34,17 +29,39 @@ var SideBarView = Backbone.View.extend({
     self.$el.find("#columns").height(computed_col_height);
   },
 
+  render: function() {
+    var self = this;
+    self.$el.html(self.template());
+    self.onResize();
+    self.renderColumns();
+    return self;
+  },
+
   renderColumns: function() {
     var self = this;
     self.$el.find("#columns").html("");
     self.columns.fetch({
+      data: {
+        tab_id: self.parent_tab.tabId()
+      },
       success: function() {
         self.columns.models.forEach(function(col) {
           var col_view = new ColumnView(col);
           self.$el.find("#columns").append( col_view.$el );
-        })
+        });
+        self.addFirstColumn();
       }
     });
+  },
+
+  addFirstColumn: function() {
+    var self = this;
+    if(!self.currentPageHasColumns()) self.addColumn();
+  },
+
+  currentPageHasColumns: function() {
+    var self = this;
+    return self.columns.forPage(self.parent_tab.pageId()).length > 0;
   },
 
   addColumn: function() {

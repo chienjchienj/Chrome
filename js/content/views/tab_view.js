@@ -12,6 +12,8 @@ var TabView = Backbone.View.extend({
 
     $.when(promise_tab, promise_page).then(
       function() {
+        console.log(self.tab);        
+        console.log(self.page);
         if(self.tab.get('active')) self.activate();
       }, 
       function(){
@@ -21,13 +23,22 @@ var TabView = Backbone.View.extend({
     );
   },
 
+  tabId: function() {
+    var self = this;
+    return self.tab.id;
+  },
+
+  pageId: function() {
+    var self = this;
+    return self.page.id;
+  },
+
   render: function() {
     var self = this;
     self.$el.css({ paddingLeft: CONFIG["sidebar_width"] });
     self.sidebar_view = new SideBarView();
-    self.sidebar_view.tab = self;
-    self.sidebar_view.render();
-    self.$el.append(self.sidebar_view.el);
+    self.sidebar_view.setParentTab(self);
+    self.$el.append(self.sidebar_view.render().el);
     return self;
   },
 

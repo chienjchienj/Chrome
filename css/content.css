@@ -86,7 +86,9 @@
   margin-top: 5px;
   margin-bottom: 5px;  
   padding-left: 3px;
-  padding-right: 3px;  
+  padding-right: 3px;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .getdata-sidebar .column .col-name:focus {

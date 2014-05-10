@@ -3,7 +3,17 @@ var ColumnView = Backbone.View.extend({
   className: "column",
 
   events: {
-    "keypress .col-name": "updateColName"
+    "keypress .col-name"  : "validateColName",
+    "keyup .col-name"     : "updateColName",
+    "focus .col-name"     : "focusColName",
+    "focusout .col-name"  : "focusOutColName"
+  },
+
+  disabled_keycodes : {
+    break_line: 13,
+    single_quote: 39,
+    double_quote: 34,
+    back_slash: 92
   },
 
   initialize: function(model) {
@@ -12,24 +22,54 @@ var ColumnView = Backbone.View.extend({
     self.render();
   },
 
-  updateColName: function(e) {
+  validateColName: function(e) {
+    console.log("Validating column name");
     var self = this;
-    var breakline_code = 13;
-    var disallowed_keycodes = [breakline_code, 39, 34, 92];
-    if(disallowed_keycodes.indexOf(e.keyCode) != -1 ) {
-      console.log("Stopping propogation")
-      e.preventDefault();
-    }
-    
-    if(e.keyCode == breakline_code) {
-      self.model.set("col_name", self.$el.find('.col-name').html());
-      self.model.save();
-      console.log(self.model);
-      console.log("saved model");
-    }
+    var disallowed_keycodes = Object.keys(self.disabled_keycodes).map(function(key){
+      return self.disabled_keycodes[key];
+    });
 
-    console.log("Name updating");
-    console.log(e);
+    if(disallowed_keycodes.indexOf(e.keyCode) != -1 ) e.preventDefault();
+
+  },
+
+  updateColName: function(e) {
+    console.log("Saving column name");
+    var self = this;
+    self.model.set("col_name", self.$el.find('.col-name')[0].innerText);
+    console.log("Saving : %s", self.$el.find('.col-name')[0].innerText)
+    self.model.save();    
+  },
+
+
+  defaultColName: function() {
+    var self = this;     
+    return "Property " + self.model.id;
+  },
+
+  getColName: function() {
+    var self = this;
+    return self.$el.find(".col-name").html();
+  },
+
+  setColName: function(col_name) {
+    var self = this;
+    return self.$el.find(".col-name").html(col_name);
+  },  
+
+  focusColName: function(e) {
+    var self = this; 
+    if( self.getColName() == self.defaultColName() ) {
+      self.setColName("");
+    }
+  },
+
+  focusOutColName: function(e) {
+    var self = this; 
+    if( self.getColName().trim().length == 0 ) {
+      self.setColName(self.defaultColName());
+    }
+    self.model.save();
   },
 
   render: function() {

@@ -16,9 +16,15 @@ managing, transforming and storage the schematic data
 jasmine-node coffee spec_j
 ```
 
+Content.JS portion of Chrome browser extension. This section of the browser extension deals with all the DOM related interactions that is 
+required for defining the data to crawl
+```console
+phantom-jasmine spec_p/specs.html
+```
+
 Content.Js portion of Chrome browser extension. This section of the browser extension deals with the user trigger events within a Window
 ```console
-phantom-jasmine spec_p
+open spec_p/runner.html
 ```
 
 ## Backlog
