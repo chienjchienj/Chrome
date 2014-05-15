@@ -1,7 +1,7 @@
-KPageVar    = require "../../../../js/background/models/kpage"
-KPage       = KPageVar.KPage
-KColumn     = KPageVar.KColumn
-KPagination = KPageVar.KPagination
+KPageVar      = require "../../../../js/background/models/kpage"
+KPage         = KPageVar.KPage
+KColumn       = KPageVar.KColumn
+KPagination   = KPageVar.KPagination
 
 describe "KPage", ->
 

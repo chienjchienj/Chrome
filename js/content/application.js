@@ -14,13 +14,11 @@ Application.handle_bars = ["sidebar", "column"];
   Executes to load all environmental variables
 **/
 Application.init = function() {
-  console.log("loading templates");
   Application.loadHandleBarTemplates(Application.render);
   Env.registerListener(Application.msgEvent);
 }
 
 Application.render = function() {
-  console.log("rendering tab_view")
   Application.tab_view = new TabView();  
 }
 

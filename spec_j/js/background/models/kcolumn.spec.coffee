@@ -1,8 +1,18 @@
-KColumn = require "../../../../js/background/models/kcolumn"
+KPageVar = require "../../../../js/background/models/kpage"
+global.KPage   = KPageVar.KPage
+global.KColumn = KPageVar.KColumn
 
 describe "KColumn", ->
   beforeEach ->
-    @page_id = 1
+    KPage.reset()
+    @page_url       = "http://google.com"
+    @tab_id         = 10
+    @parent_url     = "http://google.com"
+    @parent_col_id  = 11111
+    @page_title     = "what to do"
+
+    @page = new KPage @page_url, @tab_id, @parent_url, @parent_col_id, @page_title
+    @page_id = @page.id
     KColumn.reset()
     @def_array = [{
         el: "td"
@@ -66,6 +76,11 @@ describe "KColumn", ->
     expect(col.id).toEqual 1
     expect(KColumn.find().length).toEqual 1
 
+  describe "parentPageUrl", ->
+    it "should return url or parent kpage", ->
+      col = new KColumn @page_id
+      expect(col.parentPageUrl()).toEqual @page_url
+
   describe "set", ->
     it "should lowercase the element attribute", ->
       col = new KColumn @page_id
@@ -120,6 +135,174 @@ describe "KColumn", ->
       col.set @def_array
 
       expect(col.domQuery()).toEqual "td.row#clementi > div:nth-child(2).contact-info > a.address > span.street > img.prop-img"
+
+  describe "recommendations", ->
+    beforeEach ->
+      @step1_array = [{
+        el: "td"
+        class: ".row"
+        position: 2
+        id: "#clementi"
+      },{                
+        el: "div"
+        position: 3
+        class: ".contact-info"
+      },{
+        el: "a"
+        position: 4
+        class: ".address"
+      },{
+        el: "span"
+        position: 5
+        class: ".street"
+      },{
+        el: "img"
+        position: 6
+        class: ".prop-img"
+      }]
+
+      @step2_array = [{
+        el: "td"
+        class: ".row"
+        position: 2
+        id: "#clementi"
+      },{                
+        el: "div"
+        position: 3
+        class: ".contact-info"
+      },{
+        el: "a"
+        position: 4
+        class: ".address"
+      },{
+        el: "span"
+        position: 5
+        class: ".street"
+      },{
+        el: "img"
+        class: ".prop-img"
+      }]
+
+      @step3_array = [{
+        el: "td"
+        class: ".row"
+        position: 2
+        id: "#clementi"
+      },{                
+        el: "div"
+        position: 3
+        class: ".contact-info"
+      },{
+        el: "a"
+        position: 4
+        class: ".address"
+      },{
+        el: "span"
+        class: ".street"
+      },{
+        el: "img"
+        class: ".prop-img"
+      }]
+
+      @step4_array = [{
+        el: "td"
+        class: ".row"
+        position: 2
+        id: "#clementi"
+      },{                
+        el: "div"
+        position: 3
+        class: ".contact-info"
+      },{
+        el: "a"
+        class: ".address"
+      },{
+        el: "span"
+        class: ".street"
+      },{
+        el: "img"
+        class: ".prop-img"
+      }]
+
+      @step5_array = [{
+        el: "td"
+        class: ".row"
+        position: 2
+        id: "#clementi"
+      },{                
+        el: "div"
+        class: ".contact-info"
+      },{
+        el: "a"
+        class: ".address"
+      },{
+        el: "span"
+        class: ".street"
+      },{
+        el: "img"
+        class: ".prop-img"
+      }]
+
+      @step6_array = [{
+        el: "td"
+        class: ".row"
+        id: "#clementi"
+      },{                
+        el: "div"
+        class: ".contact-info"
+      },{
+        el: "a"
+        class: ".address"
+      },{
+        el: "span"
+        class: ".street"
+      },{
+        el: "img"
+        class: ".prop-img"
+      }]      
+
+    describe "recommendedArray", ->
+
+      it "should return well-formed recommendedArray", ->
+        col = new KColumn @page_id
+        col.set @step1_array
+        expect(col.recommendedArray()).toEqual @step2_array
+
+        col.set @step2_array
+        expect(col.recommendedArray()).toEqual @step3_array
+
+        col.set @step3_array
+        expect(col.recommendedArray()).toEqual @step4_array
+
+        col.set @step4_array
+        expect(col.recommendedArray()).toEqual @step5_array
+
+        col.set @step5_array
+        expect(col.recommendedArray()).toEqual @step6_array
+
+        col.set @step6_array
+        expect(col.recommendedArray()).toBe null
+
+    describe "recommendedQuery", ->
+      it "should return well-formed recommended query", ->
+        col = new KColumn @page_id
+        col.set @step1_array
+        expect(col.recommendedQuery()).toEqual "td:nth-child(2).row#clementi > div:nth-child(3).contact-info > a:nth-child(4).address > span:nth-child(5).street > img.prop-img"
+
+        col.set @step2_array
+        expect(col.recommendedQuery()).toEqual "td:nth-child(2).row#clementi > div:nth-child(3).contact-info > a:nth-child(4).address > span.street > img.prop-img"
+
+        col.set @step3_array
+        expect(col.recommendedQuery()).toEqual "td:nth-child(2).row#clementi > div:nth-child(3).contact-info > a.address > span.street > img.prop-img"
+
+        col.set @step4_array
+        expect(col.recommendedQuery()).toEqual "td:nth-child(2).row#clementi > div.contact-info > a.address > span.street > img.prop-img"
+
+        col.set @step5_array
+        expect(col.recommendedQuery()).toEqual "td.row#clementi > div.contact-info > a.address > span.street > img.prop-img"
+
+        col.set @step6_array
+        expect(col.recommendedQuery()).toBe null
 
   describe "hasAnchor", ->
 

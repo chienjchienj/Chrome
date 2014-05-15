@@ -6,6 +6,7 @@ var KColumn = function(page_id, tab_id) {
   self.col_name           = "Property " + self.id
   self.dom_array          = [];
   self.required_attribute = null;  
+  self.is_active          = false;
   KColumn.instances.push(self);
   return self;
 };
@@ -149,6 +150,14 @@ KColumn.partialLineageMerge = function(old_dom_array, new_dom_array) {
 
 }
 
+KColumn.prototype.parentPageUrl = function() {
+  var self = this;
+  var kpage = new KPage.find({ id: self.page_id })[0];
+  
+  if(kpage) return kpage.origin_url;
+  return false;
+}
+
 
 /** 
   Sets the dom array for this column
@@ -179,6 +188,10 @@ KColumn.prototype.isEmpty = function() {
   return self.dom_array.length == 0;
 }
 
+KColumn.prototype.domArray = function() {
+  var self = this;
+  return self.dom_array;
+}
 
 KColumn.prototype.domQuery = function() {
   var self = this;
@@ -192,6 +205,61 @@ KColumn.prototype.domQuery = function() {
 
   }).join(" > ");
 };
+
+/**
+  CSS query of the next set of dom arrays to recommends
+
+  Returns Array || null
+
+**/
+KColumn.prototype.recommendedArray = function() {
+  var self = this;
+  var recommended_array = [];
+  var has_morphed = false;
+
+  for(var x = self.dom_array.length - 1; x >= 0; x--) {
+    var curr_dom = self.dom_array[x];
+    var new_dom = {};
+
+    Object.keys(curr_dom).forEach(function(attr) {
+
+      if(attr == "position" && !has_morphed) {
+        has_morphed = true;
+
+      } else {
+        new_dom[attr] = curr_dom[attr];
+      }
+    });
+
+    recommended_array.unshift(new_dom);
+
+  }
+
+  if(has_morphed) return recommended_array;
+  else return null;
+}
+
+/**
+  CSS query of the next set of dom arrays to recommend
+
+  Returns String || null
+**/
+KColumn.prototype.recommendedQuery = function() {
+  var self = this;
+  var recommend_array = self.recommendedArray();
+
+  if(!recommend_array) return recommend_array;
+
+  return recommend_array.map(function(dom){
+    query = "";
+    dom.el        && (query += dom.el);
+    dom.position  && (query += ":nth-child(" + dom.position + ")");
+    dom.class     && (query += dom.class);
+    dom.id        && (query += dom.id);
+    return query;
+
+  }).join(" > ");  
+}
 
 KColumn.prototype.hasAnchor = function() {
   var self = this;
@@ -315,13 +383,18 @@ KColumn.prototype.toParams = function() {
   Returns the JSON for content.js display
 **/
 KColumn.prototype.toJson = function() {
-  var self = this;
+  var self    = this;
   var partial = {};
-  partial.id        = self.id;
-  partial.page_id   = self.page_id;
-  partial.col_name  = self.col_name;
-  partial.dom_query = self.domQuery();
-  partial.dom_array = self.dom_array;
+  partial.id                = self.id;
+  partial.page_id           = self.page_id;
+  parital.page_url          = self.parentPageUrl();
+  partial.col_name          = self.col_name;
+  partial.dom_array         = self.domArray();  
+  partial.dom_query         = self.domQuery();
+  partial.recommended_array = self.recommendedArray();  
+  partial.recommended_query = self.recommendedQuery();
+  partial.is_active         = self.is_active;
+
   if(self.required_attribute) partial.required_attribute = self.required_attribute;
   return partial;
 }

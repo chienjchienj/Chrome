@@ -12,7 +12,6 @@ Backbone.sync = function (method, model, options) {
   payload["controller"] = model.url;
   payload["method"]     = method;  
 
-  console.log(method);
   switch(method) {
     case "read" :
     case "create" :

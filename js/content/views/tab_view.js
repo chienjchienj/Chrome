@@ -12,8 +12,6 @@ var TabView = Backbone.View.extend({
 
     $.when(promise_tab, promise_page).then(
       function() {
-        console.log(self.tab);        
-        console.log(self.page);
         if(self.tab.get('active')) self.activate();
       }, 
       function(){
@@ -23,11 +21,13 @@ var TabView = Backbone.View.extend({
     );
   },
 
+  /** Gets the ID of this Tab **/
   tabId: function() {
     var self = this;
     return self.tab.id;
   },
 
+  /** Gets the ID of this Page - Each URL within this Tab has a unique Page ID **/
   pageId: function() {
     var self = this;
     return self.page.id;
@@ -42,11 +42,13 @@ var TabView = Backbone.View.extend({
     return self;
   },
 
+  /** Activates the DataGet **/
   activate: function() {
     var self = this;
     self.render();
   },
 
+  /** Deactivates the DataGet **/
   deactivate: function() {
     var self = this;    
     self.$el.css({ paddingLeft: "0px" });
