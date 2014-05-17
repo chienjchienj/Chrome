@@ -6,7 +6,45 @@ var Column = Backbone.Model.extend({
     json_obj.id       = self.get('id');    
     json_obj.col_name = self.get('col_name');
     return json_obj;
+  },
+
+  belongsToPage: function(page_id) {
+    var self = this;
+    return page_id == self.get('page_id');
+  },
+
+  /**
+    Checks if the dom_array has elements already selected for this Column
+
+    Returns Boolean
+  **/
+  domArrayNotEmpty: function() {
+    var self = this;
+    return self.get("dom_array") && 
+        self.get("dom_array").length > 0;
+
+  },
+
+  /**
+    Checks if there are recommended dom additions for this Column
+
+    Returns Boolean
+  **/
+  hasRecommendations: function() {
+    var self = this;
+    return self.get("recommended_array") && 
+        self.get("recommended_array").length > 0;
+  },
+
+  mergeInNewSelections: function(new_dom_arrays) {
+
+  },
+
+  setRecommendationsToSelected: function() {
+    
   }
+
+
 
 });
 

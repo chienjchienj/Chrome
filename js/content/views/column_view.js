@@ -11,10 +11,10 @@ var ColumnView = Backbone.View.extend({
   },
 
   /** 
-    Dom elements that cannot be selected by our mouse click events
+    Class Names that prevents elements from being selected by our mouse click events
     The list of css queries describes either these doms, their direct parents or ancestore further up the DOM tree
   **/
-  unselectable_doms: [ ".getdata-sidebar" ],
+  unselectable_classnames: [ "getdata-sidebar" ],
 
   /** List of all the DOM elements within a HTML Dom that are selectable **/
   selectable_doms: [ "h1", "h2", "h3", "h4", "h5", "h6", "span", "p", "div", "td", "img", "a" ],
@@ -122,26 +122,23 @@ var ColumnView = Backbone.View.extend({
     self.model.save();
   },
 
-  belongsToCurrentPage: function() {
-    var self = this;
-    return self.model.get("page_id") == self.parent_view.pageId();
-  },
-
   /**
     Called when this column starts being the active column. Note: There can only be one active column per Tab
   **/
   activate: function(e) {
     var self = this;
     self.parent_view.deactivateColumnViews([self.model.id]);
+    console.log("Activating: %s", self.model.id);
     self.model.set("is_active", true);
     self.model.save();
-
     switch(self.getState()) {
-      case self.states.no_page:
+      case self.states.not_page:
+        console.log("Redirecting to the parent page");
         self.redirectToParentPage();
         break;
 
       case self.states.fresh:
+        console.log("Started spying on mouse");
         self.spyOnMouseStart();
         break;
 
@@ -156,6 +153,8 @@ var ColumnView = Backbone.View.extend({
         self.dressUpSelectedDoms();      
         break;
     }
+
+    console.log("State %s versus case %s ", self.getState(), self.states.not_page);
     
   },
 
@@ -193,43 +192,75 @@ var ColumnView = Backbone.View.extend({
     returns
   **/
   getState: function() {
-    
+    var self = this;
+    if(!self.belongsToCurrentPage()) {
+      console.log("Does not belong to page");
+      return self.states.not_page;
+
+    } else if(!self.hasDomsSelected()) {
+      return self.states.fresh;
+
+    } else if(self.hasDomRecommendations()) {
+      return self.states.recommends;
+
+    } else if(!self.hasDomRecommendations()) {
+      return self.states.fixed;
+
+    }
+  },
+
+  belongsToCurrentPage: function() {
+    var self = this;
+    return self.model.belongsToPage(self.parent_view.pageId())
+  },
+
+  hasDomsSelected: function() {
+    var self = this;
+    return self.model.domArrayNotEmpty();
+  },
+
+  hasDomRecommendations: function() {
+    var self = this;
+    return self.model.hasRecommendations();
   },
 
   /** 
     Redirects this window to the page this view's column model belongs to
   **/
   redirectToParentPage: function() {
-
+    var self = this;    
+    console.log("Redirecting to column_id: %s, page_id: %s", 
+      self.model.id, self.model.get('page_id') );
+    Env.redirect(self.model.get("page_url"));
   },
 
-  /** 
-    Fetches the Page this View's Column model object belong to
-
-    Params:
-      callback
+  /**
+    Returns a list of DOMs that can be included for harvesting 
+    on this page
 
     Returns:
-      Promise
+      [dom1, dom2, dom3,...]
   **/
-  fetchParentPage: function(callback) {
-
-  },
-
   selectableDoms: function() {
     var self = this;
     var sds  = self.selectable_doms.join(" , ");
     return $(sds);
   },
 
+  /**
+    Determines if a selected element cannot be selected
+
+    Returns: Boolean
+      true if dom cannot be selected
+  **/
   isUnselectable: function(dom) {
     var self = this;
     var unselectable = false;
     var $dom = $(dom);
 
-    self.unselectable_doms.forEach(function(u_dom) {
+    self.unselectable_classnames.forEach(function(u_dom) {
       if($dom.hasClass(u_dom)) unselectable = true;
-      if($dom.parents(u_dom).length > 0) unselectable = true;
+      if($dom.parents("." + u_dom).length > 0) unselectable = true;
     });
 
     return unselectable;
@@ -264,6 +295,9 @@ var ColumnView = Backbone.View.extend({
     console.log("Mouse over selectable dom detected by Column View: ", self.model.id);
     console.log(e.currentTarget);
     console.log("\n\n");
+    $(e.currentTarget).attr("getdata_color", self.getSelectableColor());
+    console.log("Setting color");
+    console.log(e.currentTarget);
     e.stopPropagation();
     // console.log("Mouse over element was listened by Column View: ", self.model.id);
   },
@@ -275,9 +309,11 @@ var ColumnView = Backbone.View.extend({
     var self = this;
     if(self.isUnselectable(e.currentTarget)) return;
 
+
     console.log("Mouse out selectable dom detected by Column View: ", self.model.id);
     console.log(e.currentTarget);
     console.log("\n\n");
+    $(e.currentTarget).attr("getdata_color", null);
     e.stopPropagation();
   },
 
@@ -335,7 +371,34 @@ var ColumnView = Backbone.View.extend({
   **/
   clickedRecommendedDomDiscard: function(e) {
 
-  },  
+  },
+
+  /**
+    Gets the color encoding for the selectable DOMs
+
+    Returns String
+  **/
+  getSelectableColor: function() {
+    return 999;
+  },
+
+  /***
+    Gets the color encoding for the recommended DOMs
+
+    Returns String
+  ***/
+  getRecommendedColor: function() {
+    return 999;
+  },
+
+  /***
+    Gets the color encoding for the selected DOMs
+    
+    Returns String
+  ***/
+  getSelectedColor: function() {
+    return 999;
+  },
 
   template: function() {
     return Application.templates['column'];

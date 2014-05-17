@@ -25,6 +25,8 @@ Env.loadTemplate = function(template_name, callback) {
   loading_bay.load(Env.filePath(file_path), function() {  
     callback && callback( $(loading_bay).html() );
   });
+}
 
-
+Env.redirect = function(page_url) {
+  window.redirect = page_url;
 }

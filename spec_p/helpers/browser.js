@@ -22,3 +22,5 @@ Env.registerListener = function(listener) {
 Env.loadTemplate = function(template_name, callback) {
   callback && callback( $("#fixture_" + template_name).html() );
 }
+
+Env.redirect = function() {}
