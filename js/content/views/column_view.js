@@ -17,7 +17,14 @@ var ColumnView = Backbone.View.extend({
   unselectable_classnames: [ "getdata-sidebar" ],
 
   /** List of all the DOM elements within a HTML Dom that are selectable **/
-  selectable_doms: [ "h1", "h2", "h3", "h4", "h5", "h6", "span", "p", "div", "td", "img", "a" ],
+  selectable_doms: [ 
+    "h1", "h2", "h3", "h4", "h5", "h6", 
+    "p", "img", "a", 
+    "span:not(:has(span))", 
+    "div:not(:has(div))", 
+    "td:not(:has(td))"
+  ],
+
 
   /** 
     List of all the dom overlays that are recommended for addition to the existing set of DOMs. 
@@ -194,7 +201,6 @@ var ColumnView = Backbone.View.extend({
   getState: function() {
     var self = this;
     if(!self.belongsToCurrentPage()) {
-      console.log("Does not belong to page");
       return self.states.not_page;
 
     } else if(!self.hasDomsSelected()) {
@@ -244,7 +250,14 @@ var ColumnView = Backbone.View.extend({
   selectableDoms: function() {
     var self = this;
     var sds  = self.selectable_doms.join(" , ");
-    return $(sds);
+
+    $sds = $(sds).filter(function(index, dom) {
+      if(self.isUnselectable(dom)) return false;
+      $(dom).attr("org-bkg-color", $(dom).css( "background-color"));
+      return true;
+    });
+
+    return $sds;
   },
 
   /**
@@ -290,16 +303,12 @@ var ColumnView = Backbone.View.extend({
   **/
   mouseOverSelectableDom: function(e) {
     var self = this;
-    if(self.isUnselectable(e.currentTarget)) return;
-
-    console.log("Mouse over selectable dom detected by Column View: ", self.model.id);
-    console.log(e.currentTarget);
-    console.log("\n\n");
-    $(e.currentTarget).attr("getdata_color", self.getSelectableColor());
-    console.log("Setting color");
-    console.log(e.currentTarget);
+    var dom = e.currentTarget;
+    if(self.isUnselectable(dom)) return;
+    $(dom).css("background-color", self.getSelectableColor());
+    $(dom).attr("getdata_color", self.getSelectableColor());
     e.stopPropagation();
-    // console.log("Mouse over element was listened by Column View: ", self.model.id);
+
   },
 
   /** 
@@ -307,13 +316,10 @@ var ColumnView = Backbone.View.extend({
   **/
   mouseOutSelectableDom: function(e) {
     var self = this;
-    if(self.isUnselectable(e.currentTarget)) return;
-
-
-    console.log("Mouse out selectable dom detected by Column View: ", self.model.id);
-    console.log(e.currentTarget);
-    console.log("\n\n");
-    $(e.currentTarget).attr("getdata_color", null);
+    var dom = e.currentTarget;
+    if(self.isUnselectable(dom)) return;
+    $(dom).css("background-color",$(dom).attr("org-bkg-color"));
+    $(dom).removeAttr("getdata_color");
     e.stopPropagation();
   },
 
@@ -379,7 +385,8 @@ var ColumnView = Backbone.View.extend({
     Returns String
   **/
   getSelectableColor: function() {
-    return 999;
+    var self = this;
+    return self.model.getColor("selecting");
   },
 
   /***
@@ -388,7 +395,7 @@ var ColumnView = Backbone.View.extend({
     Returns String
   ***/
   getRecommendedColor: function() {
-    return 999;
+    return self.model.getColor("recommending");
   },
 
   /***
@@ -397,7 +404,7 @@ var ColumnView = Backbone.View.extend({
     Returns String
   ***/
   getSelectedColor: function() {
-    return 999;
+    return self.model.getColor("selected");
   },
 
   template: function() {

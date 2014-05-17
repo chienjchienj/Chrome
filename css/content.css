@@ -120,7 +120,3 @@
 [getdata_color] {
   cursor: pointer;
 }
-
-[getdata_color='999'] {
-  background-color: #999;
-}

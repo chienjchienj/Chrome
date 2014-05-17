@@ -1,5 +1,6 @@
 var Column = Backbone.Model.extend({
   url: "kcolumns",
+
   forTemplate: function() {
     var self = this;
     var json_obj  = {};
@@ -42,9 +43,12 @@ var Column = Backbone.Model.extend({
 
   setRecommendationsToSelected: function() {
     
+  },
+
+  getColor: function(type) {
+    var self = this;
+    return self.get("colors")[type];
   }
-
-
 
 });
 

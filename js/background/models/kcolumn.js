@@ -364,6 +364,55 @@ KColumn.prototype.hasSameTailType = function(new_dom_array) {
 
 }
 
+KColumn.prototype.getColors = function(type) {
+  var self = this;
+  
+  var diluter = 0;
+  switch(type) {
+    case "selecting": 
+      diluter = .7;
+      break;
+
+    case "selected":
+      diluter = 1;
+      break;
+
+    case "recommending":
+      diluter = .3;
+      break;
+  }
+
+  var c1 =  self.fibonaci(self.id * 3) % 255;
+  var c2 =  self.fibonaci(self.id * 5) % 255;
+  var c3 =  self.fibonaci(self.id * 7) % 255;
+
+  var self_colors = {};
+  self_colors.selecting     = self.getRgb(c1, c2, c3, 0.7);
+  self_colors.selected      = self.getRgb(c1, c2, c3, 1);
+  self_colors.recommending  = self.getRgb(c1, c2, c3, 0.3);
+  return self_colors;
+}
+
+KColumn.prototype.getRgb = function(c1, c2, c3, a) {
+  return "rgba(" +
+    c1 + ", " + 
+    c2 + ", " + 
+    c3 + ", " + 
+    a + " )";
+}
+
+KColumn.prototype.fibonaci = function(sequence) {
+  fibon_sequence = sequence + 7;
+  var golden_ratio = 1.618034;
+
+  var base_color = (
+    Math.pow(golden_ratio, fibon_sequence) - 
+    ( 1 - Math.pow(golden_ratio, fibon_sequence - 1)) 
+  ) / Math.sqrt(5) ;
+
+  return Math.round(base_color);
+}
+
 /**
   Returns the JSON partial for the data definition schema
   
@@ -393,6 +442,7 @@ KColumn.prototype.toJson = function() {
   partial.dom_query         = self.domQuery();
   partial.recommended_array = self.recommendedArray();  
   partial.recommended_query = self.recommendedQuery();
+  partial.colors            = self.getColors();
   partial.is_active         = self.is_active;
 
   if(self.required_attribute) partial.required_attribute = self.required_attribute;
