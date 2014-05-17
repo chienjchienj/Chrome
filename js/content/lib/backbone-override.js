@@ -21,7 +21,8 @@ Backbone.sync = function (method, model, options) {
     case "update" :
       payload["args_array"] = [model.attributes];
       break;
-
+    default:
+      payload["args_array"] = [data];
   }
 
 

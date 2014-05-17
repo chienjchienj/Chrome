@@ -322,7 +322,11 @@ KColumn.prototype.clone = function() {
 **/
 KColumn.prototype.merge = function(new_dom_array) {
   var self = this;
-  if(self.hasSameLineage(new_dom_array)) {
+  if(!self.isSet()) {
+    self.set(new_dom_array);
+    return true;
+    
+  } else if(self.hasSameLineage(new_dom_array)) {
     merged_array = KColumn.fullLineageMerge(self.dom_array, new_dom_array);
     self.set(merged_array);
     return true;

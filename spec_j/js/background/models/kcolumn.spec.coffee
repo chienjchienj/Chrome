@@ -707,6 +707,30 @@ describe "KColumn", ->
         expect(KColumn.isIdentical merged_array, def_array3).toBe true
   
   describe "merge", ->
+    it "should merge by setting", ->
+      def_array1 = [{
+          el: "td"
+          class: ".row"
+          id: "#clementi"
+        },{                
+          el: "div"
+          position: 2
+          class: ".contact-info"
+        },{
+          el: "a"
+          class: ".address"
+        },{
+          el: "span"
+          class: ".street"
+        },{
+          el: "img"
+          class: ".prop-img"
+        }]
+
+      col = new KColumn @page_id
+      expect(col.merge def_array1).toBe true
+      expect(KColumn.isIdentical col.dom_array, def_array1).toBe true        
+
     it "should merge successfully with full lineage and same tail", ->
       def_array1 = [{
           el: "td"

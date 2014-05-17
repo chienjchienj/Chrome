@@ -81,7 +81,6 @@ var ColumnView = Backbone.View.extend({
   },
 
   validateColName: function(e) {
-    console.log("Validating column name");
     var self = this;
     var disallowed_keycodes = Object.keys(self.disabled_keycodes).map(function(key){
       return self.disabled_keycodes[key];
@@ -91,8 +90,8 @@ var ColumnView = Backbone.View.extend({
   },
 
   updateColName: function(e) {
-    console.log("Saving column name");
     var self = this;
+    if(self.$el.find('.col-name')[0].innerText.length == 0) return;
     self.model.set("col_name", self.$el.find('.col-name')[0].innerText);
     console.log("Saving : %s", self.$el.find('.col-name')[0].innerText)
     self.model.save();    
@@ -124,7 +123,9 @@ var ColumnView = Backbone.View.extend({
   unfocusColName: function(e) {
     var self = this;
     if( self.getColName().trim().length == 0 ) {
-      self.setColName(self.defaultColName());
+      self.model.set("col_name", self.defaultColName());
+      self.model.save();
+      self.setColName(self.defaultColName());      
     }
     self.model.save();
   },
@@ -135,17 +136,14 @@ var ColumnView = Backbone.View.extend({
   activate: function(e) {
     var self = this;
     self.parent_view.deactivateColumnViews([self.model.id]);
-    console.log("Activating: %s", self.model.id);
     self.model.set("is_active", true);
     self.model.save();
     switch(self.getState()) {
       case self.states.not_page:
-        console.log("Redirecting to the parent page");
         self.redirectToParentPage();
         break;
 
       case self.states.fresh:
-        console.log("Started spying on mouse");
         self.spyOnMouseStart();
         break;
 
@@ -160,8 +158,6 @@ var ColumnView = Backbone.View.extend({
         self.dressUpSelectedDoms();      
         break;
     }
-
-    console.log("State %s versus case %s ", self.getState(), self.states.not_page);
     
   },
 
@@ -304,7 +300,6 @@ var ColumnView = Backbone.View.extend({
   mouseOverSelectableDom: function(e) {
     var self = this;
     var dom = e.currentTarget;
-    if(self.isUnselectable(dom)) return;
     $(dom).css("background-color", self.getSelectableColor());
     $(dom).attr("getdata_color", self.getSelectableColor());
     e.stopPropagation();
@@ -317,7 +312,6 @@ var ColumnView = Backbone.View.extend({
   mouseOutSelectableDom: function(e) {
     var self = this;
     var dom = e.currentTarget;
-    if(self.isUnselectable(dom)) return;
     $(dom).css("background-color",$(dom).attr("org-bkg-color"));
     $(dom).removeAttr("getdata_color");
     e.stopPropagation();
@@ -328,13 +322,57 @@ var ColumnView = Backbone.View.extend({
     if Dom is already selected or recommended ignore
   **/
   clickedOnSelectableDom: function(e) {
-    var self = this;
-    if(self.isUnselectable(e.currentTarget)) return;
-    
-    console.log("CLicked on selectable dom detected by Column View: ", self.model.id);
-    console.log(e.currentTarget);
-    console.log("\n\n");
+    var self          = this;
+    var new_dom_array = self.calculateNewDomArray(e.currentTarget);
     e.stopPropagation();
+  },
+
+  /**
+    Generates the dom array that uniquely describes this dom element given 
+
+    Returns Array
+  **/
+  calculateNewDomArray: function(dom) {
+    var self = this;
+
+    var new_dom_array = [];
+    var curr_dom      = dom;
+    var max_depth     = 5;
+    var curr_depth    = 0;
+
+    do {
+      var curr_hash       = {};
+      curr_hash.el        = curr_dom.nodeName.toLowerCase();
+      curr_hash.class     = curr_dom.className;
+      curr_hash.id        = curr_dom.id;
+      curr_hash.position  = self.calculatePositionInLevel(curr_dom);
+      curr_depth          += 1;
+      new_dom_array.unshift(curr_hash);
+
+    } while(
+      (curr_dom = curr_dom.parentElement) && 
+      curr_depth < max_depth &&
+      curr_dom &&
+      curr_dom.nodeName.toLowerCase() != "html"
+    );
+
+    return new_dom_array;
+
+  },
+
+  /**
+    Calculating the current position of the element in relation to its siblings.
+    Discounting the text nodes from this calculation
+
+    Returns Integer
+  **/
+  calculatePositionInLevel: function(dom) {
+    var curr_dom = dom;
+    var curr_pos = 1;
+    while(curr_dom = curr_dom.previousSibling) {
+      if(curr_dom.nodeName != "#text") curr_pos += 1;
+    };
+    return curr_pos;
   },
 
   /**

@@ -38,7 +38,18 @@ var Column = Backbone.Model.extend({
   },
 
   mergeInNewSelections: function(new_dom_arrays) {
-
+    return self.fetch({
+      method: 'merge',
+      data: new_dom_arrays,
+      success: function(model, response, option) {
+        console.log("Merged Successfully");
+        debugger
+      },
+      error: function(model, response, option) {
+        console.log("Merged Successfully");
+        debugger
+      }
+    })
   },
 
   setRecommendationsToSelected: function() {

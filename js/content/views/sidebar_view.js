@@ -21,7 +21,6 @@ var SideBarView = Backbone.View.extend({
   
     self.column_views.forEach(function(col_view) {
       if( !self.columnViewIsExempted(exempted_model_ids, col_view) ) {
-        console.log("Deactivating view: %s", col_view.model.id)
         col_view.deactivate(); 
       }
     });

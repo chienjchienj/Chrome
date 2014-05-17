@@ -31,7 +31,6 @@ KColumnsController.update = function(new_attributes, tab_obj) {
 }
 
 KColumnsController.read = function(data_obj, tab_obj) {
-  console.log(data_obj);
   data_obj = data_obj || {};
   response        = {}
   response.data   = KColumn.find(data_obj).map(function(kcol) {
@@ -41,6 +40,13 @@ KColumnsController.read = function(data_obj, tab_obj) {
   return response;
 
 }
+
+KColumnsController.merge = function(data_obj, tab_obj) {
+  console.log("Called merge");
+  console.log(data_obj);
+  console.log(tab_obj);
+}
+
 
 /** Export for node testing **/
 try { 
