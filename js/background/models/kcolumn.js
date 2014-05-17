@@ -364,24 +364,8 @@ KColumn.prototype.hasSameTailType = function(new_dom_array) {
 
 }
 
-KColumn.prototype.getColors = function(type) {
+KColumn.prototype.getColors = function() {
   var self = this;
-  
-  var diluter = 0;
-  switch(type) {
-    case "selecting": 
-      diluter = .7;
-      break;
-
-    case "selected":
-      diluter = 1;
-      break;
-
-    case "recommending":
-      diluter = .3;
-      break;
-  }
-
   var c1 =  self.fibonaci(self.id * 3) % 255;
   var c2 =  self.fibonaci(self.id * 5) % 255;
   var c3 =  self.fibonaci(self.id * 7) % 255;
