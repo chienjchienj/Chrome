@@ -979,3 +979,20 @@ describe "KColumn", ->
         col_name: "Property 1"
         dom_query: 'td.row#clementi > div:nth-child(2).contact-info > a.address > span.street > span.prop-img'
         required_attribute: "data"
+
+  describe "fibonaci", ->
+    it "should return sequences accurately", ->
+      col = new KColumn @page_id
+      expect(col.fibonaci(1)).toEqual 34
+      expect(col.fibonaci(2)).toEqual 55
+      expect(col.fibonaci(3)).toEqual 89
+      expect(col.fibonaci(4)).toEqual 144
+      expect(col.fibonaci(5)).toEqual 233
+
+  describe "getColors", ->
+    it "should return colors", ->
+      col = new KColumn @page_id
+      color_hash = col.getColors()
+      expect(color_hash.selected).toEqual "rgba(89, 233, 100, 1 )"
+      expect(color_hash.selecting).toEqual "rgba(89, 233, 100, 0.7 )"
+      expect(color_hash.recommending).toEqual "rgba(89, 233, 100, 0.3 )"
