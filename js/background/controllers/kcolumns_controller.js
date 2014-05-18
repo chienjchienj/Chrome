@@ -17,13 +17,10 @@ KColumnsController.create = function(data_obj, tab_obj) {
 KColumnsController.can_update = [ "col_name", "dom_array", "required_attribute", "count", "is_active" ];
 
 KColumnsController.update = function(new_attributes, tab_obj) {
-  console.log(new_attributes);
   var kc          = new KColumn.find({ id: new_attributes.id })[0];
   KColumnsController.can_update.forEach(function(attr) {
     kc[attr] = new_attributes[attr];
   });
-  console.log("=== Updated KColumn ===");
-  console.log(kc);
   response        = {};
   response.data   = kc.toJson();
   response.status = "success";
@@ -42,9 +39,34 @@ KColumnsController.read = function(data_obj, tab_obj) {
 }
 
 KColumnsController.merge = function(data_obj, tab_obj) {
-  console.log("Called merge");
-  console.log(data_obj);
-  console.log(tab_obj);
+
+  response = {};
+  data_obj = data_obj || {}
+
+  if(!data_obj.id) {
+    response.status = "error";
+    response.err_msg = "Merge cannot be called with kcolumn id";
+
+  } else if (!data_obj.new_array_dom) {
+    response.status = "error";
+    response.err_msg = "Merge cannot be called with new_array_dom";
+
+  } else{
+    var kc = new KColumn.find({ id: data_obj.id })[0];
+    result = kc.merge(data_obj.new_array_dom);
+
+    if(result) {
+      response.status = "success"
+      response.data   = kc.toJson();
+
+    } else {
+      response.status = "error";
+      response.err_msg = "Merge cannot be performed with new_array_dom provided";
+
+    }
+  }
+
+  return response;
 }
 
 

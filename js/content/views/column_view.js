@@ -323,8 +323,25 @@ var ColumnView = Backbone.View.extend({
   **/
   clickedOnSelectableDom: function(e) {
     var self          = this;
-    var new_dom_array = self.calculateNewDomArray(e.currentTarget);
+    self.getAndMergeNewDomArray(e.currentTarget);
     e.stopPropagation();
+  },
+
+  getAndMergeNewDomArray: function(dom) {
+    var self          = this;
+    var new_dom_array = self.calculateNewDomArray(dom);
+    var promise       = self.model.mergeInNewSelections(new_dom_array);
+    $.when(promise).then(
+      function() {
+        console.log("Gonna dress up the selected and recommended DOMs");
+        self.dressUpSelectedDoms();
+        self.dressUpRecommendedDoms();
+      },
+      function() {
+        console.log("Gonna create a new column with the given new_dom_array");
+
+      }
+    );
   },
 
   /**
@@ -345,7 +362,7 @@ var ColumnView = Backbone.View.extend({
       curr_hash.el        = curr_dom.nodeName.toLowerCase();
       curr_hash.class     = curr_dom.className;
       curr_hash.id        = curr_dom.id;
-      curr_hash.position  = self.calculatePositionInLevel(curr_dom);
+      if(curr_hash.el != "body") curr_hash.position  = self.calculatePositionInLevel(curr_dom);
       curr_depth          += 1;
       new_dom_array.unshift(curr_hash);
 
