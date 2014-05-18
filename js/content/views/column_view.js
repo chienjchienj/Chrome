@@ -339,10 +339,24 @@ var ColumnView = Backbone.View.extend({
       },
       function() {
         console.log("Gonna create a new column with the given new_dom_array");
-
+        self.setDomArrayToNewColumn(new_dom_array);
       }
     );
   },
+
+  /**
+    Called when newly selected dom_array cannot be merged to current 
+    column's dom_array
+
+    Creates a new Column and sets the new dom_array to it and focuses on it
+
+  **/
+  setDomArrayToNewColumn: function(dom_array) {
+    var self = this;
+    self.parent_view.addColumn({
+      dom_array: dom_array
+    });
+  },  
 
   /**
     Generates the dom array that uniquely describes this dom element given 

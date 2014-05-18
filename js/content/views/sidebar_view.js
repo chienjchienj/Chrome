@@ -99,16 +99,30 @@ var SideBarView = Backbone.View.extend({
     return self.columns.forPage(self.parent_tab.pageId()).length > 0;
   },
 
-  addColumn: function() {
+  addColumn: function(preset_attributes) {
     var self = this;
-    self.columns.newColumn( self.newColumnCreated, self.errorHandler );
+    if(!preset_attributes) {
+      self.columns.newColumn( self.newColumnCreated, self.errorHandler ); 
+
+    } else {
+      self.columns.newColumn( function(new_col) {
+        self.newColumnCreated(new_col, preset_attributes);
+
+      } , self.errorHandler ); 
+    }
     
   },
 
-  newColumnCreated: function(new_col) {
+  newColumnCreated: function(new_col, preset_attributes) {
     var self = this;
     self.deactivateColumnViews();
     new_col.set("is_active", true);
+
+    if(preset_attributes) {
+      Object.keys(preset_attributes).forEach(function(attribute) {
+        new_col.set(attribute, preset_attributes[attribute]);
+      });
+    }
     $.when(new_col.save()).then( self.newColumnSaved , self.errorHandler );
   },
 
