@@ -29,7 +29,7 @@ var ColumnView = Backbone.View.extend({
   /** 
     List of all the dom overlays that are recommended for addition to the existing set of DOMs. 
   **/
-  recommended_doms: [],
+  recommended_dom_views: [],
 
   /** List of all the dom overlays rendered on the current page  **/
   selected_dom_views: [],
@@ -174,19 +174,21 @@ var ColumnView = Backbone.View.extend({
   },
 
   /**
-    When the extension get deactivated : Removes all the selected_dom and recommended_dom overlays
+    Removes this view and all its sub elements
+    Called when the extension get deactivated    
   **/
   destroy: function() {
     var self = this;
-    self.recommended_doms_views.forEach(function(dom) {
+    self.recommended_dom_views.forEach(function(dom) {
       dom.remove();
     });
 
-    self.selected_doms_views.forEach(function(dom) {
+    self.selected_dom_views.forEach(function(dom) {
       dom.remove();
     });
 
     self.spyOnMouseStop();
+    self.remove();    
   },
 
   /**
@@ -312,9 +314,16 @@ var ColumnView = Backbone.View.extend({
   mouseOutSelectableDom: function(e) {
     var self = this;
     var dom = e.currentTarget;
+    self.clearMouseOverDom(dom);
+    e.stopPropagation();
+  },
+
+  /**
+    Removes the styling modifications to the DOM element when it is mouseover in selecting mode
+  **/
+  clearMouseOverDom: function(dom) {
     $(dom).css("background-color",$(dom).attr("org-bkg-color"));
     $(dom).removeAttr("getdata_color");
-    e.stopPropagation();
   },
 
   /**
@@ -339,6 +348,7 @@ var ColumnView = Backbone.View.extend({
       },
       function() {
         console.log("Gonna create a new column with the given new_dom_array");
+        self.clearMouseOverDom(dom);
         self.setDomArrayToNewColumn(new_dom_array);
       }
     );

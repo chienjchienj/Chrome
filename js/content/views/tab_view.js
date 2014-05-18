@@ -51,8 +51,9 @@ var TabView = Backbone.View.extend({
   /** Deactivates the DataGet **/
   deactivate: function() {
     var self = this;    
+    self.sidebar_view.destroy();    
     self.$el.css({ paddingLeft: "0px" });
-    self.$el.find(".getdata-sidebar").remove();
+    // self.$el.find(".getdata-sidebar").remove();
   }
 
 });

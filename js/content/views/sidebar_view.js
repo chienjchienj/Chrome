@@ -3,22 +3,41 @@ var SideBarView = Backbone.View.extend({
   className: "getdata-sidebar",
 
   events : {
-    "click #add_columns": "addColumn"
+    "click #add_columns": "addColumnEvent"
   },
 
   column_views: [],
 
   initialize: function() {
-    var self      = this;
+    var self      = this;    
     self.columns  = new Columns();
-    _.bindAll(self, "newColumnCreated", "newColumnSaved", "onResize");
+    _.bindAll(self, "newColumnCreated", "newColumnSaved", "onResize", "renderColumnViews");
 
     $(window).on("resize", self.onResize);    
   },
 
+  /**
+    Removes this view and all its sub elements
+    Called when the extension get deactivated    
+  **/
+  destroy: function() {
+    var self = this;
+    self.destroyColumnViews();
+    self.remove();
+  },
+
+  /**
+    Removing all the column views belonging to this view
+  **/
+  destroyColumnViews: function() {
+    var self = this;
+    self.column_views.forEach(function(col_view) {
+      col_view.destroy();
+    });
+  },
+
   deactivateColumnViews: function(exempted_model_ids) {
     var self = this;
-  
     self.column_views.forEach(function(col_view) {
       if( !self.columnViewIsExempted(exempted_model_ids, col_view) ) {
         col_view.deactivate(); 
@@ -63,30 +82,39 @@ var SideBarView = Backbone.View.extend({
     var self = this;
     self.$el.html(self.template());
     self.onResize();
-    self.renderColumns();
+    self.loadColumns();
     return self;
   },
 
-  renderColumns: function() {
+  /**
+    Loads the Column records from the background repository
+  **/
+  loadColumns: function() {
     var self = this;
     self.$el.find("#columns").html("");
     self.columns.fetch({
       data: {
         tab_id: self.parent_tab.tabId()
       },
-      success: function() {
-        self.column_views = [];
-        self.columns.models.forEach(function(col) {
-          var col_view = new ColumnView({
-            model: col,
-            parent_view: self
-          });
-          self.$el.find("#columns").append( col_view.$el );
-          self.column_views.push(col_view);
-        });
-        self.addFirstColumn();
-      }
+      success: self.renderColumnViews
     });
+  },
+
+  /**
+    Renders the Column Views
+  **/ 
+  renderColumnViews: function() {
+    var self = this;
+    self.column_views = [];
+    self.columns.models.forEach(function(col) {
+      var col_view = new ColumnView({
+        model: col,
+        parent_view: self
+      });
+      self.$el.find("#columns").append( col_view.$el );
+      self.column_views.push(col_view);
+    });
+    self.addFirstColumn();    
   },
 
   addFirstColumn: function() {
@@ -97,6 +125,12 @@ var SideBarView = Backbone.View.extend({
   currentPageHasColumns: function() {
     var self = this;
     return self.columns.forPage(self.parent_tab.pageId()).length > 0;
+  },
+
+  addColumnEvent: function(e) {
+    var self = this;
+    self.addColumn();
+    
   },
 
   addColumn: function(preset_attributes) {
@@ -110,8 +144,7 @@ var SideBarView = Backbone.View.extend({
 
       } , self.errorHandler ); 
     }
-    
-  },
+  },  
 
   newColumnCreated: function(new_col, preset_attributes) {
     var self = this;
@@ -128,7 +161,7 @@ var SideBarView = Backbone.View.extend({
 
   newColumnSaved: function(saved_col) {
     var self = this;
-    self.renderColumns();
+    self.loadColumns();
   },
 
   errorHandler:  function(err_msg) {
