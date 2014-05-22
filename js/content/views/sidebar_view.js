@@ -36,6 +36,14 @@ var SideBarView = Backbone.View.extend({
     });
   },
 
+  /**
+    Event listener that handles new column adding events
+  **/
+  addColumnEvent: function(e) {
+    var self = this;
+    self.addColumn();
+  },
+
   deactivateColumnViews: function(exempted_model_ids) {
     var self = this;
     self.column_views.forEach(function(col_view) {
@@ -125,12 +133,6 @@ var SideBarView = Backbone.View.extend({
   currentPageHasColumns: function() {
     var self = this;
     return self.columns.forPage(self.parent_tab.pageId()).length > 0;
-  },
-
-  addColumnEvent: function(e) {
-    var self = this;
-    self.addColumn();
-    
   },
 
   addColumn: function(preset_attributes) {
