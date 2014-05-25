@@ -412,6 +412,20 @@ describe "KColumn", ->
       col.set @def_array
       expect(col.hasSameLineage(@def_array3)).toEqual false
 
+    it "should be false if both definition arrays are insufficiently long", ->
+      def1 = [{  el: "body" },{ el: "span" }]
+      def2 = [{  el: "body" },{ el: "img" }]
+      col = new KColumn @page_id
+      col.set def1
+      expect(col.hasSameLineage(def2)).toEqual false
+
+    it "should be false if both definition arrays have only one single differing element", ->
+      def1 = [{ el: "span" }]
+      def2 = [{ el: "img" }]
+      col = new KColumn @page_id
+      col.set def1
+      expect(col.hasSameLineage(def2)).toEqual false
+
   describe "hasSameTailType", ->
     it "should be true if lineage and type are the same", ->
       col = new KColumn @page_id

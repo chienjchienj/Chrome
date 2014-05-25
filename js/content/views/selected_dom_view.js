@@ -11,6 +11,7 @@ var SelectedDomView = Backbone.View.extend({
   },
 
   destroy: function() {
+    console.log("Destroy sdv was called");
     var self = this;
     self.observer.disconnect();
     self.remove();

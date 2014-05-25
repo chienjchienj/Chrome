@@ -74,6 +74,7 @@ var ColumnView = Backbone.View.extend({
     );
 
     if(self.model.get("is_active")) self.activate();
+    if(self.belongsToCurrentPage()) self.dressUpSelectedDoms();
 
   },
 
@@ -154,13 +155,13 @@ var ColumnView = Backbone.View.extend({
 
       case self.states.recommends:
         self.spyOnMouseStart();
-        self.dressUpSelectedDoms();        
+        // self.dressUpSelectedDoms();
         self.dressUpRecommendedDoms();
         break;
 
       case self.states.fixed:
         self.spyOnMouseStart();      
-        self.dressUpSelectedDoms();      
+        // self.dressUpSelectedDoms();
         break;
     }
     
@@ -174,7 +175,7 @@ var ColumnView = Backbone.View.extend({
     self.model.set("is_active", false);
     self.model.save();
     self.spyOnMouseStop();
-    self.undressSelectedDoms();
+    // self.undressSelectedDoms();
     self.undressRecommendedDoms();
   },
 
@@ -450,8 +451,8 @@ var ColumnView = Backbone.View.extend({
     styles selected dom when activate happens
   **/
   dressUpSelectedDoms: function() {
-    console.log("Dressing up selected doms");
     var self = this;
+    console.log("Dressing up selected doms: %s", self.model.id);    
     var doms = $(self.model.attributes.dom_query);
 
     _.each(doms, function(dom) {
@@ -468,6 +469,7 @@ var ColumnView = Backbone.View.extend({
     Removes the styling of selected dom when activate happens
   **/
   undressSelectedDoms: function() {
+    var self = this;
     _.each(self.selected_dom_views, function(sdv) {
       sdv.destroy();
     })

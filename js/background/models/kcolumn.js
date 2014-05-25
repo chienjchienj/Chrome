@@ -347,13 +347,21 @@ KColumn.prototype.hasSameLineage = function(new_dom_array) {
   var self = this;
   if(self.dom_array.length != new_dom_array.length) return false;
 
-  var mismatch = true;
+  var matched = true;
+
   self.dom_array.forEach(function(dom, index) {
     if(dom.el != new_dom_array[index].el && index < self.dom_array.length - 1) {
-      mismatch = false;
+      matched = false;
     }
   });
-  return mismatch;
+
+  if(new_dom_array.length == 1 && self.dom_array[0].el != new_dom_array[0].el)
+    matched = false;
+
+  if(new_dom_array.length == 2 && self.dom_array[1].el != new_dom_array[1].el && new_dom_array[0].el == "body") 
+    matched = false; 
+
+  return matched;
 
 }
 
