@@ -66,7 +66,12 @@ var ColumnView = Backbone.View.extend({
     self.model        = opts.model;
     self.parent_view  = opts.parent_view;
     self.render();
-    _.bindAll(self, "mouseOverSelectableDom", "mouseOutSelectableDom", "clickedOnSelectableDom", "clickedRecommendedDomAdd");
+    _.bindAll(self, 
+      "mouseOverSelectableDom", 
+      "mouseOutSelectableDom", 
+      "clickedOnSelectableDom", 
+      "clickedRecommendedDomAdd"
+    );
 
     if(self.model.get("is_active")) self.activate();
 
@@ -149,8 +154,8 @@ var ColumnView = Backbone.View.extend({
 
       case self.states.recommends:
         self.spyOnMouseStart();
+        self.dressUpSelectedDoms();        
         self.dressUpRecommendedDoms();
-        self.dressUpSelectedDoms();
         break;
 
       case self.states.fixed:
@@ -179,16 +184,10 @@ var ColumnView = Backbone.View.extend({
   **/
   destroy: function() {
     var self = this;
-    self.recommended_dom_views.forEach(function(dom) {
-      dom.remove();
-    });
-
-    self.selected_dom_views.forEach(function(dom) {
-      dom.remove();
-    });
-
+    self.undressRecommendedDoms();
+    self.undressSelectedDoms();
     self.spyOnMouseStop();
-    self.remove();    
+    self.remove();  
   },
 
   /**
@@ -303,7 +302,7 @@ var ColumnView = Backbone.View.extend({
     var self = this;
     var dom = e.currentTarget;
     $(dom).css("background-color", self.getSelectableColor());
-    $(dom).attr("getdata_color", self.getSelectableColor());
+    $(dom).attr("getdata_color",   self.getSelectableColor());
     e.stopPropagation();
 
   },
@@ -384,8 +383,8 @@ var ColumnView = Backbone.View.extend({
     do {
       var curr_hash       = {};
       curr_hash.el        = curr_dom.nodeName.toLowerCase();
-      curr_hash.class     = curr_dom.className;
-      curr_hash.id        = curr_dom.id;
+      curr_hash.class     = self.calculateClassName(curr_dom);
+      curr_hash.id        = self.calculateId(curr_dom);
       if(curr_hash.el != "body") curr_hash.position  = self.calculatePositionInLevel(curr_dom);
       curr_depth          += 1;
       new_dom_array.unshift(curr_hash);
@@ -399,6 +398,37 @@ var ColumnView = Backbone.View.extend({
 
     return new_dom_array;
 
+  },
+
+  /**
+    Computes the well formated class name given a DOM object
+
+    Returns String
+  **/
+  calculateClassName: function(dom) {
+    if(!dom.className || dom.className.length == 0 ) return "";
+    
+    return dom.className
+      .split(" ")
+      .map( function(class_name) {
+        var class_name = class_name.trim();
+        if(class_name.length > 0) return "." + class_name;
+        return "";
+      })
+      .join("");
+
+  },
+
+  /**
+    Computes the well formated class name given a DOM object
+
+    Returns String
+  **/
+  calculateId: function(dom) {
+    if(dom.id && dom.id.length > 0) {
+      return "#" + dom.id;
+    }
+    return "";
   },
 
   /**
@@ -420,14 +450,27 @@ var ColumnView = Backbone.View.extend({
     styles selected dom when activate happens
   **/
   dressUpSelectedDoms: function() {
-    
+    console.log("Dressing up selected doms");
+    var self = this;
+    var doms = $(self.model.attributes.dom_query);
+
+    _.each(doms, function(dom) {
+      var sdv = new SelectedDomView({
+        dom:    dom,
+        color:  self.getSelectedColor()
+      });
+      console.log("Created new selected dom view");
+      self.selected_dom_views.push(sdv);
+    });
   },
 
   /**
     Removes the styling of selected dom when activate happens
   **/
   undressSelectedDoms: function() {
-
+    _.each(self.selected_dom_views, function(sdv) {
+      sdv.destroy();
+    })
   },
 
   /**
@@ -474,6 +517,7 @@ var ColumnView = Backbone.View.extend({
     Returns String
   ***/
   getRecommendedColor: function() {
+    var self = this;
     return self.model.getColor("recommending");
   },
 
@@ -483,6 +527,7 @@ var ColumnView = Backbone.View.extend({
     Returns String
   ***/
   getSelectedColor: function() {
+    var self = this;
     return self.model.getColor("selected");
   },
 

@@ -128,3 +128,7 @@
 [getdata_color] {
   cursor: pointer;
 }
+
+.getdata-selected_dom {
+  position: absolute;
+}

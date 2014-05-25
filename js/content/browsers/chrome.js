@@ -30,3 +30,12 @@ Env.loadTemplate = function(template_name, callback) {
 Env.redirect = function(page_url) {
   window.redirect = page_url;
 }
+
+Env.getMutationObserver = function(dom, callback) {
+  var observer = new MutationObserver(callback);
+  var observation_config = {
+    attributes: true
+  };
+  observer.observe(dom, observation_config);
+  return observer;
+}
