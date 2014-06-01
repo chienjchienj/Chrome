@@ -7,6 +7,7 @@ var KColumn = function(page_id, tab_id) {
   self.dom_array          = [];
   self.required_attribute = null;  
   self.is_active          = false;
+  self.counter            = 0;
   KColumn.instances.push(self);
   return self;
 };
@@ -440,6 +441,7 @@ KColumn.prototype.toJson = function() {
   partial.recommended_query = self.recommendedQuery();
   partial.colors            = self.getColors();
   partial.is_active         = self.is_active;
+  partial.counter           = self.counter;
 
   if(self.required_attribute) partial.required_attribute = self.required_attribute;
   return partial;

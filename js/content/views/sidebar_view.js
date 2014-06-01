@@ -137,9 +137,12 @@ var SideBarView = Backbone.View.extend({
 
   addColumn: function(preset_attributes) {
     var self = this;
+
+    // When adding a brand new column
     if(!preset_attributes) {
       self.columns.newColumn( self.newColumnCreated, self.errorHandler ); 
 
+    // When adding a new column that has some attributes already preset
     } else {
       self.columns.newColumn( function(new_col) {
         self.newColumnCreated(new_col, preset_attributes);

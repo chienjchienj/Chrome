@@ -14,25 +14,16 @@ var ColumnView = Backbone.View.extend({
     Class Names that prevents elements from being selected by our mouse click events
     The list of css queries describes either these doms, their direct parents or ancestore further up the DOM tree
   **/
-  unselectable_classnames: [ "getdata-sidebar" ],
+  unselectable_classnames: [ "getdata-sidebar", "getdata-selected_dom" ],
 
   /** List of all the DOM elements within a HTML Dom that are selectable **/
   selectable_doms: [ 
     "h1", "h2", "h3", "h4", "h5", "h6", 
     "p", "img", "a", 
-    "span:not(:has(span))", 
+    "span:not(:has(span))",
     "div:not(:has(div))", 
     "td:not(:has(td))"
   ],
-
-
-  /** 
-    List of all the dom overlays that are recommended for addition to the existing set of DOMs. 
-  **/
-  recommended_dom_views: [],
-
-  /** List of all the dom overlays rendered on the current page  **/
-  selected_dom_views: [],
 
   /** List of characters that are not allowed for use in col_names **/
   disabled_keycodes : {
@@ -62,9 +53,11 @@ var ColumnView = Backbone.View.extend({
 
   **/
   initialize: function(opts) {
-    var self          = this;
-    self.model        = opts.model;
-    self.parent_view  = opts.parent_view;
+    var self                    = this;
+    self.model                  = opts.model;
+    self.parent_view            = opts.parent_view;
+    self.recommended_dom_views  = [];
+    self.selected_dom_views     = [];
     self.render();
     _.bindAll(self, 
       "mouseOverSelectableDom", 
@@ -74,7 +67,7 @@ var ColumnView = Backbone.View.extend({
     );
 
     if(self.model.get("is_active")) self.activate();
-    if(self.belongsToCurrentPage()) self.dressUpSelectedDoms();
+    // if(self.belongsToCurrentPage()) self.dressUpSelectedDoms();
 
   },
 
@@ -83,7 +76,21 @@ var ColumnView = Backbone.View.extend({
     var data      = self.model.forTemplate();
     var template  = self.template();
     self.$el.html(template(data));
+    self.renderCounter();
     return self;
+  },
+
+  renderCounter: function() {
+    var self = this;
+    
+    if($(self.model.get("dom_query")).length) {
+      var self = this;
+      self.$el.find(".counter").html($(self.model.get("dom_query")).length);
+      self.$el.find(".counter").show();
+    } else {
+      self.$el.find(".counter").hide();
+    }
+
   },
 
   validateColName: function(e) {
@@ -155,13 +162,13 @@ var ColumnView = Backbone.View.extend({
 
       case self.states.recommends:
         self.spyOnMouseStart();
-        // self.dressUpSelectedDoms();
+        self.dressUpSelectedDoms();
         self.dressUpRecommendedDoms();
         break;
 
       case self.states.fixed:
         self.spyOnMouseStart();      
-        // self.dressUpSelectedDoms();
+        self.dressUpSelectedDoms();
         break;
     }
     
@@ -175,7 +182,7 @@ var ColumnView = Backbone.View.extend({
     self.model.set("is_active", false);
     self.model.save();
     self.spyOnMouseStop();
-    // self.undressSelectedDoms();
+    self.undressSelectedDoms();
     self.undressRecommendedDoms();
   },
 
@@ -345,6 +352,8 @@ var ColumnView = Backbone.View.extend({
         console.log("Gonna dress up the selected and recommended DOMs");
         self.dressUpSelectedDoms();
         self.dressUpRecommendedDoms();
+        self.updateDomCountRecord();
+        self.renderCounter();
       },
       function() {
         console.log("Gonna create a new column with the given new_dom_array");
@@ -352,6 +361,12 @@ var ColumnView = Backbone.View.extend({
         self.setDomArrayToNewColumn(new_dom_array);
       }
     );
+  },
+
+  updateDomCountRecord: function() {
+    var self = this;
+    self.model.set("counter", $(self.model.get("dom_query")).length);
+    self.model.save();
   },
 
   /**
@@ -452,10 +467,12 @@ var ColumnView = Backbone.View.extend({
   **/
   dressUpSelectedDoms: function() {
     var self = this;
-    console.log("Dressing up selected doms: %s", self.model.id);    
+    console.log("Dressing up selected doms: %s", self.model.id);
     var doms = $(self.model.attributes.dom_query);
 
     _.each(doms, function(dom) {
+      if(self.selectedDomAlreadyDressedUp(dom)) return;
+
       var sdv = new SelectedDomView({
         dom:    dom,
         color:  self.getSelectedColor()
@@ -466,27 +483,38 @@ var ColumnView = Backbone.View.extend({
   },
 
   /**
+    Checks if dom is already selected and has a corresponding selected_dom_view
+  **/
+  selectedDomAlreadyDressedUp: function(dom) {
+    var self = this;
+    return self.selected_dom_views.filter(function(curr_sdv){
+      return curr_sdv.isSameDom(dom);
+    }).length > 0
+
+  },
+
+  /**
     Removes the styling of selected dom when activate happens
   **/
   undressSelectedDoms: function() {
     var self = this;
     _.each(self.selected_dom_views, function(sdv) {
       sdv.destroy();
-    })
+    });
+    self.selected_dom_views = [];
   },
 
   /**
     styles recommendd dom  when activate happens
   **/
   dressUpRecommendedDoms: function() {
-
+    var self = this;
   },
 
   /**
     Removes the styling of recommended dom when deactivate happens
   **/
   undressRecommendedDoms: function() {
-
   },
 
   /**

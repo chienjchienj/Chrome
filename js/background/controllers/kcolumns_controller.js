@@ -14,7 +14,7 @@ KColumnsController.create = function(data_obj, tab_obj) {
   return response;
 }
 
-KColumnsController.can_update = [ "col_name", "dom_array", "required_attribute", "count", "is_active" ];
+KColumnsController.can_update = [ "col_name", "dom_array", "required_attribute", "count", "is_active", "counter" ];
 
 KColumnsController.update = function(new_attributes, tab_obj) {
   var kc          = new KColumn.find({ id: new_attributes.id })[0];
