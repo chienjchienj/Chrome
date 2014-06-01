@@ -83,6 +83,7 @@ var ColumnView = Backbone.View.extend({
     var data      = self.model.forTemplate();
     var template  = self.template();
     self.$el.html(template(data));
+    self.renderColorSticks();
     self.renderCounter();
     return self;
   },
@@ -94,16 +95,41 @@ var ColumnView = Backbone.View.extend({
     });
 
     if(countables.length) {
-      
       var self = this;
       self.$el.find(".counter").html(countables.length);
       self.$el.find(".counter").show();
 
     } else {
       self.$el.find(".counter").hide();
-    }
 
+    }
   },
+
+  renderColorSticks: function() {
+    var self = this;
+    self.$el.find(".stick-holder").html("");
+    _.each (self.model.get("color_sticks"), function(color) {
+      var stick = self.renderPaginatedStick(color);
+      self.$el
+        .find(".stick-holder")
+        .append(stick);
+      
+    });
+  },
+
+  renderPaginatedStick: function(color) {
+    $stick = $("<div>");
+    $stick.addClass("stick-paginated");
+    $stick.css("borderLeft", "4px solid " + color.selected);
+    return $stick;
+  },
+
+  renderNonPaginatedStick: function(color) {
+    $stick2 = $("<div>");
+    $stick2.addClass("stick-non-paginated");
+    $stick.css("background-color", color.selected);
+    return $stick;
+  },  
 
   validateColName: function(e) {
     var self = this;

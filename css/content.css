@@ -83,10 +83,19 @@
   float: left;
 }
 
-.getdata-sidebar .column .stick-holder .stick-non-pagination {
+.getdata-sidebar .column .stick-holder .stick-paginated {
+  height: 8px;
+  border-bottom: 5px solid transparent;
+  border-top: 5px solid transparent;
+  margin-right: 1px;
+  float: left;
+}
+
+.getdata-sidebar .column .stick-holder .stick-non-paginated {
+  height: 18px;
   width: 3px;
-  height: 20px;
-  padding-right: 2px;
+  margin-right: 2px;
+  float: left;
 }
 
 .getdata-sidebar .column .col-name {

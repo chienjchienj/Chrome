@@ -469,6 +469,7 @@ KColumn.prototype.toJson = function() {
   partial.recommended_array = self.recommendedArray();  
   partial.recommended_query = self.recommendedQuery();
   partial.colors            = self.getColors();
+  partial.color_sticks      = self.getColorSticks();
   partial.is_active         = self.is_active;
   partial.counter           = self.counter;
 
