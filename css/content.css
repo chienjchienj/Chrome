@@ -62,12 +62,16 @@
   height: 30px;
 }
 
-.getdata-sidebar .curr_page.column {
+.getdata-sidebar .column {
   background-color: #2b2825;
 }
 
+.getdata-sidebar .curr_page.column {
+  background-color: #4b4845;
+}
+
 .getdata-sidebar .curr_page.column.active {
-  background-color: #2b2825;
+  background-color: #6b6865;
 }
 
 .getdata-sidebar .column .stick-holder {

@@ -66,8 +66,15 @@ var ColumnView = Backbone.View.extend({
       "clickedRecommendedDomAdd"
     );
 
-    if(self.model.get("is_active")) self.activate();
-    // if(self.belongsToCurrentPage()) self.dressUpSelectedDoms();
+    if(self.model.get("is_active")) {
+      self.$el.addClass('active');
+      self.activate(); 
+    }
+    if(self.belongsToCurrentPage()) {
+      self.$el.addClass('curr_page');
+      // self.dressUpSelectedDoms();
+    }
+      
 
   },
 
@@ -82,7 +89,7 @@ var ColumnView = Backbone.View.extend({
 
   renderCounter: function() {
     var self = this;
-    
+
     if($(self.model.get("dom_query")).length) {
       var self = this;
       self.$el.find(".counter").html($(self.model.get("dom_query")).length);
@@ -151,6 +158,8 @@ var ColumnView = Backbone.View.extend({
     self.parent_view.deactivateColumnViews([self.model.id]);
     self.model.set("is_active", true);
     self.model.save();
+    self.$el.addClass('active');
+
     switch(self.getState()) {
       case self.states.not_page:
         self.redirectToParentPage();
@@ -180,6 +189,7 @@ var ColumnView = Backbone.View.extend({
   deactivate: function() {
     var self = this;
     self.model.set("is_active", false);
+    self.$el.removeClass('active');
     self.model.save();
     self.spyOnMouseStop();
     self.undressSelectedDoms();
