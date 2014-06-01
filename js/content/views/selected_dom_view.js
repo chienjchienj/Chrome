@@ -69,12 +69,12 @@ var SelectedDomView = Backbone.View.extend({
         padding: "4px 8px",
         top:  self.top  - 2,
         left: self.left - 2
-      }, 100)
+      }, 75)
       .animate({
         padding: "2px 6px",
         top:  self.top,
         left: self.left
-      }, 150)
+      }, 120)
   }
 
 });

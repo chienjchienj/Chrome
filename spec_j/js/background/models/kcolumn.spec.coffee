@@ -76,6 +76,65 @@ describe "KColumn", ->
     expect(col.id).toEqual 1
     expect(KColumn.find().length).toEqual 1
 
+  describe "parentKColumn", ->
+    beforeEach ->
+      @main_page = new KPage "http://some_url", 1, null, null, "my website main"
+      @col_1 = new KColumn @main_page.id
+
+      @sub_page = new KPage "http://some_url/category", 1, "http://some_url", @col_1.id, "my sub page"
+      @col_2 = new KColumn @sub_page.id
+
+      @detail_page = new KPage "http://some_url/category/detail", 1, "http://some_url/category", @col_2.id, "my detail page"
+      @col_3 = new KColumn @detail_page.id
+
+    it "should return parent kcolumn", ->
+      expect(@col_3.parentKColumn()).toEqual @col_2
+      expect(@col_2.parentKColumn()).toEqual @col_1
+
+  describe "getColorSticks", ->
+    beforeEach ->
+      @main_page = new KPage "http://some_url", 1, null, null, "my website main"
+      @col_1 = new KColumn @main_page.id
+
+      @sub_page = new KPage "http://some_url/category", 1, "http://some_url", @col_1.id, "my sub page"
+      @col_2 = new KColumn @sub_page.id
+
+      @detail_page = new KPage "http://some_url/category/detail", 1, "http://some_url/category", @col_2.id, "my detail page"
+      @col_3 = new KColumn @detail_page.id
+
+    it "should return color sticks for root", ->
+      expect(@col_1.getColorSticks()).toEqual [{ 
+        selecting:    'rgba(89, 233, 100, 0.7 )' 
+        selected:     'rgba(89, 233, 100, 1 )'
+        recommending: 'rgba(89, 233, 100, 0.3 )'
+      }]
+
+    it "should return color sticks for second level and root", ->
+      expect(@col_2.getColorSticks()).toEqual [{ 
+        selecting:    'rgba(89, 233, 100, 0.7 )' 
+        selected:     'rgba(89, 233, 100, 1 )'
+        recommending: 'rgba(89, 233, 100, 0.3 )'
+      },{ 
+        selecting:    'rgba(122, 34, 116, 0.7 )'
+        selected:     'rgba(122, 34, 116, 1 )'
+        recommending: 'rgba(122, 34, 116, 0.3 )' 
+      }]
+
+    it "should return color sticks for third level, second level and root", ->
+      expect(@col_3.getColorSticks()).toEqual [{ 
+        selecting:    'rgba(89, 233, 100, 0.7 )' 
+        selected:     'rgba(89, 233, 100, 1 )'
+        recommending: 'rgba(89, 233, 100, 0.3 )'
+      },{ 
+        selecting:    'rgba(122, 34, 116, 0.7 )'
+        selected:     'rgba(122, 34, 116, 1 )'
+        recommending: 'rgba(122, 34, 116, 0.3 )' 
+      },{ 
+        selecting:    'rgba(67, 97, 149, 0.7 )', 
+        selected:     'rgba(67, 97, 149, 1 )', 
+        recommending: 'rgba(67, 97, 149, 0.3 )' 
+      }]
+
   describe "parentPageUrl", ->
     it "should return url or parent kpage", ->
       col = new KColumn @page_id

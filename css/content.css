@@ -60,6 +60,7 @@
   background-color: #2b2825;
   width: 180px;
   height: 30px;
+  cursor: pointer;
 }
 
 .getdata-sidebar .column {
@@ -101,6 +102,7 @@
   padding-right: 3px;
   overflow: hidden;
   white-space: nowrap;
+  cursor: text;
 }
 
 .getdata-sidebar .column .col-name:focus {

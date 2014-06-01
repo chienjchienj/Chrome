@@ -137,6 +137,7 @@ var SideBarView = Backbone.View.extend({
 
   addColumn: function(preset_attributes) {
     var self = this;
+    self.deactivateColumnViews();
 
     // When adding a brand new column
     if(!preset_attributes) {
@@ -153,20 +154,26 @@ var SideBarView = Backbone.View.extend({
 
   newColumnCreated: function(new_col, preset_attributes) {
     var self = this;
-    self.deactivateColumnViews();
     new_col.set("is_active", true);
-
     if(preset_attributes) {
       Object.keys(preset_attributes).forEach(function(attribute) {
         new_col.set(attribute, preset_attributes[attribute]);
       });
     }
-    $.when(new_col.save()).then( self.newColumnSaved , self.errorHandler );
+    $.when(new_col.save()).then( function() {
+      self.newColumnSaved(new_col);
+      
+    } , self.errorHandler );
   },
 
   newColumnSaved: function(saved_col) {
     var self = this;
-    self.loadColumns();
+    var col_view = new ColumnView({
+      model: saved_col,
+      parent_view: self
+    });
+    self.$el.find("#columns").append( col_view.$el );
+    self.column_views.push(col_view);    
   },
 
   errorHandler:  function(err_msg) {

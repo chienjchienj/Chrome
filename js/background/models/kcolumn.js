@@ -160,6 +160,14 @@ KColumn.prototype.parentPageUrl = function() {
 }
 
 
+KColumn.prototype.parentKColumn = function() {
+  var self = this;
+  var kpage = new KPage.find({ id: self.page_id })[0];
+  if(!kpage.parent_column_id) return false;
+
+  return KColumn.find({ id: kpage.parent_column_id})[0];
+}
+
 /** 
   Sets the dom array for this column
   returns false if the input is invalid
@@ -374,9 +382,30 @@ KColumn.prototype.hasSameTailType = function(new_dom_array) {
   if(new_dom_array.length == 0 || self.dom_array.length == 0) return false;
   if(new_dom_array[new_dom_array.length - 1].el != self.dom_array[self.dom_array.length - 1].el) return false;
   return true;
-
 }
 
+/**
+  Returns an array of Color Objects ordered from the root most KColumn's color to current KColumns' color
+**/
+KColumn.prototype.getColorSticks = function() {
+  var self        = this;
+  var parent_col  = self.parentKColumn();
+  if(!parent_col) return [self.getColors()];
+
+  var all_sticks = parent_col.getColorSticks();
+  all_sticks.push(self.getColors());
+  return all_sticks;
+}
+
+/**
+  Returns the color Object for this KColumns
+
+  Returns 
+    Color:
+      selecting:String    - RBG color
+      selected:String     - RBG color
+      recommending:String - RBG color
+**/
 KColumn.prototype.getColors = function() {
   var self = this;
   var c1 =  self.fibonaci(self.id * 3) % 255;

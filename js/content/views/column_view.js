@@ -7,7 +7,7 @@ var ColumnView = Backbone.View.extend({
     "keyup .col-name"     : "updateColName",
     "focus .col-name"     : "focusColName",
     "focusout .col-name"  : "unfocusColName",
-    "click"               : "activate"
+    "click"               : "clickedColumn"
   },
 
   /** 
@@ -58,6 +58,7 @@ var ColumnView = Backbone.View.extend({
     self.parent_view            = opts.parent_view;
     self.recommended_dom_views  = [];
     self.selected_dom_views     = [];
+
     self.render();
     _.bindAll(self, 
       "mouseOverSelectableDom", 
@@ -88,11 +89,16 @@ var ColumnView = Backbone.View.extend({
 
   renderCounter: function() {
     var self = this;
+    var countables = $(self.model.get("dom_query")).filter(function(index, dom) {
+      return !self.isUnselectable(dom);
+    });
 
-    if($(self.model.get("dom_query")).length) {
+    if(countables.length) {
+      
       var self = this;
-      self.$el.find(".counter").html($(self.model.get("dom_query")).length);
+      self.$el.find(".counter").html(countables.length);
       self.$el.find(".counter").show();
+
     } else {
       self.$el.find(".counter").hide();
     }
@@ -112,7 +118,6 @@ var ColumnView = Backbone.View.extend({
     var self = this;
     if(self.$el.find('.col-name')[0].innerText.length == 0) return;
     self.model.set("col_name", self.$el.find('.col-name')[0].innerText);
-    console.log("Saving : %s", self.$el.find('.col-name')[0].innerText)
     self.model.save();
   },
 
@@ -148,12 +153,17 @@ var ColumnView = Backbone.View.extend({
     self.model.save();
   },
 
+  clickedColumn: function(e) {
+    var self = this;
+    if(self.$el.hasClass('active')) return;
+    self.activate();
+  },
+
   /**
     Called when this column starts being the active column. Note: There can only be one active column per Tab
   **/
-  activate: function(e) {
+  activate: function() {
     var self = this;
-    if(self.$el.hasClass('active')) return;
 
     self.parent_view.deactivateColumnViews([self.model.id]);
     self.model.set("is_active", true);
@@ -302,8 +312,7 @@ var ColumnView = Backbone.View.extend({
     $doms     = self.selectableDoms();
     $doms.bind("mouseenter", self.mouseOverSelectableDom);
     $doms.bind("mouseleave", self.mouseOutSelectableDom);
-    $doms.bind("click",      self.clickedOnSelectableDom);    
-    console.log("Binding to events : %s", self.model.get("col_name"));
+    $doms.bind("click",      self.clickedOnSelectableDom);
   },
 
   spyOnMouseStop: function() {
@@ -363,14 +372,12 @@ var ColumnView = Backbone.View.extend({
 
     $.when(promise).then(
       function() {
-        console.log("Gonna dress up the selected and recommended DOMs");
         self.dressUpSelectedDoms();
         self.dressUpRecommendedDoms();
         self.updateDomCountRecord();
         self.renderCounter();
       },
       function() {
-        console.log("Gonna create a new column with the given new_dom_array");
         self.deactivate();
         self.setDomArrayToNewColumn(new_dom_array);
       }
@@ -379,7 +386,12 @@ var ColumnView = Backbone.View.extend({
 
   updateDomCountRecord: function() {
     var self = this;
-    self.model.set("counter", $(self.model.get("dom_query")).length);
+    
+    var countables = $(self.model.get("dom_query")).filter(function(index, dom) {
+      return self.isUnselectable(dom);
+    });
+
+    self.model.set("counter", countables.length);
     self.model.save();
   },
 
@@ -481,17 +493,15 @@ var ColumnView = Backbone.View.extend({
   **/
   dressUpSelectedDoms: function() {
     var self = this;
-    console.log("Dressing up selected doms: %s", self.model.id);
     var doms = $(self.model.attributes.dom_query);
 
     _.each(doms, function(dom) {
-      if(self.selectedDomAlreadyDressedUp(dom)) return;
+      if(self.isUnselectable(dom) || self.selectedDomAlreadyDressedUp(dom)) return;
 
       var sdv = new SelectedDomView({
         dom:    dom,
         color:  self.getSelectedColor()
       });
-      console.log("Created new selected dom view");
       self.selected_dom_views.push(sdv);
     });
   },
