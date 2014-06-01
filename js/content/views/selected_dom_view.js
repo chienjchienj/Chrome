@@ -33,8 +33,6 @@ var SelectedDomView = Backbone.View.extend({
   },
 
   domChanged: function(mutation_event) {
-    console.log("Dom change event detected");
-    console.log(mutation_event);
     var self = this;
     self.adjustDisplay();
   },

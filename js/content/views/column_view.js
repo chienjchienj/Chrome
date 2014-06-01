@@ -67,7 +67,6 @@ var ColumnView = Backbone.View.extend({
     );
 
     if(self.model.get("is_active")) {
-      self.$el.addClass('active');
       self.activate(); 
     }
     if(self.belongsToCurrentPage()) {
@@ -114,7 +113,7 @@ var ColumnView = Backbone.View.extend({
     if(self.$el.find('.col-name')[0].innerText.length == 0) return;
     self.model.set("col_name", self.$el.find('.col-name')[0].innerText);
     console.log("Saving : %s", self.$el.find('.col-name')[0].innerText)
-    self.model.save();    
+    self.model.save();
   },
 
 
@@ -144,7 +143,6 @@ var ColumnView = Backbone.View.extend({
     var self = this;
     if( self.getColName().trim().length == 0 ) {
       self.model.set("col_name", self.defaultColName());
-      self.model.save();
       self.setColName(self.defaultColName());      
     }
     self.model.save();
@@ -155,6 +153,8 @@ var ColumnView = Backbone.View.extend({
   **/
   activate: function(e) {
     var self = this;
+    if(self.$el.hasClass('active')) return;
+
     self.parent_view.deactivateColumnViews([self.model.id]);
     self.model.set("is_active", true);
     self.model.save();
@@ -303,6 +303,7 @@ var ColumnView = Backbone.View.extend({
     $doms.bind("mouseenter", self.mouseOverSelectableDom);
     $doms.bind("mouseleave", self.mouseOutSelectableDom);
     $doms.bind("click",      self.clickedOnSelectableDom);    
+    console.log("Binding to events : %s", self.model.get("col_name"));
   },
 
   spyOnMouseStop: function() {
@@ -348,8 +349,10 @@ var ColumnView = Backbone.View.extend({
     if Dom is already selected or recommended ignore
   **/
   clickedOnSelectableDom: function(e) {
-    var self          = this;
-    self.getAndMergeNewDomArray(e.currentTarget);
+    var self = this;
+    var dom  = e.currentTarget
+    self.getAndMergeNewDomArray(dom);
+    self.clearMouseOverDom(dom);
     e.stopPropagation();
   },
 
@@ -357,6 +360,7 @@ var ColumnView = Backbone.View.extend({
     var self          = this;
     var new_dom_array = self.calculateNewDomArray(dom);
     var promise       = self.model.mergeInNewSelections(new_dom_array);
+
     $.when(promise).then(
       function() {
         console.log("Gonna dress up the selected and recommended DOMs");
@@ -367,7 +371,7 @@ var ColumnView = Backbone.View.extend({
       },
       function() {
         console.log("Gonna create a new column with the given new_dom_array");
-        self.clearMouseOverDom(dom);
+        self.deactivate();
         self.setDomArrayToNewColumn(new_dom_array);
       }
     );
