@@ -40,7 +40,7 @@ var SelectedDomView = Backbone.View.extend({
   adjustDisplay: function() {
     var self  = this;
     var comp_styles = window.getComputedStyle(self.dom);
-    self.left  = $(self.dom).position().left + parseInt(comp_styles.marginLeft.replace(/px/,'') - 6);
+    self.left  = $(self.dom).position().left + parseInt(comp_styles.marginLeft.replace(/px/,'') - 2);
     self.top   = $(self.dom).position().top  + parseInt(comp_styles.marginTop.replace(/px/,'')  - 2);
 
     self.$el.css("height",     self.dom.offsetHeight);
@@ -51,13 +51,33 @@ var SelectedDomView = Backbone.View.extend({
     _.each(self.stylesToEmulate, function(style) {
       self.$el.css(style,   comp_styles[style]);
     });
-    self.$el.html($(self.dom).html());
+    self.$el.html(self.getDisplayContent());
+  },
+
+  getDisplayContent: function() {
+    var self = this;
+    switch(self.dom.nodeName) {
+      case "IMG": return self.duplicateDom();
+      default:    return $(self.dom).html()
+    }
+  },
+
+  duplicateDom: function() {
+    var self  = this;
+    var d_img = $("<" + self.dom.nodeName+ ">")
+    for(var x = 0; x < self.dom.attributes.length ; x++) {
+      var attr_name = self.dom.attributes[x].nodeName;
+      var attr_val  = self.dom.attributes[x].nodeValue;
+      $(d_img).attr(attr_name, attr_val);
+    }
+    return d_img;
   },
 
   render: function() {
     var self = this;
     self.adjustDisplay();
     self.$el.css("background-color",  self.color);
+    self.$el.css("outline", "solid 2px" + self.color);
     $("body").append(self.$el);
     self.animate();
   },
@@ -66,12 +86,12 @@ var SelectedDomView = Backbone.View.extend({
     var self = this;
     self.$el
       .animate({
-        padding: "4px 8px",
+        padding: "4px 4px",
         top:  self.top  - 2,
         left: self.left - 2
       }, 75)
       .animate({
-        padding: "2px 6px",
+        padding: "2px 2px",
         top:  self.top,
         left: self.left
       }, 120)

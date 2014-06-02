@@ -305,6 +305,7 @@ var ColumnView = Backbone.View.extend({
     $sds = $(sds).filter(function(index, dom) {
       if(self.isUnselectable(dom)) return false;
       $(dom).attr("org-bkg-color", $(dom).css( "background-color"));
+      $(dom).attr("org-outline", $(dom).css( "outline"));
       return true;
     });
 
@@ -336,39 +337,41 @@ var ColumnView = Backbone.View.extend({
   spyOnMouseStart: function() {
     var self  = this;
     $doms     = self.selectableDoms();
-    $doms.bind("mouseenter", self.mouseOverSelectableDom);
-    $doms.bind("mouseleave", self.mouseOutSelectableDom);
-    $doms.bind("click",      self.clickedOnSelectableDom);
+    $doms.bind("mouseover", self.mouseOverSelectableDom);
+    $doms.bind("mouseout",  self.mouseOutSelectableDom);
+    $doms.bind("click",     self.clickedOnSelectableDom);
   },
 
   spyOnMouseStop: function() {
     var self  = this;    
     $doms = self.selectableDoms();
-    $doms.unbind("mouseenter", self.mouseOverSelectableDom);
-    $doms.unbind("mouseleave", self.mouseOutSelectableDom);
-    $doms.unbind("click",      self.clickedOnSelectableDom);    
+    $doms.unbind("mouseover", self.mouseOverSelectableDom);
+    $doms.unbind("mouseout",  self.mouseOutSelectableDom);
+    $doms.unbind("click",     self.clickedOnSelectableDom);    
   },
 
   /** 
     Changes the background color of the DOM element when mouses of a yet-selected selectable DOM element
   **/
   mouseOverSelectableDom: function(e) {
+    e.stopPropagation();
+
     var self = this;
     var dom = e.currentTarget;
     $(dom).css("background-color", self.getSelectableColor());
+    $(dom).css("outline", "solid 2px " + self.getSelectableColor());
     $(dom).attr("getdata_color",   self.getSelectableColor());
-    e.stopPropagation();
-
   },
 
   /** 
     Reverts a temporarily modified DOM element after the mouse has left
   **/
   mouseOutSelectableDom: function(e) {
+    e.stopPropagation();
+
     var self = this;
     var dom = e.currentTarget;
     self.clearMouseOverDom(dom);
-    e.stopPropagation();
   },
 
   /**
@@ -376,6 +379,7 @@ var ColumnView = Backbone.View.extend({
   **/
   clearMouseOverDom: function(dom) {
     $(dom).css("background-color",$(dom).attr("org-bkg-color"));
+    $(dom).css("outline",$(dom).attr("org-outline"));
     $(dom).removeAttr("getdata_color");
   },
 
@@ -384,11 +388,13 @@ var ColumnView = Backbone.View.extend({
     if Dom is already selected or recommended ignore
   **/
   clickedOnSelectableDom: function(e) {
+    e.preventDefault();    
+    e.stopPropagation();
+
     var self = this;
     var dom  = e.currentTarget
     self.getAndMergeNewDomArray(dom);
     self.clearMouseOverDom(dom);
-    e.stopPropagation();
   },
 
   getAndMergeNewDomArray: function(dom) {
@@ -520,7 +526,6 @@ var ColumnView = Backbone.View.extend({
   dressUpSelectedDoms: function() {
     var self = this;
     var doms = $(self.model.attributes.dom_query);
-
     _.each(doms, function(dom) {
       if(self.isUnselectable(dom) || self.selectedDomAlreadyDressedUp(dom)) return;
 
