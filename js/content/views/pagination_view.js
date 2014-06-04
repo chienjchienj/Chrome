@@ -258,17 +258,7 @@ var PaginationView = Backbone.View.extend({
     self.setState(self.states.SELECTED);
     self.displayPaginationSelected();
     self.stopPaginationListener();
-  },
-
-  /**
-
-  **/
-  setPagination: function(dom) {
-    var self = this;
-  },
-
-  unsetPagination: function() {
-
+    self.setPagination(dom);
   },
 
   startPaginationListener: function() {
@@ -285,6 +275,118 @@ var PaginationView = Backbone.View.extend({
     $doms.unbind("mouseover", self.mouseOverSelectableDom);
     $doms.unbind("mouseout",  self.mouseOutSelectableDom);
     $doms.unbind("click",     self.clickedOnSelectableDom);    
-  }
+  },
+
+  unsetPagination: function() {
+    var self = this;
+    self.model.set("dom_array", []);
+    self.model.save();
+  },
+
+  /**
+
+  **/
+  setPagination: function(dom) {
+    var self = this;
+    var dom_array = self.calculateNewDomArray(dom);
+    self.model.set("dom_array", dom_array);
+    self.model.save();
+  },
+
+  /**
+    Generates the dom array that uniquely describes this dom element given 
+
+    Returns Array
+  **/
+  calculateNewDomArray: function(dom) {
+    var self = this;
+
+    var new_dom_array = [];
+    var curr_dom      = dom;
+    var max_depth     = 5;
+    var curr_depth    = 0;
+
+    do {
+      var curr_hash       = {};
+      curr_hash.el        = curr_dom.nodeName.toLowerCase();
+      curr_hash.class     = self.calculateClassName(curr_dom);
+      curr_hash.id        = self.calculateId(curr_dom);
+
+      if(curr_hash.el != "body") curr_hash.position  = self.calculatePositionInLevel(curr_dom);
+
+      var contains        = self.calculateContains(curr_dom);
+      if(contains) curr_hash.contains = contains;
+
+      curr_depth          += 1;
+      new_dom_array.unshift(curr_hash);
+
+    } while(
+      (curr_dom = curr_dom.parentElement) && 
+      curr_depth < max_depth &&
+      curr_dom &&
+      curr_dom.nodeName.toLowerCase() != "html"
+    );
+
+    return new_dom_array;
+
+  },
+
+  /**
+    Computes the well formated class name given a DOM object
+
+    Returns String
+  **/
+  calculateClassName: function(dom) {
+    if(!dom.className || dom.className.length == 0 ) return "";
+    
+    return dom.className
+      .split(" ")
+      .map( function(class_name) {
+        var class_name = class_name.trim();
+        if(class_name.length > 0) return "." + class_name;
+        return "";
+      })
+      .join("");
+
+  },
+
+  /**
+    Computes the well formated class name given a DOM object
+
+    Returns String
+  **/
+  calculateId: function(dom) {
+    if(dom.id && dom.id.length > 0) {
+      return "#" + dom.id;
+    }
+    return "";
+  },
+
+  /**
+    Calculating the current position of the element in relation to its siblings.
+    Discounting the text nodes from this calculation
+
+    Returns Integer
+  **/
+  calculatePositionInLevel: function(dom) {
+    var curr_dom = dom;
+    var curr_pos = 1;
+    while(curr_dom = curr_dom.previousSibling) {
+      if(curr_dom.nodeName != "#text") curr_pos += 1;
+    };
+    return curr_pos;
+  },
+
+  /**
+    Calculating the current position of the element in relation to its siblings.
+    Discounting the text nodes from this calculation
+
+    Returns Integer
+  **/
+  calculateContains: function(dom) {
+    if(dom.nodeName == 'A') return dom.innerText
+    return false;
+  }  
+
 
 });

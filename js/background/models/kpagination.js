@@ -1,6 +1,11 @@
 var KPagination = function(page_id) {
+
+  var kpaginations = KPagination.find({ page_id: page_id });  
+  if(kpaginations.length > 0) return kpaginations[0];
+
   var self        = this;
   self.page_id    = page_id;
+  self.id         = KPagination.getId();
   self.dom_array  = [];
   KPagination.instances.push(self);
 }
@@ -107,6 +112,7 @@ KPagination.prototype.toParams = function() {
 KPagination.prototype.toJson = function() {
   var self = this;
   partial = {};
+  partial.id             = self.id;
   partial.has_pagination = self.isSet();  
   partial.dom_query = self.domQuery();
   partial.dom_array = self.dom_array;

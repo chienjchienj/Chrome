@@ -1,5 +1,5 @@
 var Column = Backbone.Model.extend({
-  url: "kcolumns",
+  url: "kcolumns",  
 
   forTemplate: function() {
     var self = this;

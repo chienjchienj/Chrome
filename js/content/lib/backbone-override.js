@@ -25,7 +25,6 @@ Backbone.sync = function (method, model, options) {
       payload["args_array"] = [data];
   }
 
-
   Env.sendMessage(payload, function(response) {
     if(response.status == "success") {
       options.success(response.data);

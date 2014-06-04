@@ -1,5 +1,5 @@
 var Pagination = Backbone.Model.extend({
-  url: "kpagination",
+  url: "kpagination",  
 
   load : function() {
     var self = this;
@@ -17,14 +17,6 @@ var Pagination = Backbone.Model.extend({
   isSet: function() {
     var self = this;
     return self.get("has_pagination");
-  },
-
-  setDomArray: function(dom_array) {
-
-  },
-
-  unsetDomArray: function() {
-
   }
-  
+
 });
