@@ -173,6 +173,7 @@ KPage.prototype.toJson = function() {
   partial.parent_url        = self.parent_url;
   partial.parent_column_id  = self.parent_column_id;
   partial.page_title        = self.page_title;
+  partial.has_pagination    = self.kpaginationIsSet();
   return partial;
 }
 

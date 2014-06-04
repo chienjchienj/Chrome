@@ -100,6 +100,18 @@ KPagination.prototype.toParams = function() {
   return partial;
 }
 
+/**
+  Returns the JSON partial for content.js
+    
+**/
+KPagination.prototype.toJson = function() {
+  var self = this;
+  partial = {};
+  partial.has_pagination = self.isSet();  
+  partial.dom_query = self.domQuery();
+  partial.dom_array = self.dom_array;
+  return partial;
+}
 
 /**
   Export module for use in NodeJs

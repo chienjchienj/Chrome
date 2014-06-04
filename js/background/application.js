@@ -1,20 +1,22 @@
 /** Node environmental dependencies **/
-try { var BrowserIconView     = require('./views/browser_icon_view'); } catch(e) {}
-try { var CONFIG              = require('./config/config'); } catch(e) {}
-try { var KTab                = require('./models/ktab'); } catch(e) {}
-try { var MixPanelController  = require('./controllers/mix_panel_controller'); } catch(e) {}
-try { var KColumnsController  = require('./controllers/kcolumns_controller'); } catch(e) {}
-try { var KTabController      = require('./controllers/ktab_controller'); } catch(e) {}
-try { var KPageController     = require('./controllers/kpage_controller'); } catch(e) {}
+try { var BrowserIconView       = require('./views/browser_icon_view'); } catch(e) {}
+try { var CONFIG                = require('./config/config'); } catch(e) {}
+try { var KTab                  = require('./models/ktab'); } catch(e) {}
+try { var MixPanelController    = require('./controllers/mix_panel_controller'); } catch(e) {}
+try { var KColumnsController    = require('./controllers/kcolumns_controller'); } catch(e) {}
+try { var KTabController        = require('./controllers/ktab_controller'); } catch(e) {}
+try { var KPageController       = require('./controllers/kpage_controller'); } catch(e) {}
+try { var KPaginationController = require('./controllers/kpagination_controller'); } catch(e) {}
 
 
 var Application = {};
 
 Application.msg_controllers = {
   mixpanel: new MixPanelController(CONFIG["mixpanel_key"], CONFIG["version"]),
-  kcolumns: KColumnsController,
-  ktab:     KTabController,
-  kpage:    KPageController
+  kcolumns:       KColumnsController,
+  ktab:           KTabController,
+  kpage:          KPageController,
+  kpagination:    KPaginationController
 };
 
 /**
@@ -36,7 +38,6 @@ Application.msgEvent = function(request, sender, sendResponse){
   var args_array = request.args_array || [];
 
   if(sender.tab) args_array.push(sender.tab);
-
   res = {}
   if(!controller) {
     res.status  = "error";
@@ -94,11 +95,12 @@ Application.refreshEvent = function(tabId, changeInfo, tab) {
 /** Export for node testing **/
 try { 
   module && (module.exports = { 
-    Application:          Application,     
-    BrowserIconView:      BrowserIconView,
-    CONFIG:               CONFIG,
-    KTab:              KTab,    
-    MixPanelController:   MixPanelController,
-    KColumnsController:   KColumnsController
+    Application:            Application,     
+    BrowserIconView:        BrowserIconView,
+    CONFIG:                 CONFIG,
+    KTab:                   KTab,    
+    MixPanelController:     MixPanelController,
+    KColumnsController:     KColumnsController,
+    KPaginationController:  KPaginationController
   }); 
 } catch(e){}

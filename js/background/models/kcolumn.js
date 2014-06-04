@@ -151,21 +151,30 @@ KColumn.partialLineageMerge = function(old_dom_array, new_dom_array) {
 
 }
 
-KColumn.prototype.parentPageUrl = function() {
+KColumn.prototype.parentKPage = function() {
   var self = this;
-  var kpage = new KPage.find({ id: self.page_id })[0];
-  
+  return new KPage.find({ id: self.page_id })[0];
+}
+
+KColumn.prototype.parentKPageUrl = function() {
+  var self  = this;
+  var kpage = self.parentKPage();
   if(kpage) return kpage.origin_url;
   return false;
 }
 
 
 KColumn.prototype.parentKColumn = function() {
-  var self = this;
-  var kpage = new KPage.find({ id: self.page_id })[0];
+  var self  = this;
+  var kpage = self.parentKPage();
   if(!kpage.parent_column_id) return false;
-
   return KColumn.find({ id: kpage.parent_column_id})[0];
+}
+
+KColumn.prototype.paginationIsSet = function() {
+  var self  = this;
+  var kpage = self.parentKPage();
+  return kpage.kpaginationIsSet();
 }
 
 /** 
@@ -462,9 +471,9 @@ KColumn.prototype.toJson = function() {
   var partial = {};
   partial.id                = self.id;
   partial.page_id           = self.page_id;
-  partial.page_url          = self.parentPageUrl();
+  partial.page_url          = self.parentKPageUrl();
   partial.col_name          = self.col_name;
-  partial.dom_array         = self.domArray();  
+  partial.dom_array         = self.domArray();
   partial.dom_query         = self.domQuery();
   partial.recommended_array = self.recommendedArray();  
   partial.recommended_query = self.recommendedQuery();
@@ -472,6 +481,7 @@ KColumn.prototype.toJson = function() {
   partial.color_sticks      = self.getColorSticks();
   partial.is_active         = self.is_active;
   partial.counter           = self.counter;
+  partial.has_pagination    = self.paginationIsSet()
 
   if(self.required_attribute) partial.required_attribute = self.required_attribute;
   return partial;

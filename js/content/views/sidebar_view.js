@@ -9,10 +9,10 @@ var SideBarView = Backbone.View.extend({
   column_views: [],
 
   initialize: function() {
-    var self      = this;    
-    self.columns  = new Columns();
-    _.bindAll(self, "newColumnCreated", "newColumnSaved", "onResize", "renderColumnViews");
+    var self            = this;
+    self.columns        = new Columns();
 
+    _.bindAll(self, "newColumnCreated", "newColumnSaved", "onResize", "renderColumnViews");
     $(window).on("resize", self.onResize);    
   },
 
@@ -44,13 +44,23 @@ var SideBarView = Backbone.View.extend({
     self.addColumn();
   },
 
-  deactivateColumnViews: function(exempted_model_ids) {
+  /**
+    Deactivates all column views
+
+    Params:
+      exempted_model_ids:Array[Integer]
+      exempt_pagination:Boolean
+  **/
+  deactivateSubViews: function(exempted_model_ids, exempt_pagination) {
     var self = this;
     self.column_views.forEach(function(col_view) {
       if( !self.columnViewIsExempted(exempted_model_ids, col_view) ) {
         col_view.deactivate(); 
       }
     });
+    if(!exempt_pagination) {
+      self.paginationView.deactivate();
+    }
   },
 
   columnViewIsExempted: function(exempted_model_ids, view_obj) {
@@ -62,6 +72,11 @@ var SideBarView = Backbone.View.extend({
   setParentTab: function(tab_obj) {
     var self = this;
     self.parent_tab = tab_obj;    
+  },
+
+  getPage: function() {
+    var self = this;
+    return self.parent_tab.page;
   },
 
   /** Gets the ID of current Tab Model **/
@@ -81,7 +96,7 @@ var SideBarView = Backbone.View.extend({
     self.$el.width(CONFIG["sidebar_width"]);
     self.$el.height(window.innerHeight);    
     
-    var raw_cols_height = self.$el.height() - 103;
+    var raw_cols_height = self.$el.height() - 168;
     var computed_col_height = raw_cols_height - (raw_cols_height % 30) + 2;
     self.$el.find("#columns").height(computed_col_height);
   },
@@ -91,6 +106,7 @@ var SideBarView = Backbone.View.extend({
     self.$el.html(self.template());
     self.onResize();
     self.loadColumns();
+    self.renderPaginationSection();
     return self;
   },
 
@@ -106,6 +122,14 @@ var SideBarView = Backbone.View.extend({
       },
       success: self.renderColumnViews
     });
+  },
+
+  renderPaginationSection: function() {
+    var self = this;    
+    self.paginationView = new PaginationView({
+      parent_view: self
+    });
+    self.$el.find("#pagination_holder").append(self.paginationView.$el);
   },
 
   /**
@@ -137,7 +161,7 @@ var SideBarView = Backbone.View.extend({
 
   addColumn: function(preset_attributes) {
     var self = this;
-    self.deactivateColumnViews();
+    self.deactivateSubViews();
 
     // When adding a brand new column
     if(!preset_attributes) {

@@ -151,3 +151,31 @@
   border-radius: 2px;
   padding: 2px 2px;
 }
+
+.getdata-sidebar #pagination_holder {
+  padding: 20px;
+}
+
+.getdata-sidebar #pagination_holder #add_pagination {
+  height: 25px;
+  width: 140px;
+  text-transform: uppercase;
+  border: 1px #207ac0;
+  color: #fff;
+  cursor: pointer;
+  text-align: center;
+  font-size: 10px;
+  line-height: 25px;
+}
+
+.getdata-sidebar #pagination_holder #add_pagination.selecting {
+  background-color: #0433b4;
+}
+
+.getdata-sidebar #pagination_holder #add_pagination.selected {
+  background-color: #8890a2;
+}
+
+.getdata-sidebar #add_pagination.dormant {
+  background-color: #086cb9;
+}

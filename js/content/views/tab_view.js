@@ -6,7 +6,7 @@ var TabView = Backbone.View.extend({
     var self      = this;
     self.tab      = new Tab();
     self.page     = new Page();
-
+    
     promise_tab   = self.tab.load();
     promise_page  = self.page.load();
 

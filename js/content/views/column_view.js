@@ -109,11 +109,14 @@ var ColumnView = Backbone.View.extend({
     var self = this;
     self.$el.find(".stick-holder").html("");
     _.each (self.model.get("color_sticks"), function(color) {
-      var stick = self.renderPaginatedStick(color);
+      var stick = self.renderNonPaginatedStick(color);
+      if(self.model.get("has_pagination")) {
+        stick = self.renderPaginatedStick(color);
+      }
+      
       self.$el
         .find(".stick-holder")
         .append(stick);
-      
     });
   },
 
@@ -125,8 +128,8 @@ var ColumnView = Backbone.View.extend({
   },
 
   renderNonPaginatedStick: function(color) {
-    $stick2 = $("<div>");
-    $stick2.addClass("stick-non-paginated");
+    $stick = $("<div>");
+    $stick.addClass("stick-non-paginated");
     $stick.css("background-color", color.selected);
     return $stick;
   },  
@@ -191,7 +194,7 @@ var ColumnView = Backbone.View.extend({
   activate: function() {
     var self = this;
 
-    self.parent_view.deactivateColumnViews([self.model.id]);
+    self.parent_view.deactivateSubViews([self.model.id]);
     self.model.set("is_active", true);
     self.model.save();
     self.$el.addClass('active');
@@ -390,21 +393,19 @@ var ColumnView = Backbone.View.extend({
   clickedOnSelectableDom: function(e) {
     e.preventDefault();    
     e.stopPropagation();
-
     var self = this;
-    var dom  = e.currentTarget
-    self.getAndMergeNewDomArray(dom);
+    var dom  = e.currentTarget;
     self.clearMouseOverDom(dom);
+    self.getAndMergeNewDomArray(dom);
   },
 
   getAndMergeNewDomArray: function(dom) {
     var self          = this;
     var new_dom_array = self.calculateNewDomArray(dom);
     var promise       = self.model.mergeInNewSelections(new_dom_array);
-
     $.when(promise).then(
       function() {
-        self.dressUpSelectedDoms();
+        self.dressUpSelectedDoms();  
         self.dressUpRecommendedDoms();
         self.updateDomCountRecord();
         self.renderCounter();

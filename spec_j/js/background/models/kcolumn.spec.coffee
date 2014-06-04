@@ -1,10 +1,13 @@
-KPageVar = require "../../../../js/background/models/kpage"
-global.KPage   = KPageVar.KPage
-global.KColumn = KPageVar.KColumn
+KPageVar            = require "../../../../js/background/models/kpage"
+global.KPage        = KPageVar.KPage
+global.KColumn      = KPageVar.KColumn
+global.KPagination  = KPageVar.KPagination
 
 describe "KColumn", ->
   beforeEach ->
     KPage.reset()
+    KPagination.reset()
+    KColumn.reset()
     @page_url       = "http://google.com"
     @tab_id         = 10
     @parent_url     = "http://google.com"
@@ -76,6 +79,22 @@ describe "KColumn", ->
     expect(col.id).toEqual 1
     expect(KColumn.find().length).toEqual 1
 
+  describe "parentKPage", ->
+    beforeEach ->
+      @main_page = new KPage "http://some_url", 1, null, null, "my website main"
+      @col_1 = new KColumn @main_page.id
+
+      @sub_page = new KPage "http://some_url/category", 1, "http://some_url", @col_1.id, "my sub page"
+      @col_2 = new KColumn @sub_page.id
+
+      @detail_page = new KPage "http://some_url/category/detail", 1, "http://some_url/category", @col_2.id, "my detail page"
+      @col_3 = new KColumn @detail_page.id
+
+    it "should return parent kcolumn", ->
+      expect(@col_1.parentKPage()).toEqual @main_page      
+      expect(@col_2.parentKPage()).toEqual @sub_page      
+      expect(@col_3.parentKPage()).toEqual @detail_page
+
   describe "parentKColumn", ->
     beforeEach ->
       @main_page = new KPage "http://some_url", 1, null, null, "my website main"
@@ -90,6 +109,34 @@ describe "KColumn", ->
     it "should return parent kcolumn", ->
       expect(@col_3.parentKColumn()).toEqual @col_2
       expect(@col_2.parentKColumn()).toEqual @col_1
+
+  describe "paginationIsSet", ->
+    it "should return true for page with pagination", ->
+      pagin1 = new KPagination @page_id
+      pagin1.set [{
+          el: "td"
+          class: ".row"
+          id: "#clementi"
+        },{                
+          el: "div"
+          position: 2
+          class: ".contact-info"
+        },{
+          el: "a"
+          class: ".address"
+        },{
+          el: "span"
+          class: ".street"
+        },{
+          el: "span"
+          class: ".prop-img"
+      }]
+      @col = new KColumn @page_id      
+      expect(@col.paginationIsSet()).toBe true
+
+    it "should return false for page without pagination", ->
+      @col = new KColumn @page_id
+      expect(@col.paginationIsSet()).toBe false
 
   describe "getColorSticks", ->
     beforeEach ->
@@ -135,10 +182,10 @@ describe "KColumn", ->
         recommending: 'rgba(67, 97, 149, 0.3 )' 
       }]
 
-  describe "parentPageUrl", ->
+  describe "parentKPageUrl", ->
     it "should return url or parent kpage", ->
       col = new KColumn @page_id
-      expect(col.parentPageUrl()).toEqual @page_url
+      expect(col.parentKPageUrl()).toEqual @page_url
 
   describe "set", ->
     it "should lowercase the element attribute", ->
