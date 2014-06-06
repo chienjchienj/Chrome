@@ -2,7 +2,15 @@ var TabView = Backbone.View.extend({
 
   el: "body",
 
-  initialize: function() {
+  /**
+    Default Constructor
+
+    Params:
+      opts:
+        done:Function(boolean)  - returns true if should activate this current tab
+        fail:Function(object)   - returns error obj response from background
+  **/
+  initialize: function(opts) {
     var self      = this;
     self.tab      = new Tab();
     self.page     = new Page();

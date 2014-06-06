@@ -19,7 +19,17 @@ Application.init = function() {
 }
 
 Application.render = function() {
-  Application.tab_view = new TabView();  
+  Application.tab_view = new TabView({
+    done: function(should_activate) {
+      if(should_activate) Application.tab_view.activate();
+
+    },
+    fail: function(error) {
+      alert("Opps... something went horribly wrong when loading our extension");
+      console.log(error);
+
+    }
+  });  
 }
 
 /**

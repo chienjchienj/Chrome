@@ -34,8 +34,9 @@ var PaginationView = Backbone.View.extend({
       "dressUpSelectedDoms"
       );
 
-    self.parent_view  = opts.parent_view;
-    self.model        = new Pagination();
+    self.parent_view        = opts.parent_view;
+    self.model              = new Pagination();
+    self.selected_dom_view  = false;
     var promise = self.model.load();
     $.when(promise).then( self.render , self.errorHandler );    
 
@@ -343,7 +344,7 @@ var PaginationView = Backbone.View.extend({
   **/
   undressSelectedDoms: function() {
     var self = this;
-    self.selected_dom_view.destroy();
+    self.selected_dom_view && self.selected_dom_view.destroy();
     self.selected_dom_view = false;
   },  
 
