@@ -10,26 +10,36 @@ Application.templates = {}
 **/
 Application.handle_bars = ["sidebar", "column"];
 
+Application.path_disabled_patterns = [
+  new RegExp(CONFIG.server_host),
+  new RegExp("google.com")
+];
+
 /** 
   Executes to load all environmental variables
 **/
 Application.init = function() {
-  Application.loadHandleBarTemplates(Application.render);
-  Env.registerListener(Application.msgEvent);
+  if(Application.shouldRenderSubViews()) {
+    Application.loadHandleBarTemplates(Application.renderTabView);
+    Env.registerListener(Application.msgEvent);    
+  }
 }
 
-Application.render = function() {
-  Application.tab_view = new TabView({
-    done: function(should_activate) {
-      if(should_activate) Application.tab_view.activate();
 
-    },
-    fail: function(error) {
-      alert("Opps... something went horribly wrong when loading our extension");
-      console.log(error);
+/**
+  Makes possible the display and hiding of the sidebar
+**/
+Application.renderTabView = function() {
+  Application.tab_view = new TabView();  
+}
 
-    }
-  });  
+/**
+  Checks if should render sub display of chrome browser extension
+**/
+Application.shouldRenderSubViews = function() {
+  return Application.path_disabled_patterns.reduce(function(prev_result, curr_regex) {
+    return prev_result && !curr_regex.test(window.location.href)
+  }, true);
 }
 
 /**
@@ -65,6 +75,13 @@ Application.activate = function() {
 **/
 Application.deactivate = function() {
   Application.tab_view.deactivate();
+}
+
+/**
+  Injects the krake definition into the Krake editor
+**/
+Application.injectDefinition = function(krake_definition) {
+
 }
 
 /**
