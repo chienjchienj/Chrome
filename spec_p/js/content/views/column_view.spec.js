@@ -14,6 +14,11 @@ describe("ColumnView", function() {
     self.sidebar_view = new SideBarView();
     self.sidebar_view.setParentTab(self.tab_view);
 
+    self.pagination_view = new PaginationView({
+      parent_view: self.sidebar_view
+    });
+    self.sidebar_view.paginationView = self.pagination_view;    
+
     var col_model_1 = new Column();
     col_model_1.set("page_id", self.page_id);
     col_model_1.set("tab_id", self.tab_id);

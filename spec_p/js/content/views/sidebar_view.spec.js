@@ -14,6 +14,11 @@ describe("SideBarView", function() {
     self.sidebar_view = new SideBarView();    
     self.sidebar_view.setParentTab(self.tab_view);
 
+    self.pagination_view = new PaginationView({
+      parent_view: self.sidebar_view
+    });
+    self.sidebar_view.paginationView = self.pagination_view;
+
   });
 
   it("should instantiate", function() {

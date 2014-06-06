@@ -22,18 +22,19 @@ var SideBarView = Backbone.View.extend({
   **/
   destroy: function() {
     var self = this;
-    self.destroyColumnViews();
+    self.destroySubViews();
     self.remove();
   },
 
   /**
     Removing all the column views belonging to this view
   **/
-  destroyColumnViews: function() {
+  destroySubViews: function() {
     var self = this;
     self.column_views.forEach(function(col_view) {
       col_view.destroy();
     });
+    self.paginationView.destroy();    
   },
 
   /**
@@ -58,6 +59,7 @@ var SideBarView = Backbone.View.extend({
         col_view.deactivate(); 
       }
     });
+
     if(!exempt_pagination) {
       self.paginationView.deactivate();
     }
@@ -96,7 +98,12 @@ var SideBarView = Backbone.View.extend({
     self.$el.width(CONFIG["sidebar_width"]);
     self.$el.height(window.innerHeight);    
     
-    var raw_cols_height = self.$el.height() - 168;
+    var buffer             = 33;
+    var header             = 45;
+    var pagination_section = 45;
+    var add_section        = 45;
+    var raw_cols_height    = self.$el.height() - buffer - header - pagination_section - add_section;
+
     var computed_col_height = raw_cols_height - (raw_cols_height % 30) + 2;
     self.$el.find("#columns").height(computed_col_height);
   },
@@ -110,27 +117,13 @@ var SideBarView = Backbone.View.extend({
     return self;
   },
 
-  /**
-    Loads the Column records from the background repository
-  **/
-  loadColumns: function() {
-    var self = this;
-    self.$el.find("#columns").html("");
-    self.columns.fetch({
-      data: {
-        tab_id: self.parent_tab.tabId()
-      },
-      success: self.renderColumnViews
-    });
-  },
-
   renderPaginationSection: function() {
     var self = this;    
     self.paginationView = new PaginationView({
       parent_view: self
     });
     self.$el.find("#pagination_holder").append(self.paginationView.$el);
-  },
+  },  
 
   /**
     Renders the Column Views
@@ -147,6 +140,20 @@ var SideBarView = Backbone.View.extend({
       self.column_views.push(col_view);
     });
     self.addFirstColumn();    
+  },
+
+  /**
+    Loads the Column records from the background repository
+  **/
+  loadColumns: function() {
+    var self = this;
+    self.$el.find("#columns").html("");
+    self.columns.fetch({
+      data: {
+        tab_id: self.parent_tab.tabId()
+      },
+      success: self.renderColumnViews
+    });
   },
 
   addFirstColumn: function() {

@@ -30,7 +30,8 @@ var PaginationView = Backbone.View.extend({
       "render", 
       "mouseOverSelectableDom", 
       "mouseOutSelectableDom", 
-      "clickedOnSelectableDom"
+      "clickedOnSelectableDom",
+      "dressUpSelectedDoms"
       );
 
     self.parent_view  = opts.parent_view;
@@ -46,6 +47,7 @@ var PaginationView = Backbone.View.extend({
     if(self.model.isSet()) {
       self.displayPaginationSelected();
       self.setState(self.states.SELECTED);
+      self.dressUpSelectedDoms();
 
     } else {
       self.displayPaginationDormant();
@@ -60,9 +62,15 @@ var PaginationView = Backbone.View.extend({
 
     switch(self.getState()) {
       case self.states.DORMANT:
-        self.setState(self.states.SELECTING)
-        self.displayPaginationSelecting();
-        self.startPaginationListener();
+        if(self.hasSelectableDoms()) {
+          self.setState(self.states.SELECTING)
+          self.displayPaginationSelecting();
+          self.startPaginationListener();
+
+        } else {
+          alert("Warning: Page does not seem to contain any hyperlink elements.");
+        }
+
         break;
 
       case self.states.SELECTING: 
@@ -75,6 +83,7 @@ var PaginationView = Backbone.View.extend({
         self.setState(self.states.DORMANT);
         self.displayPaginationDormant();
         self.unsetPagination();
+        self.undressSelectedDoms();
         break;
     }
   },  
@@ -82,6 +91,7 @@ var PaginationView = Backbone.View.extend({
   destroy: function() {
     var self = this;
     self.stopPaginationListener();
+    self.undressSelectedDoms();
     self.remove();
   },
 
@@ -168,6 +178,14 @@ var PaginationView = Backbone.View.extend({
     self.$el.removeClass("dormant");
     self.$el.removeClass("selecting");    
     self.$el.html("Remove Pagination");
+  },
+
+  /**
+    Returns true if there are Doms elements on the page that can be selected
+  **/
+  hasSelectableDoms: function() {
+    var self = this;
+    return self.selectableDoms().length > 0
   },
 
   /**
@@ -284,14 +302,50 @@ var PaginationView = Backbone.View.extend({
   },
 
   /**
-
+    Saves the DOM array
   **/
   setPagination: function(dom) {
     var self = this;
     var dom_array = self.calculateNewDomArray(dom);
     self.model.set("dom_array", dom_array);
-    self.model.save();
+    var promise = self.model.save();
+    $.when(promise).then( self.dressUpSelectedDoms, self.errorHandler );
   },
+
+  /**
+    styles selected dom when activate happens
+  **/
+  dressUpSelectedDoms: function() {
+    var self = this;
+    var doms = $(self.model.attributes.dom_query);
+
+    _.each(doms, function(dom) {
+      if(self.isUnselectable(dom) || self.selectedDomAlreadyDressedUp(dom)) return;
+
+      var sdv = new SelectedDomView({
+        dom:    dom,
+        color:  self.getSelectedColor()
+      });
+      self.selected_dom_view = sdv;
+    });
+  },
+
+  /**
+    Checks if dom is already selected and has a corresponding selected_dom_view
+  **/
+  selectedDomAlreadyDressedUp: function(dom) {
+    var self = this;
+    return self.selected_dom_view && self.selected_dom_view.isSameDom(dom);
+  },  
+
+  /**
+    Removes the styling of selected dom when activate happens
+  **/
+  undressSelectedDoms: function() {
+    var self = this;
+    self.selected_dom_view.destroy();
+    self.selected_dom_view = false;
+  },  
 
   /**
     Generates the dom array that uniquely describes this dom element given 
@@ -311,9 +365,6 @@ var PaginationView = Backbone.View.extend({
       curr_hash.el        = curr_dom.nodeName.toLowerCase();
       curr_hash.class     = self.calculateClassName(curr_dom);
       curr_hash.id        = self.calculateId(curr_dom);
-
-      if(curr_hash.el != "body") curr_hash.position  = self.calculatePositionInLevel(curr_dom);
-
       var contains        = self.calculateContains(curr_dom);
       if(contains) curr_hash.contains = contains;
 
@@ -368,23 +419,8 @@ var PaginationView = Backbone.View.extend({
 
     Returns Integer
   **/
-  calculatePositionInLevel: function(dom) {
-    var curr_dom = dom;
-    var curr_pos = 1;
-    while(curr_dom = curr_dom.previousSibling) {
-      if(curr_dom.nodeName != "#text") curr_pos += 1;
-    };
-    return curr_pos;
-  },
-
-  /**
-    Calculating the current position of the element in relation to its siblings.
-    Discounting the text nodes from this calculation
-
-    Returns Integer
-  **/
   calculateContains: function(dom) {
-    if(dom.nodeName == 'A') return dom.innerText
+    if(dom.nodeName == 'A') return dom.innerText.trim()
     return false;
   }  
 
