@@ -3,8 +3,8 @@
       "matches"   : [ "<all_urls>" ],
       "css": [ "css/content.css" ], 
       "js": [ 
-        "js/content/browsers/chrome.js",      
-        "js/content/config/config.js",
+        "js/config/config.js",      
+        "js/content/browsers/chrome.js",
         "js/content/lib/jquery_1.9.1.min.js",
         "js/content/lib/jquery_ui_1.10.3.js",        
         "js/content/lib/handlebars.js",
@@ -28,7 +28,7 @@
    } ],  
    "background": {
       "scripts": [ 
-        "js/background/config/config.js",
+        "js/config/config.js",
         "js/background/lib/mixpanel.js",
         "js/background/models/kcookie.js",
         "js/background/models/kcolumn.js",

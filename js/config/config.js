@@ -1,4 +1,5 @@
 var CONFIG = {
+  sidebar_width: "180px",
   mixpanel_key:   "6739c9644606bc42c8ac134c22e1d691",
   version:        chrome.runtime.getManifest().version,
   active_icon:    "images/krake_icon_24.png",

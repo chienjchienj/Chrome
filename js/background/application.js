@@ -1,6 +1,6 @@
 /** Node environmental dependencies **/
 try { var BrowserIconView       = require('./views/browser_icon_view'); } catch(e) {}
-try { var CONFIG                = require('./config/config'); } catch(e) {}
+try { var CONFIG                = require('../config/config'); } catch(e) {}
 try { var KTab                  = require('./models/ktab'); } catch(e) {}
 try { var MixPanelController    = require('./controllers/mix_panel_controller'); } catch(e) {}
 try { var KColumnsController    = require('./controllers/kcolumns_controller'); } catch(e) {}
