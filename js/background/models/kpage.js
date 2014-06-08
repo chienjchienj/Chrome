@@ -153,7 +153,7 @@ KPage.prototype.toParams = function(include_url) {
   var self = this;
 
   var partial = {};
-  if(self.kcolumnsIsSet())      partial.columns = self.kcolumnsToParams();  
+  if(self.kcolumnsIsSet())      partial.columns = self.kcolumnsToParams();
   else return false;
 
   if(include_url)               partial.origin_url = self.origin_url;
