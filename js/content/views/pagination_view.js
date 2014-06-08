@@ -1,5 +1,4 @@
 var PaginationView = Backbone.View.extend({
-  id: "add_pagination",
 
   events : {
     "click": "clickedPaginationButton"
@@ -35,6 +34,7 @@ var PaginationView = Backbone.View.extend({
       );
 
     self.parent_view        = opts.parent_view;
+    self.$el                = self.parent_view.$el.find("#add_pagination");
     self.model              = new Pagination();
     self.selected_dom_view  = false;
     var promise = self.model.load();

@@ -98,14 +98,23 @@ var SideBarView = Backbone.View.extend({
     self.$el.width(CONFIG["sidebar_width"]);
     self.$el.height(window.innerHeight);    
     
-    var buffer             = 33;
-    var header             = 45;
-    var pagination_section = 45;
-    var add_section        = 45;
-    var raw_cols_height    = self.$el.height() - buffer - header - pagination_section - add_section;
+    var dimension           = {
+      buffer              : 33,
+      header              : 45,
+      bottom_butt_holder  : 20,
+      pagination_button   : 25,
+      done_button         : 25,
+      top_butt_holder     : 20,
+      add_button          : 25
+    };
 
-    var computed_col_height = raw_cols_height - (raw_cols_height % 30) + 2;
-    self.$el.find("#columns").height(computed_col_height);
+    var raw_cols_height     = self.$el.height();
+    for(var key in dimension) {
+      raw_cols_height -= dimension[key];
+    }
+
+    // var computed_col_height = raw_cols_height - (raw_cols_height % 30) + 2;
+    self.$el.find("#columns").height(raw_cols_height);
   },
 
   render: function() {
@@ -122,7 +131,7 @@ var SideBarView = Backbone.View.extend({
     self.paginationView = new PaginationView({
       parent_view: self
     });
-    self.$el.find("#pagination_holder").append(self.paginationView.$el);
+    // self.$el.find("#pagination_holder").append(self.paginationView.$el);
   },  
 
   /**

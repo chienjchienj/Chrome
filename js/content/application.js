@@ -11,8 +11,7 @@ Application.templates = {}
 Application.handle_bars = ["sidebar", "column"];
 
 Application.path_disabled_patterns = [
-  new RegExp(CONFIG.server_host),
-  new RegExp("google.com")
+  new RegExp(CONFIG.server_host)
 ];
 
 /** 
@@ -80,7 +79,7 @@ Application.deactivate = function() {
 /**
   Injects the krake definition into the Krake editor
 **/
-Application.injectDefinition = function(krake_definition) {
+Application.injectDefinition = function(crawler_def) {
 
 }
 
