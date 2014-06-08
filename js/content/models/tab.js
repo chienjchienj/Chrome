@@ -12,5 +12,36 @@ var Tab = Backbone.Model.extend({
       },
       error: function(collection, response, options) {}
     });
+  },
+
+  dispatch : function(page_id) {
+    var self = this;
+    return self.fetch({
+      method: 'dispatch',
+      data: {
+        page_id: page_id
+      },
+      success: function(collection, response, options) {
+        debugger
+      },
+      error: function(collection, response, options) {}
+    });
+  },
+
+  compile : function(page_id) {
+    var self = this;
+
+    return self.fetch({
+      method: 'compile',
+      data: {
+        page_id: page_id
+      },
+      success: function(collection, response, options) {
+        debugger
+      },
+      error: function(collection, response, options) {}
+    });    
+
   }
+
 });

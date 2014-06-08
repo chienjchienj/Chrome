@@ -8,8 +8,6 @@ KPageController.create = function(data_obj, tab_obj) {
   return response;
 }
 
-
-
 /** Export for node testing **/
 try { 
   module && (module.exports = KPageController); 

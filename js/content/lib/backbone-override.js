@@ -13,15 +13,18 @@ Backbone.sync = function (method, model, options) {
   payload["method"]     = method;  
 
   switch(method) {
-    case "read" :
-    case "create" :
-    case "new" :
+    case "compile"  :
+    case "read"     :
+    case "create"   :
+    case "new"      :
       payload["args_array"] = [data];
       break;
-    case "update" :
+      
+    case "update"   :
       payload["args_array"] = [model.attributes];
       break;
-    default:
+
+    default         :
       payload["args_array"] = [data];
   }
 

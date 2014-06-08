@@ -3,7 +3,8 @@ var SideBarView = Backbone.View.extend({
   className: "getdata-sidebar",
 
   events : {
-    "click #add_columns": "addColumnEvent"
+    "click #add_columns": "addColumnEvent",
+    "click #save_holder": "dispatchTabEvent",
   },
 
   column_views: [],
@@ -43,6 +44,14 @@ var SideBarView = Backbone.View.extend({
   addColumnEvent: function(e) {
     var self = this;
     self.addColumn();
+  },
+
+  /**
+    Event listener that handles saving of what has already been defined
+  **/
+  dispatchTabEvent: function(e) {
+    var self = this;
+    self.parent_tab.dispatch();
   },
 
   /**

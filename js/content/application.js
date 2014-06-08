@@ -14,6 +14,8 @@ Application.path_disabled_patterns = [
   new RegExp(CONFIG.server_host)
 ];
 
+Application.path_injection_pattern = new RegExp(CONFIG.server_host + CONFIG.paths.create_new_path );
+
 /** 
   Executes to load all environmental variables
 **/
@@ -21,6 +23,10 @@ Application.init = function() {
   if(Application.shouldRenderSubViews()) {
     Application.loadHandleBarTemplates(Application.renderTabView);
     Env.registerListener(Application.msgEvent);    
+
+  } else if(Application.shouldInjectDefinition()) {
+    Application.injectDefinition();
+
   }
 }
 
@@ -39,6 +45,38 @@ Application.shouldRenderSubViews = function() {
   return Application.path_disabled_patterns.reduce(function(prev_result, curr_regex) {
     return prev_result && !curr_regex.test(window.location.href)
   }, true);
+}
+
+Application.shouldInjectDefinition = function() {
+  return Application.path_injection_pattern.test(window.location.href);
+}
+
+/**
+  Injects the krake definition into the Krake editor
+**/
+Application.injectDefinition = function(crawler_def) {
+
+  var getUrlVars = function() {
+    var vars = {};
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    hashes.forEach(function(hash) {
+      hash          = hash.split('=');
+      vars[hash[0]] = hash[1];
+    });
+    return vars;
+  }
+
+  self.tab = new Tab();  
+  var promise = self.tab.compile(getUrlVars()["page_id"]);
+
+  promise.then(function(data_response) {
+    $("#krake_name.krake_name_input").val(data_response.page_title);
+    $("#krake_content.krake_json_input").html(JSON.stringify(data_response.definition));
+
+  }, function() {
+    console.log("Opps... Something went wrong");
+  })
+
 }
 
 /**
@@ -74,13 +112,6 @@ Application.activate = function() {
 **/
 Application.deactivate = function() {
   Application.tab_view.deactivate();
-}
-
-/**
-  Injects the krake definition into the Krake editor
-**/
-Application.injectDefinition = function(crawler_def) {
-
 }
 
 /**

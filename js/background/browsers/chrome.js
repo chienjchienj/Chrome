@@ -15,6 +15,10 @@ Env.sendMessage = function(tab_id, payload, callback) {
   chrome.tabs.sendMessage(tab_id, payload, callback);
 }
 
+Env.redirectTo = function(tab_id, url) {
+  chrome.tabs.update(tab_id, {url: url});
+}
+
 /**
   Export module for use in NodeJs
 **/

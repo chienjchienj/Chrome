@@ -2,6 +2,10 @@ var TabView = Backbone.View.extend({
 
   el: "body",
 
+  events : {
+    "click #add_columns": "addColumnEvent"
+  },  
+
   /**
     Default Constructor
 
@@ -62,6 +66,11 @@ var TabView = Backbone.View.extend({
     self.sidebar_view.destroy();    
     self.$el.css({ paddingLeft: "0px" });
     // self.$el.find(".getdata-sidebar").remove();
+  },
+
+  dispatch: function() {
+    var self      = this;
+    self.tab.dispatch(self.page.id);
   }
 
 });
