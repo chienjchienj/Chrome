@@ -141,6 +141,8 @@ var ColumnView = Backbone.View.extend({
     });
 
     if(disallowed_keycodes.indexOf(e.keyCode) != -1 ) e.preventDefault();
+    if(self.disabled_keycodes["break_line"] == e.keyCode) $(e.currentTarget).blur()
+
   },
 
   updateColName: function(e) {
