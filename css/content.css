@@ -34,7 +34,8 @@
 }
 
 .getdata-sidebar #columns {
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .getdata-sidebar .column {
