@@ -34,7 +34,7 @@
 }
 
 .getdata-sidebar #columns {
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
@@ -86,9 +86,10 @@
   color: #ffffff;  
   float: left;
   height: 20px;
-  width: 100px;
+  width: 95px;
   margin-top: 5px;
   margin-bottom: 5px;  
+  margin-right: 5px;
   padding-left: 3px;
   padding-right: 3px;
   overflow: hidden;
@@ -120,7 +121,8 @@
   font-size: 12px;
   background-color: #fff;
   border-radius:5px;
-  padding: 1px 3px;
+  padding: 4px 3px;
+  line-height: 20px;
 }
 
 /** Color Scheming **/
