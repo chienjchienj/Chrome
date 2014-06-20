@@ -21,9 +21,7 @@ var Tab = Backbone.Model.extend({
       data: {
         page_id: page_id
       },
-      success: function(collection, response, options) {
-        debugger
-      },
+      success: function(collection, response, options) {},
       error: function(collection, response, options) {}
     });
   },
@@ -36,9 +34,7 @@ var Tab = Backbone.Model.extend({
       data: {
         page_id: page_id
       },
-      success: function(collection, response, options) {
-        debugger
-      },
+      success: function(collection, response, options) {},
       error: function(collection, response, options) {}
     });    
 
