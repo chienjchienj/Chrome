@@ -97,21 +97,19 @@ KColumn.fullLineageMerge = function(old_dom_array, new_dom_array) {
   da_1 = KColumn.copyDomArray(old_dom_array);
   da_2 = KColumn.copyDomArray(new_dom_array);
 
-  var is_first = true;
+  // var is_first = true;
 
   while((e1 = da_1.pop()) && (e2 = da_2.pop())){
     var new_e = {};
 
-    if(is_first) { // Make allowance for differing tail element
-      is_first = false;
-      if(e1.el && e2.el && e1.el != e2.el) new_e.el = "*";
-      else if(e1.el && e2.el && e1.el == e2.el)  new_e.el = e2.el;
+    if(e1.el && e1.el == e2.el) new_e.el = e2.el;
+    else return false;
 
-    } else { // No more allowance for differing non-tail elements
-      if(e1.el && e1.el == e2.el) new_e.el = e2.el;
-      else return false;
-
-    }
+    // if(is_first) { // Make allowance for differing tail element
+    //   is_first = false;
+    //   if(e1.el && e2.el && e1.el != e2.el) new_e.el = "*";
+    //   else if(e1.el && e2.el && e1.el == e2.el)  new_e.el = e2.el;
+    // }
 
     if(e1.position && e1.position == e2.position) new_e.position = e2.position;
     if(e1.class && e1.class == e2.class) new_e.class = e2.class;
@@ -346,8 +344,11 @@ KColumn.prototype.merge = function(new_dom_array) {
     
   } else if(self.hasSameLineage(new_dom_array)) {
     merged_array = KColumn.fullLineageMerge(self.dom_array, new_dom_array);
-    self.set(merged_array);
-    return true;
+    if(merged_array) {
+      self.set(merged_array);
+      return true;      
+    }
+    return false;
 
   } else if(self.hasSameTailType(new_dom_array)) {
     merged_array = KColumn.partialLineageMerge(self.dom_array, new_dom_array);

@@ -90,7 +90,10 @@ var ColumnView = Backbone.View.extend({
 
   renderCounter: function() {
     var self = this;
+    console.log(self.model.get("dom_query"));
     var countables = $(self.model.get("dom_query")).filter(function(index, dom) {
+      console.log(index)
+      console.log(dom);
       return !self.isUnselectable(dom);
     });
 

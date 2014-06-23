@@ -613,7 +613,7 @@ describe "KColumn", ->
         expect(KColumn.isIdentical merged_array, def_array3).toBe true
 
     describe "different tail", ->
-      it "should return full merged array with generic position", ->
+      it "should not return full merged array with generic position", ->
         def_array1 = [{
             el: "td"
             class: ".row"
@@ -671,7 +671,7 @@ describe "KColumn", ->
           }]
 
         merged_array = KColumn.fullLineageMerge def_array1, def_array2
-        expect(KColumn.isIdentical merged_array, def_array3).toBe true
+        expect(KColumn.isIdentical merged_array, def_array3).toBe false
 
 
     describe "broken lineage", ->
@@ -913,7 +913,7 @@ describe "KColumn", ->
       expect(col.merge def_array2).toBe true
       expect(KColumn.isIdentical col.dom_array, def_array3).toBe true
 
-    it "merge successfully with full lineage merge and differing tail", ->
+    it "should merge successfully with full lineage merge and differing tail", ->
       def_array1 = [{
           el: "td"
           class: ".row"
@@ -971,8 +971,8 @@ describe "KColumn", ->
         }]
       col = new KColumn @page_id
       col.set def_array1
-      expect(col.merge def_array2).toBe true
-      expect(KColumn.isIdentical col.dom_array, def_array3).toBe true   
+      expect(col.merge def_array2).toBe false
+      expect(KColumn.isIdentical col.dom_array, def_array3).toBe false
 
     it "should merge successfully with partial lineage merge", ->
       def_array1 = [{
