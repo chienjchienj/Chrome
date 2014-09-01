@@ -21,11 +21,9 @@ Application.path_injection_pattern = new RegExp(CONFIG.server_host + CONFIG.path
 **/
 Application.init = function() {
   
-  Env.registerListener(Application.msgEvent);
-
   if(Application.shouldRenderSubViews()) {
     Application.loadHandleBarTemplates(Application.renderTabView);
-    Env.registerListener(Application.msgEvent);    
+    Env.registerListener(Application.msgEvent);
 
   } else if(Application.shouldInjectDefinition()) {
     Application.injectDefinition();
