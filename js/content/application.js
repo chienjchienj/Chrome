@@ -20,6 +20,9 @@ Application.path_injection_pattern = new RegExp(CONFIG.server_host + CONFIG.path
   Executes to load all environmental variables
 **/
 Application.init = function() {
+  
+  Env.registerListener(Application.msgEvent);
+
   if(Application.shouldRenderSubViews()) {
     Application.loadHandleBarTemplates(Application.renderTabView);
     Env.registerListener(Application.msgEvent);    

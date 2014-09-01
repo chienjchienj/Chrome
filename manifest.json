@@ -3,8 +3,8 @@
       "matches"   : [ "<all_urls>" ],
       "css": [ "css/content.css" ], 
       "js": [ 
+        "js/content/browsers/chrome.js",      
         "js/config/config.js",      
-        "js/content/browsers/chrome.js",
         "js/content/lib/jquery_1.9.1.min.js",
         "js/content/lib/jquery_ui_1.10.3.js",        
         "js/content/lib/handlebars.js",
@@ -28,6 +28,7 @@
    } ],  
    "background": {
       "scripts": [ 
+        "js/background/browsers/chrome.js",      
         "js/config/config.js",
         "js/background/lib/mixpanel.js",
         "js/background/models/kcookie.js",
@@ -41,8 +42,7 @@
         "js/background/controllers/kpagination_controller.js",        
         "js/background/controllers/kpage_controller.js",
         "js/background/controllers/ktab_controller.js",
-        "js/background/application.js",
-        "js/background/browsers/chrome.js"
+        "js/background/application.js"
       ]
    },
    "browser_action": {

@@ -7,6 +7,10 @@ Env.sendMessage = function(payload, callback) {
   chrome.runtime.sendMessage(payload, callback);
 }
 
+Env.getVersion = function() {
+  return chrome.runtime.getManifest().version;
+}
+
 Env.imagePath = function(img_path) {
   return "'" + chrome.extension.getURL(img_path) + "'";
 }
@@ -16,7 +20,7 @@ Env.filePath = function(file_path) {
 }
 
 Env.registerListener = function(listener) {
- chrome.extension.onMessage.addListener(Application.msgEvent); 
+ chrome.extension.onMessage.addListener(listener); 
 }
 
 Env.loadTemplate = function(template_name, callback) {

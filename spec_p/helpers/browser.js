@@ -24,3 +24,11 @@ Env.loadTemplate = function(template_name, callback) {
 }
 
 Env.redirect = function() {}
+
+Env.getVersion = function() {
+  return "test version";  
+}
+
+Env.registerListener = function(event_type, listener) {
+
+}

@@ -92,6 +92,22 @@ Application.refreshEvent = function(tabId, changeInfo, tab) {
   else BrowserIconView.deactivate();
 }
 
+
+
+// @Description : Listens for message calls from the front end
+Env.registerListener("runtime_on_message", Application.msgEvent);
+
+// @Description : handles page reload event
+Env.registerListener("tabs_on_update", Application.refreshEvent);
+
+// @Description : handles extension Icon click event
+Env.registerListener("browser_action_onclick", Application.iconEvent);
+
+// @Description : handles for tab change event
+Env.registerListener("tabs_on_activate", Application.tabEvent);
+
+
+
 /** Export for node testing **/
 try { 
   module && (module.exports = { 

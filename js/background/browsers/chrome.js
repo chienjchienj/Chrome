@@ -7,8 +7,30 @@ Env.getSelectedTab = function(query, callback) {
   chrome.tabs.getSelected(query, callback);  
 }
 
+Env.getVersion = function() {
+  return chrome.runtime.getManifest().version;
+}
+
 Env.setIcon = function(img_path) {
   chrome.browserAction.setIcon({path:img_path});
+}
+
+Env.registerListener = function(event_type, listener) {
+  switch(event_type) {
+    case "runtime_on_message":
+      chrome.runtime.onMessage.addListener(listener);
+      break;
+    case "tabs_on_update":
+      chrome.tabs.onUpdated.addListener(listener);
+      break;
+    case "browser_action_onclick":
+      chrome.browserAction.onClicked.addListener(listener);
+      break;
+    case "tabs_on_activate":
+      chrome.tabs.onActivated.addListener(listener);
+      break;
+  }
+
 }
 
 Env.sendMessage = function(tab_id, payload, callback) {
@@ -32,15 +54,3 @@ try {
 if(chrome.runtime && !chrome.runtime.onMessage) {
   chrome.runtime.onMessage = chrome.extension.onMessage
 } 
-  
-// @Description : Listens for message calls from the front end
-chrome.runtime.onMessage.addListener(Application.msgEvent);
-
-// @Description : handles page reload event
-chrome.tabs.onUpdated.addListener(Application.refreshEvent);
-
-// @Description : handles extension Icon click event
-chrome.browserAction.onClicked.addListener(Application.iconEvent);
-
-// @Description : handles for tab change event
-chrome.tabs.onActivated.addListener(Application.tabEvent);  

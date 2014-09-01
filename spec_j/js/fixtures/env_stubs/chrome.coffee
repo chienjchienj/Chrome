@@ -15,3 +15,8 @@ Env.getSelectedTab = (query, callback)->
 Env.setIcon = (img_path)->
 
 Env.sendMessage = (tab_id, payload, callback)->
+
+Env.getVersion = ->
+  "test version"
+
+Env.registerListener = (event_type, listener)->
