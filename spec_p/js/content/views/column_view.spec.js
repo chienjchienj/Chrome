@@ -22,6 +22,11 @@ describe("ColumnView", function() {
     var col_model_1 = new Column();
     col_model_1.set("page_id", self.page_id);
     col_model_1.set("tab_id", self.tab_id);
+    col_model_1.set("colors", {
+      selecting:    "#111",
+      recommending: "#222",
+      selected:     "#333"
+    });    
     self.sidebar_view.columns.models.push(col_model_1);
 
     self.column_view_1 = new ColumnView({
@@ -32,6 +37,12 @@ describe("ColumnView", function() {
     var col_model_2 = new Column();
     col_model_2.set("page_id", self.page_id + 1);
     col_model_2.set("tab_id", self.tab_id);
+    col_model_2.set("colors", {
+      selecting:    "#111",
+      recommending: "#222",
+      selected:     "#333"
+    });
+
     self.sidebar_view.columns.models.push(col_model_2);
 
     self.column_view_2 = new ColumnView({

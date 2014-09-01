@@ -57,41 +57,19 @@
   background-color: #6b6865;
 }
 
-.getdata-sidebar .column .stick-holder {
-  width: 40px;
-  height: 20px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  float: left;
-}
-
-.getdata-sidebar .column .stick-holder .stick-paginated {
-  height: 8px;
-  border-bottom: 5px solid transparent;
-  border-top: 5px solid transparent;
-  margin-right: 1px;
-  float: left;
-}
-
-.getdata-sidebar .column .stick-holder .stick-non-paginated {
-  height: 18px;
-  width: 3px;
-  margin-right: 2px;
-  float: left;
-}
-
 .getdata-sidebar .column .col-name {
   font-size: 12px;
   line-height: 20px;
   color: #ffffff;  
   float: left;
   height: 20px;
-  width: 95px;
-  margin-top: 5px;
-  margin-bottom: 5px;  
-  margin-right: 5px;
-  padding-left: 3px;
-  padding-right: 3px;
+  width: 125px;
+  margin-top:     5px;
+  margin-bottom:  5px;  
+  margin-right:   5px;
+  margin-left:    10px;  
+  padding-left:   3px;
+  padding-right:  3px;
   overflow: hidden;
   white-space: nowrap;
   cursor: text;

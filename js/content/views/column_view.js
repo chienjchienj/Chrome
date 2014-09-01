@@ -72,10 +72,7 @@ var ColumnView = Backbone.View.extend({
     }
     if(self.belongsToCurrentPage()) {
       self.$el.addClass('curr_page');
-      // self.dressUpSelectedDoms();
     }
-      
-
   },
 
   render: function() {
@@ -83,7 +80,7 @@ var ColumnView = Backbone.View.extend({
     var data      = self.model.forTemplate();
     var template  = self.template();
     self.$el.html(template(data));
-    self.renderColorSticks();
+    // self.renderColorSticks();
     self.renderCounter();
     return self;
   },
@@ -111,6 +108,7 @@ var ColumnView = Backbone.View.extend({
   renderColorSticks: function() {
     var self = this;
     self.$el.find(".stick-holder").html("");
+
     _.each (self.model.get("color_sticks"), function(color) {
       var stick = self.renderNonPaginatedStick(color);
       if(self.model.get("has_pagination")) {
@@ -203,6 +201,7 @@ var ColumnView = Backbone.View.extend({
     self.model.set("is_active", true);
     self.model.save();
     self.$el.addClass('active');
+    self.$el.css("background-color", self.getSelectedColor());
 
     switch(self.getState()) {
       case self.states.not_page:
@@ -234,6 +233,7 @@ var ColumnView = Backbone.View.extend({
     var self = this;
     self.model.set("is_active", false);
     self.$el.removeClass('active');
+    self.$el.css("background-color", self.getDefaultColor());
     self.model.save();
     self.spyOnMouseStop();
     self.undressSelectedDoms();
@@ -620,6 +620,10 @@ var ColumnView = Backbone.View.extend({
   getSelectedColor: function() {
     var self = this;
     return self.model.getColor("selected");
+  },
+
+  getDefaultColor: function() {
+    return "#2b2825";
   },
 
   template: function() {
