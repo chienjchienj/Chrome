@@ -28,6 +28,7 @@
    } ],  
    "background": {
       "scripts": [ 
+        "js/content/lib/jquery_1.9.1.min.js",      
         "js/background/browsers/chrome.js",      
         "js/config/config.js",
         "js/background/lib/mixpanel.js",

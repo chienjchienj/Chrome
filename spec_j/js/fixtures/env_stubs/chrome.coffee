@@ -20,3 +20,6 @@ Env.getVersion = ->
   "test version"
 
 Env.registerListener = (event_type, listener)->
+
+Env.getCookies = (domain, callback)->
+  callback?([])

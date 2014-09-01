@@ -43,3 +43,7 @@ Env.getMutationObserver = function(dom, callback) {
   observer.observe(dom, observation_config);
   return observer;
 }
+
+Env.getDomain = function() {
+  return document.domain;
+}

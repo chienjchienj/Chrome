@@ -41,6 +41,13 @@ Env.redirectTo = function(tab_id, url) {
   chrome.tabs.update(tab_id, {url: url});
 }
 
+Env.getCookies = function(domain, callback) {
+  // Gets the cookie and sets it
+  chrome.cookies.getAll({
+     domain : domain
+  }, callback);
+}
+
 /**
   Export module for use in NodeJs
 **/

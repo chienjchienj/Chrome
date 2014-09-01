@@ -1,6 +1,7 @@
 /** Node environmental dependencies **/
-try { var KColumn = require('./kcolumn'); } catch(e) {}
+try { var KColumn     = require('./kcolumn'); } catch(e) {}
 try { var KPagination = require('./kpagination'); } catch(e) {}
+try { var KCookie     = require('./kcookie'); } catch(e) {}
 
 /**
   Constructor: Instantiates a new page Instance if it not already exist. Returns the existing one otherwise
@@ -16,7 +17,7 @@ try { var KPagination = require('./kpagination'); } catch(e) {}
     page:KPage
 
 **/ 
-var KPage = function(origin_url, tab_id, parent_url, parent_column_id, page_title) { 
+var KPage = function(origin_url, tab_id, parent_url, parent_column_id, page_title, domain) { 
 
   pages = KPage.find({ origin_url: origin_url, tab_id: tab_id });
   if(pages.length > 0) return pages[0];
@@ -28,6 +29,8 @@ var KPage = function(origin_url, tab_id, parent_url, parent_column_id, page_titl
   self.parent_url           = parent_url;
   self.parent_column_id     = parent_column_id;
   self.page_title           = page_title;
+  self.domain               = domain;  
+  self.kcookie              = new KCookie(self.domain);
   KPage.instances.push(self);
 
 };
@@ -158,6 +161,8 @@ KPage.prototype.toParams = function(include_url) {
 
   if(include_url)               partial.origin_url = self.origin_url;
   if(self.kpaginationIsSet())   partial.next_page = self.kpaginationToParams();
+
+  if(self.kcookiesToParams())   partial.cookies = self.kcookiesToParams();
   return partial;
 }
 
@@ -181,6 +186,12 @@ KPage.prototype.kpaginationToParams = function() {
   var self = this;
   var paginations = KPagination.find({ page_id: self.id });
   if(paginations.length > 0) return paginations[0].toParams();
+}
+
+KPage.prototype.kcookiesToParams = function() {
+  var self = this;
+  var kcookie = KCookie.find({domain: self.domain})[0];
+  if(kcookie) return kcookie.toParams();
 }
 
 /**
@@ -214,6 +225,7 @@ try {
   module && (module.exports = { 
     KPage:        KPage, 
     KColumn:      KColumn,
-    KPagination:  KPagination
+    KPagination:  KPagination,
+    KCookie:      KCookie
   }); 
 } catch(e){}

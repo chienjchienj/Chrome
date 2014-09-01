@@ -32,3 +32,7 @@ Env.getVersion = function() {
 Env.registerListener = function(event_type, listener) {
 
 }
+
+Env.getDomain = function() {
+  return "testing.com";
+}

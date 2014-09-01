@@ -1,6 +1,7 @@
 KPageVar      = require "../../../../js/background/models/kpage"
 KPage         = KPageVar.KPage
 KColumn       = KPageVar.KColumn
+KCookie       = KPageVar.KCookie
 KPagination   = KPageVar.KPagination
 
 describe "KPage", ->
@@ -8,6 +9,7 @@ describe "KPage", ->
   beforeEach ->
     KPage.reset()
     KColumn.reset()
+    KCookie.reset()
     KPagination.reset()
     @page_url       = "http://google.com"
     @tab_id      = 10
