@@ -222,6 +222,28 @@ KColumn.prototype.domQuery = function() {
   }).join(" > ");
 };
 
+KColumn.prototype.requiredAttribute = function() {
+  var self      = this;
+  var attribute = self.required_attribute;
+  
+  if(attribute) {
+    return attribute;
+
+  } else {
+    var last_dom  = self.dom_array[self.dom_array.length - 1]
+    if(last_dom) {
+      switch(last_dom.el.toLowerCase()) {
+        case "img": 
+          return "src";
+        case "iframe": 
+          return "src";
+      }
+    }
+    return null;
+  }
+
+}
+
 /**
   CSS query of the next set of dom arrays to recommends
 
@@ -460,7 +482,7 @@ KColumn.prototype.toParams = function() {
   var partial = {};
   partial.col_name = self.col_name;
   partial.dom_query = self.domQuery();
-  if(self.required_attribute) partial.required_attribute = self.required_attribute;
+  if(self.requiredAttribute()) partial.required_attribute = self.requiredAttribute();
   return partial;
 }
 

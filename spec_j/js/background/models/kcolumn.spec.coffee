@@ -1140,3 +1140,29 @@ describe "KColumn", ->
       expect(color_hash.selected).toEqual "rgba(89, 233, 100, 1 )"
       expect(color_hash.selecting).toEqual "rgba(89, 233, 100, 0.7 )"
       expect(color_hash.recommending).toEqual "rgba(89, 233, 100, 0.3 )"
+
+  describe "requiredAttribute", ->
+    it "should return a src if selected attribute type is image", ->
+      img_array = [{
+          el: "span"
+          class: ".street"
+        },{
+          el: "img"
+          class: ".prop-img"
+        }]      
+      col = new KColumn @page_id
+      col.set img_array
+      expect(col.requiredAttribute()).toEqual "src"
+
+    it "should return a src if selected attribute type is iframe", ->
+      img_array = [{
+          el: "span"
+          class: ".street"
+        },{
+          el: "iframe"
+          class: ".prop-img"
+        }]      
+      col = new KColumn @page_id
+      col.set img_array
+      expect(col.requiredAttribute()).toEqual "src"
+      
