@@ -39,10 +39,8 @@ MixPanelController.prototype.trackVersion = function() {
     mixpanel.track("developer - extension installed - browser", { 'extension_version' : self.version });
     localStorage.setItem('version', self.version );
 
-
   // When updating the browser extension
   } else if(localStorage.getItem('version') != self.version) {
-    
     mixpanel.track( "developer - extension updated - browser",{
       'extension_version' : chrome.runtime.getManifest().version,
       'old_extension_version' : localStorage.getItem('version')
