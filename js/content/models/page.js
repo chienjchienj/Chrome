@@ -6,7 +6,8 @@ var Page = Backbone.Model.extend({
     return self.fetch({
       method: 'create',
       data: {
-        domain: Env.getDomain()
+        domain: Env.getDomain(),
+        origin_url: Env.getLocation()
       },
       success: function(collection, response, options) {
         Object.keys(response).forEach(function(attribute) {

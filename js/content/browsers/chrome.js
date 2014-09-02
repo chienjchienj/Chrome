@@ -47,3 +47,7 @@ Env.getMutationObserver = function(dom, callback) {
 Env.getDomain = function() {
   return document.domain;
 }
+
+Env.getLocation = function() {
+  return window.location.toString();
+}

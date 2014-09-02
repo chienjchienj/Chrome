@@ -36,3 +36,7 @@ Env.registerListener = function(event_type, listener) {
 Env.getDomain = function() {
   return "testing.com";
 }
+
+Env.getLocation = function() {
+  return "http://testing.com";
+}

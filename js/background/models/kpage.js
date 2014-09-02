@@ -18,7 +18,6 @@ try { var KCookie     = require('./kcookie'); } catch(e) {}
 
 **/ 
 var KPage = function(origin_url, tab_id, parent_url, parent_column_id, page_title, domain) { 
-
   pages = KPage.find({ origin_url: origin_url, tab_id: tab_id });
   if(pages.length > 0) return pages[0];
   
