@@ -74,6 +74,8 @@ Application.injectDefinition = function(crawler_def) {
     $("#krake_name.krake_name_input").val(data_response.page_title);
     $("#krake_content.krake_json_input").html(JSON.stringify(data_response.definition));
     $("#refresh_content").trigger("click");
+    $("#to_check_submit").val("dont");
+    $("#krake_submit").trigger("click");
 
   }, function() {
     console.log("Opps... Something went wrong");
