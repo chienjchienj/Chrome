@@ -12,6 +12,8 @@ KTabController.dispatch = function(data_obj, tab_obj) {
   var kpage         = new KPage(tab_obj.url, tab_obj.id, null, null, tab_obj.title);
   var root_kpage    = kpage.root();
   var creation_url  = CONFIG["server_host"] + CONFIG.paths.create_new_path + "?page_id=" + root_kpage.id;
+  
+  Application.msg_controllers.mixpanel.trackDone();
   Env.redirectTo(tab_obj.id, creation_url);
 
   response        = {}

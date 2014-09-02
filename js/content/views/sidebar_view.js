@@ -177,7 +177,9 @@ var SideBarView = Backbone.View.extend({
 
   addFirstColumn: function() {
     var self = this;
-    if(!self.currentPageHasColumns()) self.addColumn();
+    if(!self.currentPageHasColumns()) {
+      self.addColumn(); 
+    }
   },
 
   currentPageHasColumns: function() {

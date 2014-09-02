@@ -10,12 +10,14 @@ var MixPanelController = function(mixpanel_key, version) {
 MixPanelController.prototype.setId = function() {
   var self = this;
   self.xhr = new XMLHttpRequest();
-  self.xhr.open("GET", "https://getdata.io/muuid", true);
+  muuid_url = CONFIG["server_host"] + CONFIG.paths.muuid_path
+  self.xhr.open("GET", muuid_url, true);
   self.xhr.onreadystatechange = function() {
     if (self.xhr.readyState == 4) {  
       self.id = JSON.parse(self.xhr.responseText)["muuid"];
       console.log("Identity : %s", self.id);
       mixpanel.identify(self.id);
+      console.log("extension tracking as " + self.id);
     }
   }
   self.xhr.send();
@@ -53,7 +55,6 @@ MixPanelController.prototype.trackVersion = function() {
 
 MixPanelController.prototype.trackExtensionActivation = function() {
   var self = this;
-
   Env.getSelectedTab(null, function(tab) {
     mixpanel.track("developer - extension activated", {
       'extension_version' : self.version,
@@ -75,33 +76,21 @@ MixPanelController.prototype.trackExtensionDeactivation = function() {
 MixPanelController.prototype.trackColumnCreation = function() {
   var self = this;
   Env.getSelectedTab(null, function(tab) {
-    mixpanel.track("developer - extension select start", {
+    mixpanel.track("developer - extension column created", {
       'extension_version' : self.version,
-      'url_location' : tab.url,
-      'select_type' : 'list_type'
+      'url_location' : tab.url
     });
   }); 
 }
 
-MixPanelController.prototype.trackColumnAddedFirst = function() {
+MixPanelController.prototype.trackColumnUpdate = function(context_obj) {
   var self = this;
-  Env.getSelectedTab(null, function(tab) {   
-    mixpanel.track("developer - extension item selected", {
-      'extension_version' : self.version,
-      'url_location' : tab.url,
-      'select_type' : 'list_first_item'
-    });//eo mixpanel.track
-  }); 
-}
+  context_obj = context_obj || {}
+  context_obj['extension_version'] = self.version;
 
-MixPanelController.prototype.trackColumnAddedMore = function() {
-  var self = this;
-  Env.getSelectedTab(null, function(tab) {   
-    mixpanel.track("developer - extension item selected", {
-      'extension_version' : self.version,
-      'url_location' : tab.url,
-      'select_type' : 'list_second_item'
-    });//eo mixpanel.track
+  Env.getSelectedTab(null, function(tab) {
+    context_obj['url_location'] = tab.url;    
+    mixpanel.track("developer - extension column updated", context_obj);
   }); 
 }
 

@@ -69,10 +69,12 @@ Application.iconEvent = function(tab) {
   if(kwin.isActive()) {
     kwin.deactivate();
     BrowserIconView.deactivate();
+    Application.msg_controllers.mixpanel.trackExtensionDeactivation();
 
   } else {
     kwin.activate();
     BrowserIconView.activate();
+    Application.msg_controllers.mixpanel.trackExtensionActivation();
   }
 };
 

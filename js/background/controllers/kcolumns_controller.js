@@ -5,6 +5,7 @@ try { var KTab = require('../models/ktab'); } catch(e) {}
 var KColumnsController = {};
 
 KColumnsController.create = function(data_obj, tab_obj) {
+  Application.msg_controllers.mixpanel.trackColumnCreation();
   var kpage       = new KPage(tab_obj.url, tab_obj.id, tab_obj.title);
   var kc          = new KColumn(kpage.id, tab_obj.id);
 
@@ -21,6 +22,7 @@ KColumnsController.update = function(new_attributes, tab_obj) {
   KColumnsController.can_update.forEach(function(attr) {
     kc[attr] = new_attributes[attr];
   });
+  Application.msg_controllers.mixpanel.trackColumnUpdate({ column_id: new_attributes.id, context: "update"});
   response        = {};
   response.data   = kc.toJson();
   response.status = "success";
@@ -42,7 +44,6 @@ KColumnsController.merge = function(data_obj, tab_obj) {
 
   response = {};
   data_obj = data_obj || {}
-
   if(!data_obj.id) {
     response.status = "error";
     response.err_msg = "Merge cannot be called with kcolumn id";
@@ -53,6 +54,7 @@ KColumnsController.merge = function(data_obj, tab_obj) {
 
   } else{
     var kc = new KColumn.find({ id: data_obj.id })[0];
+    Application.msg_controllers.mixpanel.trackColumnUpdate({ column_id: data_obj.id, context: "merge"});    
     result = kc.merge(data_obj.new_array_dom);
 
     if(result) {
