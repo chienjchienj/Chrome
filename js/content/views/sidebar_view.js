@@ -168,7 +168,8 @@ var SideBarView = Backbone.View.extend({
     self.$el.find("#columns").html("");
     self.columns.fetch({
       data: {
-        tab_id: self.parent_tab.tabId()
+        tab_id: self.parent_tab.tabId(),
+        page_id: self.parent_tab.pageId()
       },
       success: self.renderColumnViews
     });
