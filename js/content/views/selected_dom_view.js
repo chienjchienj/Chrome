@@ -42,11 +42,11 @@ var SelectedDomView = Backbone.View.extend({
     var comp_styles = window.getComputedStyle(self.dom);
     self.left  = $(self.dom).position().left + parseInt(comp_styles.marginLeft.replace(/px/,'') - 2);
     self.top   = $(self.dom).position().top  + parseInt(comp_styles.marginTop.replace(/px/,'')  - 2);
-
-    self.$el.css("height",     self.dom.offsetHeight);
-    self.$el.css("maxWidth",   self.dom.offsetWidth);
-    self.$el.css("left",       self.left);
-    self.$el.css("top",        self.top);
+    self.$el.css("height",    self.dom.offsetHeight);
+    self.$el.css("maxWidth",  self.dom.offsetWidth);
+    self.$el.css("width",     self.dom.offsetWidth);
+    self.$el.css("left",      self.left);
+    self.$el.css("top",       self.top);
 
     _.each(self.stylesToEmulate, function(style) {
       self.$el.css(style,   comp_styles[style]);
