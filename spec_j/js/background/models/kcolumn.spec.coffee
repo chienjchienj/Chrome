@@ -495,6 +495,92 @@ describe "KColumn", ->
       dom_array = []
       col.set dom_array
       expect(col.isEmpty()).toBe true
+
+  describe "hasTdTails", ->
+    it "returns true when both are tds", ->
+      td1 = [{
+        el: "table"
+        position: 1
+      },{
+        el: "tr"
+        position: 2
+      },{
+        el: "td"
+        class: ".col"
+        position: 2
+      }]
+
+      td2 = [{
+        el: "table"
+        position: 1
+      },{
+        el: "tr"
+        position: 3
+      },{          
+        el: "td"
+        class: ".col"
+        position: 2
+      }]        
+      col = new KColumn @page_id
+      col.set td1
+      expect(col.hasTdTails(td2)).toEqual true
+
+    it "returns false when the currently set dom is not td", ->
+      td1 = [{
+        el: "table"
+        position: 1
+      },{
+        el: "tr"
+        position: 2
+      },{
+        el: "span"
+        class: ".col"
+        position: 2
+      }]
+
+      td2 = [{
+        el: "table"
+        position: 1
+      },{
+        el: "tr"
+        position: 3
+      },{          
+        el: "td"
+        class: ".col"
+        position: 2
+      }]        
+      col = new KColumn @page_id
+      col.set td1
+      expect(col.hasTdTails(td2)).toEqual false
+
+
+    it "returns false when the new dom is not td", ->
+      td1 = [{
+        el: "table"
+        position: 1
+      },{
+        el: "tr"
+        position: 2
+      },{
+        el: "td"
+        class: ".col"
+        position: 2
+      }]
+
+      td2 = [{
+        el: "table"
+        position: 1
+      },{
+        el: "tr"
+        position: 3
+      },{          
+        el: "span"
+        class: ".col"
+        position: 2
+      }]        
+      col = new KColumn @page_id
+      col.set td1
+      expect(col.hasTdTails(td2)).toEqual false
   
   describe "hasSameLineage", ->
     it "should be true if lineage and type are the same", ->
@@ -532,6 +618,176 @@ describe "KColumn", ->
       col.set def1
       expect(col.hasSameLineage(def2)).toEqual false
 
+    describe "td", ->
+      it "true if tds are from same table, different rows, same column and same class", ->
+        td1 = [{
+          el: "table"
+          position: 1
+        },{
+          el: "tr"
+          position: 2
+        },{
+          el: "td"
+          class: ".col"
+          position: 2
+        }]
+
+        td2 = [{
+          el: "table"
+          position: 1
+        },{
+          el: "tr"
+          position: 3
+        },{          
+          el: "td"
+          class: ".col"
+          position: 2
+        }]        
+        col = new KColumn @page_id
+        col.set td1
+        expect(col.hasSameLineage(td2)).toEqual true
+
+      it "false if tds are from same table, different rows, different column and same class", ->
+        td1 = [{
+          el: "table"
+          position: 1
+        },{          
+          el: "tr"
+          position: 2
+        },{          
+          el: "td"
+          class: ".col"
+          position: 2
+        }]
+
+        td2 = [{
+          el: "table"
+          position: 1
+        },{          
+          el: "tr"
+          position: 3
+        },{          
+          el: "td"
+          class: ".col"
+          position: 3
+        }]        
+        col = new KColumn @page_id
+        col.set td1
+        expect(col.hasSameLineage(td2)).toEqual false
+
+      it "false if tds are from same table, different rows, same column and different class", ->
+        td1 = [{
+          el: "table"
+          position: 1
+        },{
+          el: "tr"
+          position: 2
+        },{
+          el: "td"
+          class: ".col1"
+          position: 2
+        }]
+
+        td2 = [{
+          el: "table"
+          position: 1
+        },{
+          el: "tr"
+          position: 3
+        },{          
+          el: "td"
+          class: ".col2"
+          position: 2
+        }]        
+        col = new KColumn @page_id
+        col.set td1
+        expect(col.hasSameLineage(td2)).toEqual false      
+
+  describe "hasTDWithSameClassAndPosition", ->
+    it "true if tds are from same table, different rows, same column and same class", ->
+      td1 = [{
+        el: "table"
+        position: 1
+      },{
+        el: "tr"
+        position: 2
+      },{
+        el: "td"
+        class: ".col"
+        position: 2
+      }]
+
+      td2 = [{
+        el: "table"
+        position: 1
+      },{
+        el: "tr"
+        position: 3
+      },{          
+        el: "td"
+        class: ".col"
+        position: 2
+      }]        
+      col = new KColumn @page_id
+      col.set td1
+      expect(col.hasTDWithSameClassAndPosition(td2)).toEqual true
+
+    it "false if tds are from same table, different rows, different column and same class", ->
+      td1 = [{
+        el: "table"
+        position: 1
+      },{          
+        el: "tr"
+        position: 2
+      },{          
+        el: "td"
+        class: ".col"
+        position: 2
+      }]
+
+      td2 = [{
+        el: "table"
+        position: 1
+      },{          
+        el: "tr"
+        position: 3
+      },{          
+        el: "td"
+        class: ".col"
+        position: 3
+      }]        
+      col = new KColumn @page_id
+      col.set td1
+      expect(col.hasTDWithSameClassAndPosition(td2)).toEqual false
+
+    it "false if tds are from same table, different rows, same column and different class", ->
+      td1 = [{
+        el: "table"
+        position: 1
+      },{
+        el: "tr"
+        position: 2
+      },{
+        el: "td"
+        class: ".col1"
+        position: 2
+      }]
+
+      td2 = [{
+        el: "table"
+        position: 1
+      },{
+        el: "tr"
+        position: 3
+      },{          
+        el: "td"
+        class: ".col2"
+        position: 2
+      }]        
+      col = new KColumn @page_id
+      col.set td1
+      expect(col.hasTDWithSameClassAndPosition(td2)).toEqual false
+
   describe "hasSameTailType", ->
     it "should be true if lineage and type are the same", ->
       col = new KColumn @page_id
@@ -548,6 +804,91 @@ describe "KColumn", ->
       col = new KColumn @page_id
       col.set @def_array
       expect(col.hasSameTailType(@def_array2)).toEqual false
+
+    describe "td", ->
+      it "true if tds are from same table, different rows, same column and same class", ->
+        td1 = [{
+          el: "table"
+          position: 1
+        },{
+          el: "tr"
+          position: 2
+        },{
+          el: "td"
+          class: ".col"
+          position: 2
+        }]
+
+        td2 = [{
+          el: "table"
+          position: 1
+        },{
+          el: "tr"
+          position: 3
+        },{          
+          el: "td"
+          class: ".col"
+          position: 2
+        }]        
+        col = new KColumn @page_id
+        col.set td1
+        expect(col.hasSameTailType(td2)).toEqual true
+
+      it "false if tds are from same table, different rows, different column and same class", ->
+        td1 = [{
+          el: "table"
+          position: 1
+        },{          
+          el: "tr"
+          position: 2
+        },{          
+          el: "td"
+          class: ".col"
+          position: 2
+        }]
+
+        td2 = [{
+          el: "table"
+          position: 1
+        },{          
+          el: "tr"
+          position: 3
+        },{          
+          el: "td"
+          class: ".col"
+          position: 3
+        }]        
+        col = new KColumn @page_id
+        col.set td1
+        expect(col.hasSameTailType(td2)).toEqual false
+
+      it "false if tds are from same table, different rows, same column and different class", ->
+        td1 = [{
+          el: "table"
+          position: 1
+        },{
+          el: "tr"
+          position: 2
+        },{
+          el: "td"
+          class: ".col1"
+          position: 2
+        }]
+
+        td2 = [{
+          el: "table"
+          position: 1
+        },{
+          el: "tr"
+          position: 3
+        },{          
+          el: "td"
+          class: ".col2"
+          position: 2
+        }]        
+        col = new KColumn @page_id
+        col.set td1
+        expect(col.hasSameTailType(td2)).toEqual false  
 
   describe "fullLineageMerge", ->
 

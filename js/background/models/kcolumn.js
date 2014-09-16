@@ -28,7 +28,7 @@ KColumn.reset = function() {
   param:
     id
     page_id
-**/ 
+**/
 KColumn.find = function(param) {
   param = param || {};
   return KColumn.instances.filter(function(obj) {
@@ -368,7 +368,7 @@ KColumn.prototype.merge = function(new_dom_array) {
     merged_array = KColumn.fullLineageMerge(self.dom_array, new_dom_array);
     if(merged_array) {
       self.set(merged_array);
-      return true;      
+      return true;
     }
     return false;
 
@@ -396,11 +396,17 @@ KColumn.prototype.hasSameLineage = function(new_dom_array) {
     }
   });
 
+  // If there is only one DOM with no nesting and elements are different
   if(new_dom_array.length == 1 && self.dom_array[0].el != new_dom_array[0].el)
     matched = false;
 
+  // If there is only one DOM with 1 nesting and nested elements are different
   if(new_dom_array.length == 2 && self.dom_array[1].el != new_dom_array[1].el && new_dom_array[0].el == "body") 
     matched = false; 
+
+  // If both tail elements are TDs
+  if(self.hasTdTails(new_dom_array) && !self.hasTDWithSameClassAndPosition(new_dom_array))
+    matched = false;
 
   return matched;
 
@@ -411,9 +417,39 @@ KColumn.prototype.hasSameLineage = function(new_dom_array) {
 **/
 KColumn.prototype.hasSameTailType = function(new_dom_array) {
   var self = this;
+
+  // When both arrays are empty
   if(new_dom_array.length == 0 || self.dom_array.length == 0) return false;
+
+  // If both tail elements are TDs
+  if(self.hasTdTails(new_dom_array) && !self.hasTDWithSameClassAndPosition(new_dom_array)) return false;
+
+  // When both tail elements are other types
   if(new_dom_array[new_dom_array.length - 1].el != self.dom_array[self.dom_array.length - 1].el) return false;
+
   return true;
+}
+
+/**
+  Returns true if both doms have TD for tails
+**/
+KColumn.prototype.hasTdTails = function(new_dom_array) {
+  var self = this;
+  return new_dom_array[new_dom_array.length - 1].el == "td" && self.dom_array[self.dom_array.length - 1].el == "td" 
+}
+
+/**
+  Checks if the tail td object has same position and class
+**/
+KColumn.prototype.hasTDWithSameClassAndPosition = function(new_dom_array) {
+  var self = this;
+  curr_tail_dom  = self.dom_array[self.dom_array.length - 1]
+  new_tail_dom   = new_dom_array[new_dom_array.length - 1]
+
+  var ele_match = curr_tail_dom.el == new_tail_dom.el;
+  var pos_match = curr_tail_dom.position == new_tail_dom.position;
+  var cls_match = curr_tail_dom.class    == new_tail_dom.class;
+  return ele_match && pos_match && cls_match;
 }
 
 /**
