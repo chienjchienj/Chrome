@@ -5,6 +5,7 @@ var SideBarView = Backbone.View.extend({
   events : {
     "click #add_columns": "addColumnEvent",
     "click #save_holder": "dispatchTabEvent",
+    "delete_column":      "deleteColumnEvent",
   },
 
   column_views: [],
@@ -44,6 +45,24 @@ var SideBarView = Backbone.View.extend({
   addColumnEvent: function(e) {
     var self = this;
     self.addColumn();
+  },
+
+  /**
+    Event listener that handles the deleting event
+  **/
+  deleteColumnEvent: function(e, col_view) {
+    var self = this;
+    col_view.model.destroy();
+    console.log("Removing " + col_view.model.id)
+    debugger    
+    // self.columns.models = self.columns.models.filter(function(model) {
+    //   return model.id != col_view.model.id;
+    // })
+
+
+    // Creates another column is this is the only one left    
+
+    // Selects the next column if this is the currently selected one
   },
 
   /**

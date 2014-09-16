@@ -15,7 +15,14 @@ var KColumn = function(page_id, tab_id) {
 KColumn.instances = [];
 
 KColumn.getId = function() {
-  return KColumn.instances.length + 1;
+  if(KColumn.instances.length == 0) {
+    return 1
+  } else {
+    current_ids = KColumn.instances.map(function(kc) {
+      return kc.id;
+    });
+    return Math.max.apply(null, current_ids) + 1;
+  }
 };
 
 KColumn.reset = function() {
@@ -39,6 +46,13 @@ KColumn.find = function(param) {
     return to_return;
   });
 };
+
+KColumn.delete = function(kcolumn_id) {
+  KColumn.instances = KColumn.instances.filter(function(obj) {
+    return obj.id != kcolumn_id;
+  });
+  return "success"
+}
 
 KColumn.isArray = function(dom_array) {
   if( Object.prototype.toString.call( dom_array ) === '[object Array]' ) {

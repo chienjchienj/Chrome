@@ -19,7 +19,8 @@ Backbone.sync = function (method, model, options) {
     case "new"      :
       payload["args_array"] = [data];
       break;
-      
+
+    case "delete"   :      
     case "update"   :
       payload["args_array"] = [model.attributes];
       break;

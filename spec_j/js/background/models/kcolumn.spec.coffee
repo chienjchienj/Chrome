@@ -79,6 +79,23 @@ describe "KColumn", ->
     expect(col.id).toEqual 1
     expect(KColumn.find().length).toEqual 1
 
+  describe "delete", ->
+    it "removes column from records given an id", ->
+      col_1 = new KColumn 1
+      col_2 = new KColumn 2
+      col_3 = new KColumn 3
+      expect(KColumn.instances.length).toEqual 3
+
+      KColumn.delete(col_2.id)
+      expect(KColumn.instances.length).toEqual 2
+      remaining_ids = KColumn.instances.map (kc)=> kc.id
+      expect(remaining_ids.indexOf(col_2.id)).toEqual -1
+
+      KColumn.delete(col_1.id)
+      expect(KColumn.instances.length).toEqual 1
+      remaining_ids = KColumn.instances.map (kc)=> kc.id
+      expect(remaining_ids.indexOf(col_1.id)).toEqual -1      
+
   describe "parentKPage", ->
     beforeEach ->
       @main_page = new KPage "http://some_url", 1, null, null, "my website main"

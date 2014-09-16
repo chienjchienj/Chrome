@@ -105,6 +105,22 @@
   line-height: 20px;
 }
 
+.getdata-sidebar .column .delete {
+  float: left;
+  display: none;
+  font-size: 10px;
+  background-color: #fff;
+  border-radius:5px;
+  padding: 3px 3px;
+  line-height: 10px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.getdata-sidebar .column:hover .delete {
+  display: block;
+}
+
 /** Color Scheming **/
 [getdata_color] {
   cursor: pointer;

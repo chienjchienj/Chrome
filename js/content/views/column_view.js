@@ -7,6 +7,7 @@ var ColumnView = Backbone.View.extend({
     "keyup .col-name"     : "updateColName",
     "focus .col-name"     : "focusColName",
     "focusout .col-name"  : "unfocusColName",
+    "click .delete"       : "clickedDeleteColumn",
     "click"               : "clickedColumn"
   },
 
@@ -183,6 +184,13 @@ var ColumnView = Backbone.View.extend({
       self.setColName(self.defaultColName());      
     }
     self.model.save();
+  },
+
+  clickedDeleteColumn: function(e) {
+    e.stopPropagation();
+    var self = this;
+
+    self.$el.trigger("delete_column", [self]);
   },
 
   clickedColumn: function(e) {

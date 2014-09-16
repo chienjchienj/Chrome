@@ -40,6 +40,13 @@ KColumnsController.read = function(data_obj, tab_obj) {
 
 }
 
+KColumnsController.delete = function(data_obj, tab_obj) {
+  data_obj        = data_obj || {};
+  response        = {}
+  response.status = KColumn.delete(data_obj.id);
+  return response;
+}
+
 KColumnsController.merge = function(data_obj, tab_obj) {
 
   response = {};
