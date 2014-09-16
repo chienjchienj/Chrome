@@ -21,8 +21,8 @@ var ColumnView = Backbone.View.extend({
     "h1", "h2", "h3", "h4", "h5", "h6", 
     "p", "img", "a", 
     "span:not(:has(span))",
-    "div:not(:has(div))", 
-    "td:not(:has(td))"
+    "div:not(:has(div, p))",
+    "td:not(:has(td, img))"
   ],
 
   /** List of characters that are not allowed for use in col_names **/

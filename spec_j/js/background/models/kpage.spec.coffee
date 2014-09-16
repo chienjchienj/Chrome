@@ -168,6 +168,7 @@ describe "KPage", ->
             col_name:   'Property 2',
             dom_query:  'td.row#clementi' 
           }]
+        cookies: []
       }
 
     it "should return well formed partial for columns with pagination", ->
@@ -214,6 +215,7 @@ describe "KPage", ->
         next_page: 
           dom_query: 'td.row#clementi > p:nth-child(2).contact-info > a.address'
           click: true
+        cookies: []
       }
 
     describe "1 level columns nesting", ->
@@ -244,7 +246,9 @@ describe "KPage", ->
                 col_name:   'Property 2',
                 dom_query:  'td.row#col2' 
               }]
+              cookies: []
           }]
+          cookies: []
         }
 
       it "should return well formed partial for columns with 1 level nesting and pagination", ->
@@ -290,10 +294,12 @@ describe "KPage", ->
               next_page:
                 dom_query : "a.next2"
                 click: true
+              cookies: []
           }]
           next_page:
             dom_query : "a.next1"
             click: true
+          cookies: []
         }   
 
     describe "2 level columns nesting", ->
@@ -336,9 +342,12 @@ describe "KPage", ->
                   columns: [{
                     col_name:   'Property 3',
                     dom_query:  'td.row#col3' 
-                  }]                
+                  }]
+                  cookies: []
               }]
+              cookies: []
           }]
+          cookies: []
         }        
 
       it "should return well formed partial for columns with 2 level nesting and pagination", ->
@@ -403,15 +412,18 @@ describe "KPage", ->
                   }]
                   next_page:
                     dom_query : "a.next3"
-                    click: true                  
+                    click: true
+                  cookies: []
               }]
               next_page:
                 dom_query : "a.next2"
                 click: true
+              cookies: []
           }]
           next_page:
             dom_query : "a.next1"
             click: true
+          cookies: []
         }   
 
   describe "kcolumnsToParams", ->
