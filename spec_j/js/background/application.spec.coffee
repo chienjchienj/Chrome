@@ -1,9 +1,9 @@
 require "../fixtures/env_stubs"
 ApplicationVar  = require "../../../js/background/application"
 Application     = ApplicationVar.Application
-KTab         = ApplicationVar.KTab
+KTab            = ApplicationVar.KTab
 BrowserIconView = ApplicationVar.BrowserIconView
-
+CONFIG          = ApplicationVar.COFIG
 
 describe "Application", ->
   beforeEach ->
