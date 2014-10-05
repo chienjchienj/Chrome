@@ -68,21 +68,16 @@ var Columns = Backbone.Collection.extend({
 
   newColumn: function(success_cb, failure_cb) {
     var self = this;
-    return self.fetch({
-      method: 'create',
-      success: function(collection, response, options) {
-        var col = new Column();
-        Object.keys(response).forEach(function(attribute) {
-          col.set(attribute, response[attribute]);
-        });
-        self.models.push(col);
-        success_cb && success_cb(col);
+    return self.create({}, {
+      success: function(model, response, options) {
+        success_cb && success_cb(model);
       },
       error: function(collection, response, options) {
-        console.log(arguments);
         failure_cb && failure_cb(arguments)
       }
     });
+
+
   },
 
   forPage: function(page_id) {

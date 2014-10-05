@@ -52,17 +52,28 @@ var SideBarView = Backbone.View.extend({
   **/
   deleteColumnEvent: function(e, col_view) {
     var self = this;
+    var col_was_active = col_view.model.get("is_active");
+
+    // Removing the model object corresponding to this col_view
+    self.columns.remove(col_view.model)
     col_view.model.destroy();
-    console.log("Removing " + col_view.model.id)
-    debugger    
-    // self.columns.models = self.columns.models.filter(function(model) {
-    //   return model.id != col_view.model.id;
-    // })
 
+    // Removing column view from column_views
+    self.column_views = self.column_views.filter(function(curr_col_view) {
+      return col_view.cid != curr_col_view.cid;
+    });
+    col_view.destroy();
 
-    // Creates another column is this is the only one left    
+    // Creates another column and have it active if there are no columns left
+    if(!self.currentPageHasColumns()) {
+      self.addFirstColumn();
 
-    // Selects the next column if this is the currently selected one
+    // Selects the most recent created column if the deleted one was active
+    } else if(col_was_active) {
+      var col_view_to_be_activated = self.column_views[self.column_views.length - 1];
+      col_view_to_be_activated.activate()
+
+    }
   },
 
   /**
