@@ -8,11 +8,10 @@ try { var KTabController        = require('./controllers/ktab_controller'); } ca
 try { var KPageController       = require('./controllers/kpage_controller'); } catch(e) {}
 try { var KPaginationController = require('./controllers/kpagination_controller'); } catch(e) {}
 
-
 var Application = {};
 
 Application.msg_controllers = {
-  mixpanel: new MixPanelController(CONFIG["mixpanel_key"], CONFIG["version"]),
+  mixpanel:       new MixPanelController(CONFIG["mixpanel_key"], CONFIG["version"], CONFIG["server_host"] + CONFIG.paths.muuid_path),
   kcolumns:       KColumnsController,
   ktab:           KTabController,
   kpage:          KPageController,

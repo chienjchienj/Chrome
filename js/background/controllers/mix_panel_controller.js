@@ -1,8 +1,9 @@
-var MixPanelController = function(mixpanel_key, version) {
+var MixPanelController = function(mixpanel_key, version, muuid_path) {
   var self      = this;
   self.version  = version;
   mixpanel.init(mixpanel_key);
   self.setId();
+  self.muuid_path = muuid_path;
   self.trackVersion();
 
 }
@@ -10,7 +11,7 @@ var MixPanelController = function(mixpanel_key, version) {
 MixPanelController.prototype.setId = function() {
   var self = this;
   self.xhr = new XMLHttpRequest();
-  muuid_url = CONFIG["server_host"] + CONFIG.paths.muuid_path
+  muuid_url = self.muuid_path;
   self.xhr.open("GET", muuid_url, true);
   self.xhr.onreadystatechange = function() {
     if (self.xhr.readyState == 4) {  
