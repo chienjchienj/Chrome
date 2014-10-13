@@ -157,28 +157,47 @@ var PaginationView = Backbone.View.extend({
   displayPaginationDormant: function() {
     var self = this;
     self.$el.show();
+
     self.$el.removeClass("selected");
+    self.$el.removeClass("fa-link");
+
     self.$el.removeClass("selecting");
+    self.$el.removeClass("fa-unlink");
+
     self.$el.addClass("dormant");
-    self.$el.html("Add Pagination");
+    self.$el.addClass("fa-unlink");
+    self.$el.attr("title", "click to add a hyperlink to the next page");
   },
 
   displayPaginationSelecting: function() {
     var self = this;
     self.$el.show();
     self.$el.removeClass("selected");
+    self.$el.removeClass("fa-link");
+
     self.$el.removeClass("dormant");
+    self.$el.removeClass("fa-unlink");
+
     self.$el.addClass("selecting");
-    self.$el.html("Select Pagination");
+    self.$el.addClass("fa-unlink");
+    self.$el.attr("title", "click on hyperlink to next page");
+    
   },
 
   displayPaginationSelected: function() {
     var self = this;
     self.$el.show();
+
     self.$el.addClass("selected");
+    self.$el.addClass("fa-link");
+
     self.$el.removeClass("dormant");
-    self.$el.removeClass("selecting");    
-    self.$el.html("Remove Pagination");
+    self.$el.removeClass("fa-unlink");
+
+    self.$el.removeClass("selecting");
+    self.$el.removeClass("fa-unlink");
+    self.$el.attr("title", "click to remove selected pagination");
+
   },
 
   /**

@@ -161,7 +161,7 @@ var SideBarView = Backbone.View.extend({
     self.$el.html(self.template());
     self.loadColumns();
     self.renderPaginationSection();
-    self.onResize();    
+    self.onResize();
     return self;
   },
 

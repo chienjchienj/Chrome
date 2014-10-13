@@ -91,16 +91,7 @@ var ColumnView = Backbone.View.extend({
     var countables = $(self.model.get("dom_query")).filter(function(index, dom) {
       return !self.isUnselectable(dom);
     });
-
-    if(countables.length) {
-      var self = this;
-      self.$el.find(".counter").html(countables.length);
-      self.$el.find(".counter").show();
-
-    } else {
-      self.$el.find(".counter").hide();
-
-    }
+    self.$el.find(".counter").html(countables.length);
   },
 
   renderColorSticks: function() {

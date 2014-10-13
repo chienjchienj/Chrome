@@ -1,7 +1,10 @@
 {
-   "content_scripts": [ {
-      "matches"   : [ "<all_urls>" ],
-      "css": [ "css/content.css" ], 
+  "content_scripts": [ {
+      "matches"   : [ "<all_urls>" ],      
+      "css": [ 
+        "css/content.css",
+        "css/font-awesome-4.2.0/css/font-awesome.css"
+      ], 
       "js": [ 
         "js/content/browsers/chrome.js",      
         "js/config/config.js",
@@ -25,8 +28,8 @@
       ],
       "matches": [ "http://*/*", "https://*/*" ],
       "run_at": "document_end"
-   } ],  
-   "background": {
+  } ],  
+  "background": {
       "scripts": [ 
         "js/content/lib/jquery_1.9.1.min.js",      
         "js/background/browsers/chrome.js",      
@@ -45,18 +48,23 @@
         "js/background/controllers/ktab_controller.js",
         "js/background/application.js"
       ]
-   },
-   "browser_action": {
+  },
+  "browser_action": {
       "default_icon": "images/krake_icon_disabled_24.png",
       "default_title": "Get Data"
-   },
-   "web_accessible_resources": [
+  },
+  "web_accessible_resources": [
     "js/content/templates/sidebar.hbs",
     "js/content/templates/column.hbs",
     "images/logo-a.png",
     "images/sidebar-add-icon.png",
     "images/sidebar-pagination-icon.png",
-    "html/panel.html"
+    "html/panel.html",
+    "css/font-awesome-4.2.0/fonts/fontawesome-webfont.eot",
+    "css/font-awesome-4.2.0/fonts/fontawesome-webfont.svg",
+    "css/font-awesome-4.2.0/fonts/fontawesome-webfont.ttf",
+    "css/font-awesome-4.2.0/fonts/fontawesome-webfont.woff",
+    "css/font-awesome-4.2.0/fonts/FontAwesome.otf"    
   ],
    "description": "Extract data with Krake",
    "icons": {

@@ -1,11 +1,10 @@
 var MixPanelController = function(mixpanel_key, version, muuid_path) {
   var self      = this;
   self.version  = version;
+  self.muuid_path = muuid_path;  
   mixpanel.init(mixpanel_key);
   self.setId();
-  self.muuid_path = muuid_path;
   self.trackVersion();
-
 }
 
 MixPanelController.prototype.setId = function() {
