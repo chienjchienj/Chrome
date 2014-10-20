@@ -94,11 +94,10 @@
   background-color: #fff;
   border-radius:5px;
   padding: 4px 3px;
-  line-height: 15px;
   text-align: center;
   float: left;
-  width: 20px;
-  height: 20px;
+  height: 12px;
+  line-height: 12px;  
   margin-top: 5px;
   margin-bottom: 5px;
   cursor: default;
@@ -110,9 +109,9 @@
   font-size: 10px;
   background-color: #fff;
   border-radius:5px;
-  padding: 3px 3px;
-  line-height: 15px;
-  height: 20px;
+  padding: 4px 3px;
+  line-height: 12px;
+  height: 12px;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: 4px;
