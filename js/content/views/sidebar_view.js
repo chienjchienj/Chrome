@@ -6,6 +6,8 @@ var SideBarView = Backbone.View.extend({
     "click #add_columns": "addColumnEvent",
     "click #save_holder": "dispatchTabEvent",
     "delete_column":      "deleteColumnEvent",
+    "mouseenter [data-toggle=tooltip]": "showTooltip",
+    "mouseout [data-toggle=tooltip]": "hideTooltip"
   },
 
   column_views: [],
@@ -15,7 +17,7 @@ var SideBarView = Backbone.View.extend({
     self.columns        = new Columns();
 
     _.bindAll(self, "newColumnCreated", "newColumnSaved", "onResize", "renderColumnViews");
-    $(window).on("resize", self.onResize);    
+    $(window).on("resize", self.onResize);
   },
 
   /**
@@ -138,13 +140,8 @@ var SideBarView = Backbone.View.extend({
     self.$el.height(window.innerHeight);    
     
     var dimension           = {
-      buffer              : 33,
-      header              : 45,
-      bottom_butt_holder  : 20,
-      pagination_button   : 25,
-      done_button         : 25,
-      top_butt_holder     : 20,
-      add_button          : 25
+      header              : 38,
+      top_butt_holder     : 37
     };
 
     var raw_cols_height     = self.$el.height();
@@ -260,6 +257,24 @@ var SideBarView = Backbone.View.extend({
 
   errorHandler:  function(err_msg) {
     console.log("An error has occurred: %s", err_msg);
+  },
+
+  showTooltip: function(e) {
+    var self = this;
+    $tooltip = self.$el.find("#krake-tooltip");
+    $tooltip.show();
+    $tooltip.css({
+      left: $(e.currentTarget).position().left,
+      top: $(e.currentTarget).position().top + 30
+    });
+    $tooltip.html( $(e.currentTarget).attr("tooltip-content") );
+    e.preventDefault();
+  },
+
+  hideTooltip: function(e) {
+    var self = this;    
+    $tooltip = self.$el.find("#krake-tooltip");
+    $tooltip.hide();
   },
 
   template: function() {

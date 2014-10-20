@@ -166,7 +166,7 @@ var PaginationView = Backbone.View.extend({
 
     self.$el.addClass("dormant");
     self.$el.addClass("fa-unlink");
-    self.$el.attr("title", "click to add a hyperlink to the next page");
+    self.$el.attr("title", "Set pagination for page");
   },
 
   displayPaginationSelecting: function() {
@@ -180,7 +180,7 @@ var PaginationView = Backbone.View.extend({
 
     self.$el.addClass("selecting");
     self.$el.addClass("fa-unlink");
-    self.$el.attr("title", "click on hyperlink to next page");
+    self.$el.attr("title", "Selected any highlighted hyperlinks");
     
   },
 
@@ -196,7 +196,7 @@ var PaginationView = Backbone.View.extend({
 
     self.$el.removeClass("selecting");
     self.$el.removeClass("fa-unlink");
-    self.$el.attr("title", "click to remove selected pagination");
+    self.$el.attr("title", "Unset pagination");
 
   },
 

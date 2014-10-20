@@ -101,6 +101,7 @@
   height: 20px;
   margin-top: 5px;
   margin-bottom: 5px;
+  cursor: default;
 }
 
 .getdata-sidebar .column .delete {
@@ -140,7 +141,7 @@
 .getdata-sidebar .sidebar-button {
   height: 25px;
   width: 25px;
-  border-radius: 13px;
+  border-radius: 5px;
   float: right;
   margin-right: 5px;
   background-color: #086cb9;
@@ -176,4 +177,19 @@
 
 .getdata-sidebar #add_pagination.dormant {
   background-color: #086cb9;
+}
+
+.getdata-sidebar #krake-tooltip {
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #fff;
+  color: #000;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 10000;
+  font-size: 11px;
+  font-weight: bold;
+  box-shadow: 2px 2px 1px rgba(50, 50, 50, 0.75);
+  display: none;
 }
